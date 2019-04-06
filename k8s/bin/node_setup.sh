@@ -7,6 +7,8 @@ yum install -y docker-ce kubelet kubeadm
 systemctl start docker
 systemctl enable docker kubelet
 
+DOCKER_CGROUPS=$(docker info | grep 'Cgroup' | cut -d' ' -f3)
 cat <<EOF >/etc/sysconfig/kubelet
+KUBELET_CGROUP_ARGS="--cgroup-driver=$DOCKER_CGROUPS"
 KUBELET_EXTRA_ARGS="--fail-swap-on=false"
 EOF
