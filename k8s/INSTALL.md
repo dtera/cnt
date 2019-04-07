@@ -4,16 +4,18 @@ The following is about how to install k8s cluster, take centos7 as an example:
 * yum install -y yum-utils
 * yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/repo/docker-ce.repo
 * yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/repo/kubernetes.repo
-* yum install -y docker-ce kubelet kubeadm kubectl
+* yum install -y docker-ce kubelet kubeadm
 * systemctl start docker
 * systemctl enable docker kubelet
 
 > cat << EOF >/etc/sysconfig/kubelet  
+KUBELET_CGROUP_ARGS="--cgroup-driver=cgroupfs"  
 KUBELET_EXTRA_ARGS="--fail-swap-on=false"  
 EOF
 
 -- On the master node, init the k8s cluster--
-* kubeadm init --ignore-preflight-errors=Swap --image-repository=registry.aliyuncs.com/google_containers --pod-network-cidr 10.244.0.0/16
+* workdir=$(cd $(dirname $(dirname $0)); pwd)
+* kubeadm init --config=$workdir/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap
 * mkdir -p $HOME/.kube
 * cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 
