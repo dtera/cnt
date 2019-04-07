@@ -2,7 +2,8 @@
 
 sh node_setup.sh
 
-kubeadm init --config=kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap
+workdir=$(cd $(dirname $(dirname $0)); pwd)
+kubeadm init --config=$workdir/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 
