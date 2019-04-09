@@ -5,3 +5,9 @@
 
 -- deploy ingress-nginx
 > kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-nginx/mandatory.yml
+
+-- install helm and tiller
+- Download your [desired version](https://github.com/helm/helm/releases)
+- Unpack it (tar -zxvf helm-v2.0.0-linux-amd64.tgz)
+- Find the helm binary in the unpacked directory, and move it to its desired destination (mv linux-amd64/helm /usr/local/bin/helm)
+- helm init -i registry.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account tiller
