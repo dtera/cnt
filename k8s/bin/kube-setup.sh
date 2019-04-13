@@ -12,18 +12,36 @@ do
   esac
 done
 
-yum install -y yum-utils
-yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/repo/docker-ce.repo
-yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/repo/kubernetes.repo
-yum install -y docker-ce kubelet kubeadm
-systemctl start docker
-systemctl enable docker kubelet
+which yum-config-manager &> /dev/null
+if [[ $? != 0 ]]; then
+  yum install -y yum-utils
+fi
 
-DOCKER_CGROUPS=$(docker info | grep 'Cgroup' | cut -d' ' -f3)
-cat <<EOF >/etc/sysconfig/kubelet
-KUBELET_CGROUP_ARGS="--cgroup-driver=$DOCKER_CGROUPS"
-KUBELET_EXTRA_ARGS="--fail-swap-on=false"
-EOF
+if [ ! -e /etc/yum.repos.d/docker-ce.repo ]; then
+  yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/repo/docker-ce.repo
+fi
+if [ ! -e /etc/yum.repos.d/kubernetes.repo ]; then
+  yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/repo/kubernetes.repo
+fi
+
+which docker &> /dev/null
+if [[ $? != 0 ]]; then
+  yum install -y docker-ce
+  systemctl start docker
+  systemctl enable docker
+fi
+
+which kubeadm &> /dev/null
+if [[ $? != 0 ]]; then
+  yum install -y kubelet kubeadm
+  systemctl enable kubelet
+  
+  DOCKER_CGROUPS=$(docker info | grep 'Cgroup' | cut -d' ' -f3)
+  cat <<EOF >/etc/sysconfig/kubelet
+  KUBELET_CGROUP_ARGS="--cgroup-driver=$DOCKER_CGROUPS"
+  KUBELET_EXTRA_ARGS="--fail-swap-on=false"
+  EOF
+fi
 
 if [[ $node_type == "master" ]]; then
   kubeadm init --config=$WD/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap|tee $WD/kubeadm-init.log
