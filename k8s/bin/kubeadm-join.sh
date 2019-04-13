@@ -27,8 +27,8 @@ done
 
 if [[ $node_type == "master" ]]; then
   hosts='k8s-master:!k8s-ctl'
-  cert-key=$(ssh $ctl_host 'kubeadm init phase upload-certs --experimental-upload-certs 2>/dev/null|tail -1')
-  ctl_args="--experimental-control-plane --certificate-key $cert-key"
+  cert_key=$(ssh $ctl_host 'kubeadm init phase upload-certs --experimental-upload-certs 2>/dev/null|tail -1')
+  ctl_args="--experimental-control-plane --certificate-key $cert_key"
 fi
 
 join_cmd="$(ssh $ctl_host 'kubeadm token create --print-join-command') --ignore-preflight-errors=Swap $ctl_args"
