@@ -35,13 +35,12 @@ which kubeadm &> /dev/null
 if [[ $? != 0 ]]; then
   yum install -y kubelet kubeadm
   systemctl enable kubelet
-  
-  DOCKER_CGROUPS=$(docker info | grep 'Cgroup' | cut -d' ' -f3)
-  cat <<EOF >/etc/sysconfig/kubelet
-  KUBELET_CGROUP_ARGS="--cgroup-driver=$DOCKER_CGROUPS"
-  KUBELET_EXTRA_ARGS="--fail-swap-on=false"
-  EOF
 fi
+DOCKER_CGROUPS=$(docker info | grep 'Cgroup' | cut -d' ' -f3)
+cat <<EOF >/etc/sysconfig/kubelet
+KUBELET_CGROUP_ARGS="--cgroup-driver=$DOCKER_CGROUPS"
+KUBELET_EXTRA_ARGS="--fail-swap-on=false"
+EOF
 
 if [[ $node_type == "master" ]]; then
   kubeadm init --config=$WD/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap|tee $WD/kubeadm-init.log
