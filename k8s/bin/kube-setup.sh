@@ -37,6 +37,11 @@ if [[ "$os_family" =~ "rhel" ]]; then
   if [ ! -e /etc/yum.repos.d/kubernetes.repo ]; then
     yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/kubernetes.repo
   fi
+cat <<EOF >/etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+  sysctl --system
 fi
 
 if [[ "$os_family" =~ "debian" ]]; then
