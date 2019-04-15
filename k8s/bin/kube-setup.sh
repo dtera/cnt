@@ -7,8 +7,8 @@ install_cmd="yum"
 kubelet_conf="/etc/sysconfig/kubelet"
 
 show_usage="args: [-h|--help  -c|--is_ctl_plane]  \n\
--h|--help          \t show help information  \n\
--c|--is_ctl_plane  \t whether current node is control plane"
+-h|--help         \t\t show help information  \n\
+-c|--is_ctl_plane \t   whether current node is control plane"
 ARGS=`getopt -o hc -l help,is_ctl_plane -n 'kube-setup.sh' -- "$@"`
 if [ $? != 0 ]; then
   echo "Terminating..."
