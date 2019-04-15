@@ -67,7 +67,7 @@ join_cmd="$(ssh $ctl_host 'kubeadm token create --print-join-command') --ignore-
 if $local_exec; then
   sh -c "$join_cmd"
 else
-  ansible $hosts -a "$join_cmd"
+  ansible $hosts -i $WD/inventory -a "$join_cmd"
 fi
 
 if [[ $node_type == "master" ]]; then
@@ -75,7 +75,7 @@ if [[ $node_type == "master" ]]; then
     mkdir -p $HOME/.kube
     cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
   else
-    ansible $hosts -m file -a 'path=$HOME/.kube state=directory'
-    ansible $hosts -m shell -a 'cp -f /etc/kubernetes/admin.conf $HOME/.kube/config'
+    ansible $hosts -i $WD/inventory -m file -a 'path=$HOME/.kube state=directory'
+    ansible $hosts -i $WD/inventory -m shell -a 'cp -f /etc/kubernetes/admin.conf $HOME/.kube/config'
   fi
 fi
