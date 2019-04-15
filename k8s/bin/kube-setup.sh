@@ -7,7 +7,7 @@ install_cmd="yum"
 kubelet_conf="/etc/sysconfig/kubelet"
 
 show_usage="args: [-c|--is_ctl_plane, -h|--help]"
-ARGS=`getopt -o c -l is_ctl_plane -n 'kube-setup.sh' -- "$@"`
+ARGS=`getopt -o hc -l help,is_ctl_plane -n 'kube-setup.sh' -- "$@"`
 if [ $? != 0 ]; then
   echo "Terminating..."
   exit 1
@@ -17,8 +17,8 @@ eval set -- "$ARGS"
 while true
 do
   case $1 in
-    c|--is_ctl_plane) shift; is_ctl_plane=true;;
-    -h|--help) shift; echo $show_usage; exit 0;;
+    -h|--help) echo $show_usage; exit 0;;
+    -c|--is_ctl_plane) shift; is_ctl_plane=true;;
     --) shift; break;;
     *) echo "unknow args"; exit 1;; 
   esac
