@@ -26,17 +26,19 @@ do
   esac
 done
 
+function add_yum_repo() {
+  if [ ! -e /etc/yum.repos.d/${1##*/} ]; then
+    yum-config-manager --add-repo=$1
+  fi
+}
+
 if [[ "$os_family" =~ "rhel" ]]; then
   which yum-config-manager &> /dev/null
   if [[ $? != 0 ]]; then
     yum install -y yum-utils
   fi
-  if [ ! -e /etc/yum.repos.d/docker-ce.repo ]; then
-    yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/docker-ce.repo
-  fi
-  if [ ! -e /etc/yum.repos.d/kubernetes.repo ]; then
-    yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/kubernetes.repo
-  fi
+  add_yum_repo https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/docker-ce.repo
+  add_yum_repo https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/kubernetes.repo
 cat <<EOF >/etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
