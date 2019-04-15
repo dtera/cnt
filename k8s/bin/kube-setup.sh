@@ -1,17 +1,26 @@
 #!/usr/bin/env bash
+
 WD=$(cd $(dirname $(dirname $0)); pwd)
 os_family=$(cat /etc/os-release|grep ID_LIKE)
-
-show_usage="args: [-t|--node_type]"
-node_type="node"
+is_ctl_plane=false
 install_cmd="yum"
 kubelet_conf="/etc/sysconfig/kubelet"
 
-while getopts ":t:" opt
+show_usage="args: [-c|--is_ctl_plane, -h|--help]"
+ARGS=`getopt -o c -l is_ctl_plane -n 'kube-setup.sh' -- "$@"`
+if [ $? != 0 ]; then
+  echo "Terminating..."
+  exit 1
+fi
+eval set -- "$ARGS"
+
+while true
 do
-  case $opt in
-    t) node_type=$OPTARG;;
-    ?) echo "unknow args"; echo $show_usage; exit 1;;
+  case $1 in
+    c|--is_ctl_plane) shift; is_ctl_plane=true;;
+    -h|--help) shift; echo $show_usage; exit 0;;
+    --) shift; break;;
+    *) echo "unknow args"; exit 1;; 
   esac
 done
 
@@ -63,7 +72,7 @@ KUBELET_CGROUP_ARGS="--cgroup-driver=$DOCKER_CGROUPS"
 KUBELET_EXTRA_ARGS="--fail-swap-on=false"
 EOF
 
-if [[ $node_type == "master" ]]; then
+if $is_ctl_plane; then
   kubeadm init --config=$WD/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap|tee $WD/kubeadm-init.log
   mkdir -p $HOME/.kube
   cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
