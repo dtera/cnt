@@ -17,10 +17,10 @@ ctl_host="192.168.88.120"
 local_exec=true
 
 show_usage="args: [-h|--help  -t|--node-type  -c|--ctl-host  -l|local-exec]  \n\
--h|--help       \t show help information  \n\
--t|--node-type  \t the type of current node(node|master)  \n\
--c|--ctl-host   \t the address of control plane host(such as: 192.168.88.120) \n\
--l|--local-exec \t whether execute in local to join current node into k8s cluster(default true)"
+-h|--help       \t\t show help information  \n\
+-t|--node-type  \t\t the type of current node(node|master)  \n\
+-c|--ctl-host   \t\t the address of control plane host(such as: 192.168.88.120) \n\
+-l|--local-exec \t   whether execute in local to join current node into k8s cluster(default true)"
 ARGS=`getopt -o ht:c:l:: -l help,node-type:,ctl-host:,local-exec:: -n 'kubeadm-join.sh' -- "$@"`
 if [ $? != 0 ]; then
   echo "Terminating..."
