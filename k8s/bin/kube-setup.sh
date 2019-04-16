@@ -64,14 +64,14 @@ fi
 
 which docker &> /dev/null
 if [[ $? != 0 ]]; then
-  sh -c "$install_cmd install -y docker-ce"
+  $install_cmd install -y docker-ce
   systemctl start docker
   systemctl enable docker
 fi
 
 which kubeadm &> /dev/null
 if [[ $? != 0 ]]; then
-  sh -c "$install_cmd install -y kubelet kubeadm"
+  $install_cmd install -y kubelet kubeadm
   systemctl enable kubelet
 fi
 
