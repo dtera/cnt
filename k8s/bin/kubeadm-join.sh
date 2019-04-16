@@ -34,7 +34,7 @@ do
     -h|--help) echo -e $show_usage; exit 0;;
     -t|--node-type) node_type=$2; shift 2;;
     -c|--ctl-host) ctl_host=$2; shift 2;;
-    -l|local-exec)
+    -l|--local-exec)
       if [[ $2 != "true" ]]; then
         if [[ $2 != "false" ]]; then
           echo "the arg value of local-exec must be either true or false"
