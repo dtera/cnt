@@ -1,20 +1,13 @@
 #!/bin/env bash
 
-which ansible &> /dev/null
-if [[ $? != 0 ]]; then
-  # echo "please install ansible according to the following command:"
-  # echo "> yum install -y ansible"
-  echo "----------------------Install ansible environment----------------------"
-  yum install -y ansible
-  exit
-fi
-
 WD=$(cd $(dirname $(dirname $0)); pwd)
+os_family=$(cat /etc/os-release|grep ID_LIKE)
 node_type="node"
 hosts="k8s-node"
 ctl_args=""
 ctl_host="192.168.88.120"
 local_exec=true
+install_cmd="yum"
 
 show_usage="args: [-h|--help  -t|--node-type  -c|--ctl-host  -l|local-exec]  \n\
 -h|--help       \t\t show help information  \n\
@@ -57,6 +50,19 @@ done
 #   esac
 # done
 
+if [[ "$os_family" =~ "debian" ]]; then
+  install_cmd="apt-get"
+fi
+
+which ansible &> /dev/null
+if [[ $? != 0 ]]; then
+  # echo "please install ansible according to the following command:"
+  # echo "> $install_cmd install -y ansible"
+  echo "----------------------Install ansible environment----------------------"
+  $install_cmd install -y ansible
+  exit
+fi
+
 if [[ $node_type == "master" ]]; then
   hosts='k8s-master:!k8s-ctl'
   cert_key=$(ssh $ctl_host 'kubeadm init phase upload-certs --experimental-upload-certs 2>/dev/null|tail -1')
@@ -65,7 +71,7 @@ fi
 
 join_cmd="$(ssh $ctl_host 'kubeadm token create --print-join-command') --ignore-preflight-errors=Swap $ctl_args"
 if $local_exec; then
-  sh -c "$join_cmd"
+  $join_cmd
 else
   ansible $hosts -i $WD/inventory -a "$join_cmd"
 fi
