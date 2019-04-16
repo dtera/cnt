@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 
 WD=$(cd $(dirname $(dirname $0)); pwd)
 os_family=$(cat /etc/os-release|grep ID_LIKE)
