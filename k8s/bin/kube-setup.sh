@@ -37,8 +37,8 @@ if [[ "$os_family" =~ "rhel" ]]; then
   if [[ $? != 0 ]]; then
     yum install -y yum-utils
   fi
-  add_yum_repo https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/docker-ce.repo
-  add_yum_repo https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/kubernetes.repo
+  add_yum_repo $WD/yum/repos/docker-ce.repo
+  add_yum_repo $WD/yum/repos/kubernetes.repo
 cat <<EOF >/etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
@@ -86,5 +86,5 @@ if $is_ctl_plane; then
   mkdir -p $HOME/.kube
   cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
 
-  kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/kube-flannel.yml
+  kubectl apply -f $WD/kube-flannel.yml
 fi
