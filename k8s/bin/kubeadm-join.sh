@@ -6,15 +6,15 @@ node_type="node"
 hosts="k8s-node"
 ctl_args=""
 ctl_host="192.168.88.120"
-local_exec=true
+remote_exec=false
 install_cmd="yum"
 
-show_usage="args: [-h|--help  -t|--node-type  -c|--ctl-host  -l|local-exec]  \n\
+show_usage="args: [-h|--help  -t|--node-type  -c|--ctl-host  -r|remote-exec]  \n\
 -h|--help       \t\t show help information  \n\
 -t|--node-type  \t\t the type of current node(node|master)  \n\
 -c|--ctl-host   \t\t the address of control plane host(such as: 192.168.88.120) \n\
--l|--local-exec \t   whether execute in local to join current node into k8s cluster(default true)"
-ARGS=`getopt -o ht:c:l:: -l help,node-type:,ctl-host:,local-exec:: -n 'kubeadm-join.sh' -- "$@"`
+-r|--remote-exec \t  whether execute in remote hosts to join corresponding node into k8s cluster(default false)"
+ARGS=`getopt -o ht:c:r:: -l help,node-type:,ctl-host:,remote-exec:: -n 'kubeadm-join.sh' -- "$@"`
 if [ $? != 0 ]; then
   echo "Terminating..."
   exit 1
@@ -27,13 +27,13 @@ do
     -h|--help) echo -e $show_usage; exit 0;;
     -t|--node-type) node_type=$2; shift 2;;
     -c|--ctl-host) ctl_host=$2; shift 2;;
-    -l|--local-exec)
-      if [[ $2 != "true" ]]; then
-        if [[ $2 != "false" ]]; then
-          echo "the arg value of local-exec must be either true or false"
+    -r|--remote-exec)
+      if [[ $2 != "false" ]]; then
+        if [[ $2 != "" && $2 != "true" ]]; then
+          echo "the arg value of remote-exec must be either true or false"
           exit 1
         fi
-        local_exec=false
+        remote_exec=true
       fi
       shift 2;;
     --) shift; break;;
@@ -70,18 +70,18 @@ if [[ $node_type == "master" ]]; then
 fi
 
 join_cmd="$(ssh $ctl_host 'kubeadm token create --print-join-command') --ignore-preflight-errors=Swap $ctl_args"
-if $local_exec; then
-  $join_cmd
-else
+if $remote_exec; then
   ansible $hosts -i $WD/inventory -a "$join_cmd"
+else
+  $join_cmd
 fi
 
 if [[ $node_type == "master" ]]; then
-  if $local_exec; then
-    mkdir -p $HOME/.kube
-    cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
-  else
+  if $remote_exec; then
     ansible $hosts -i $WD/inventory -m file -a 'path=$HOME/.kube state=directory'
     ansible $hosts -i $WD/inventory -m shell -a 'cp -f /etc/kubernetes/admin.conf $HOME/.kube/config'
+  else
+    mkdir -p $HOME/.kube
+    cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
   fi
 fi
