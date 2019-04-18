@@ -13,7 +13,7 @@ show_usage="args: [-h|--help  -t|--node-type  -c|--ctl-host  -r|remote-exec]  \n
 -h|--help       \t\t show help information  \n\
 -t|--node-type  \t\t the type of current node(node|master)  \n\
 -c|--ctl-host   \t\t the address of control plane host(such as: 192.168.88.120) \n\
--r|--remote-exec \t  whether execute in remote hosts to join corresponding node into k8s cluster(default false)"
+-r|--remote-exec \t  whether executes in remote hosts to join corresponding nodes into k8s cluster(default false)"
 ARGS=`getopt -o ht:c:r:: -l help,node-type:,ctl-host:,remote-exec:: -n 'kubeadm-join.sh' -- "$@"`
 if [ $? != 0 ]; then
   echo "Terminating..."
