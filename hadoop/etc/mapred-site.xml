@@ -1,0 +1,7 @@
+<configuration>
+  <!-- specify the framework of allocating and scheduling resource -->
+  <property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+  </property>
+</configuration>
