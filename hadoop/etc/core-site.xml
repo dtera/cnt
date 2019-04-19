@@ -1,0 +1,18 @@
+<configuration>
+  <!-- specify the nameservice of hdfs -->
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://ns1/</value>
+  </property>
+  <!-- specify the tmp dir of hadoop -->
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/usr/local/cnt/hadoop-3.2.0/tmp</value>
+  </property>
+					
+  <!-- specify the addresses of zookeeper cluster -->
+  <property>
+    <name>ha.zookeeper.quorum</name>
+    <value>z1.cnt.io:2181,z2.cnt.io:2181,z3.cnt.io:2181</value>
+  </property>
+</configuration>
