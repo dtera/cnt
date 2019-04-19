@@ -1,0 +1,70 @@
+<configuration>
+  <!--specify the nameservice of hdfs, should be in consistence with the one in core-site.xml -->
+  <property>
+    <name>dfs.nameservices</name>
+    <value>ns1</value>
+  </property>
+  <!-- two namenodes for ns1: nn1 and nn2 respectively -->
+  <property>
+    <name>dfs.ha.namenodes.ns1</name>
+    <value>nn1,nn2</value>
+  </property>
+  <!-- specify the rpc conmunication address of nn1 -->
+  <property>
+    <name>dfs.namenode.rpc-address.ns1.nn1</name>
+    <value>m1.cnt.io:9000</value>
+  </property>
+  <!-- specify the http conmunication address of nn1 -->
+  <property>
+    <name>dfs.namenode.http-address.ns1.nn1</name>
+    <value>m1.cnt.io:50070</value>
+  </property>
+  <!-- specify the rpc conmunication address of nn2 -->
+  <property>
+    <name>dfs.namenode.rpc-address.ns1.nn2</name>
+    <value>m2.cnt.io:9000</value>
+  </property>
+  <!-- specify the http conmunication address of nn2 -->
+  <property>
+    <name>dfs.namenode.http-address.ns1.nn2</name>
+    <value>m2.cnt.io:50070</value>
+  </property>
+  <!-- specify the location of depositing namenode's metadata in journalnode -->
+  <property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://z1.cnt.io:8485;z2.cnt.io:8485;z3.cnt.io:8485/ns1</value>
+  </property>
+  <!-- specify the location of depositing data in local disk for journalnode -->
+  <property>
+    <name>dfs.journalnode.edits.dir</name>
+    <value>/usr/local/bigdata/hadoop-2.8.1/journaldata</value>
+  </property>
+  <!-- enable the automatic shifting of failover for namenode -->
+  <property>
+    <name>dfs.ha.automatic-failover.enabled</name>
+    <value>true</value>
+  </property>
+  <!-- specify the implementation provider of failover mechanism -->
+  <property>
+    <name>dfs.client.failover.proxy.provider.ns1</name>
+    <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+  </property>
+  <!-- config methods of isolation mechanism, different methods are seperated by a line break -->
+  <property>
+    <name>dfs.ha.fencing.methods</name>
+    <value>
+      sshfence
+      shell(/bin/true)
+    </value>
+  </property>
+  <!-- specify the private key files to login with no need for password -->
+  <property>
+    <name>dfs.ha.fencing.ssh.private-key-files</name>
+    <value>/root/.ssh/id_rsa</value>
+  </property>
+  <!-- config the timeout time of isolation mechanism for sshfence -->
+  <property>
+    <name>dfs.ha.fencing.ssh.connect-timeout</name>
+    <value>30000</value>
+  </property>
+</configuration>
