@@ -1,6 +1,6 @@
-# [Apache Hadoop](http://hadoop.apache.org/) ![hadoop](https://hadoop.apache.org/hadoop-logo.jpg)
+![hadoop](https://hadoop.apache.org/hadoop-logo.jpg)
 
-## Hadoop Cluster Setup
+## [Hadoop](http://hadoop.apache.org/) Cluster Setup
 
 ### deployment of hadoop cluster
 |hostnmae |ip            |install packages      |running processes                                 |
