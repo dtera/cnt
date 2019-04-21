@@ -7,3 +7,4 @@ zk_conf_dir: {{ zk_home }}/conf
 zk_data_dir: {{ zk_home }}/data
 
 local_pkg_dir: /storage/pkg
+env_path: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
