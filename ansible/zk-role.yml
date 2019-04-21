@@ -1,5 +1,6 @@
-hosts: zks
-remote_user: root
+---
+- hosts: zks
+  remote_user: root
 
-roles:
-- zookeeper
+  roles:
+  - zookeeper
