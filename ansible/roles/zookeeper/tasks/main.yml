@@ -26,7 +26,7 @@
   unarchive: src="{{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz" dest="{{ zk_install_dir }}/"
   
 - name: copy zoo.cfg
-  tempalte: src=zoo.cfg.j2 dest="{{ zk_conf_dir }}/zoo.cfg"
+  template: src=zoo.cfg.j2 dest="{{ zk_conf_dir }}/zoo.cfg"
   notify: restart zookeeper
    
 - name: ensure existence of zookeeper data directory
