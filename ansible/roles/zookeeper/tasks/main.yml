@@ -34,7 +34,7 @@
   
 - name: ensure existence of zookeeper data directory
   copy: content={{ item.0 }} dest="{{ zk_data_dir }}/myid"
-  with_indexed_items: {{ groups['zks'] }}
+  with_indexed_items: "{{ groups['zks'] }}"
   
 - name: config environment variable of zookeeper
   lineinfile:
