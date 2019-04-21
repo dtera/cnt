@@ -3,7 +3,7 @@
 ## [Hadoop](http://hadoop.apache.org/) Cluster Setup
 
 ### deployment of hadoop cluster
-|hostnmae |ip            |install packages      |running processes                                 |
+|hostname |ip            |install packages      |running processes                                 |
 |---------|--------------|----------------------|--------------------------------------------------| 
 |m1.cnt.io|192.168.88.121|jdk, hadoop           |NameNode, DFSZKFailoverController(zkfc)           |
 |m2.cnt.io|192.168.88.122|jdk, hadoop           |NameNode, DFSZKFailoverController(zkfc)           |
