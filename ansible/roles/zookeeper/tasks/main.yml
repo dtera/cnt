@@ -27,7 +27,7 @@
   
 - name: copy zoo.cfg
   template: src=zoo.cfg.j2 dest="{{ zk_conf_dir }}/zoo.cfg"
-  notify: restart zookeeper
+# notify: restart zookeeper
    
 - name: ensure existence of zookeeper data directory
   file: path={{ zk_data_dir }} state=directory
