@@ -1,8 +1,8 @@
 - name: include OS-specific variables.
-  include_vars: {{ ansible_os_family }}.yml
+  include_vars: "{{ ansible_os_family }}.yml"
 
 - name: set hostname.
-  hostname: name{{ hostname }}
+  hostname: "{{ hostname }}"
   
 - name: ensure existence of installation package directory in local
   file: path={{ local_pkg_dir }} state=directory
@@ -10,7 +10,7 @@
 
 - name: check for existence of zookeeper package in local
   stat:
-    path: {{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz
+    path: "{{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz"
   register: zk_pkg
   connection: local
   
@@ -23,17 +23,17 @@
   file: path={{ zk_install_dir }} state=directory
   
 - name: unarchive zookeeper package
-  unarchive: src={{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz dest={{ zk_install_dir }}/
+  unarchive: src="{{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz" dest="{{ zk_install_dir }}/"
   
 - name: copy zoo.cfg
-  tempalte: src=zoo.cfg.j2 dest={{ zk_conf_dir }}/zoo.cfg
+  tempalte: src=zoo.cfg.j2 dest="{{ zk_conf_dir }}/zoo.cfg"
   notify: restart zookeeper
    
 - name: ensure existence of zookeeper data directory
   file: path={{ zk_data_dir }} state=directory
   
 - name: ensure existence of zookeeper data directory
-  copy: content={{ item.0 }} dest={{ zk_data_dir }}/myid
+  copy: content={{ item.0 }} dest="{{ zk_data_dir }}/myid"
   with_indexed_items: {{ groups['zks'] }}
   
 - name: config environment variable of zookeeper
