@@ -1,0 +1,6 @@
+zk_version: 3.4.14
+zk_pkg_name: zookeeper-{{ zk_version }}
+zk_pkg_url: https://apache.org/dist/zookeeper/stable/{{ zk_pkg_name }}.tar.gz
+zk_install_dir: /usr/local/cnt
+zk_home: {{ zk_install_dir }}/{{ zk_pkg_name }}
+zk_data_dir: {{ zk_home }}/data
