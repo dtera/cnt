@@ -1,0 +1,5 @@
+hosts: zks
+remote_user: root
+
+roles:
+- zookeeper
