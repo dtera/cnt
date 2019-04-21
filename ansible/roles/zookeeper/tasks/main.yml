@@ -1,0 +1,51 @@
+- name: Include OS-specific variables.
+  include_vars: {{ ansible_os_family }}.yml
+
+- name: Ensure existence of installation package directory in local
+  file: path={{ local_pkg_dir }} state=directory
+  connection: local
+
+- name: Check for existence of zookeeper package in local
+  stat:
+    path: {{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz
+  register: zk_pkg
+  connection: local
+  
+- name: Download zookeeper package if not exists
+  get_url: url={{ zk_pkg_url }} dest={{ local_pkg_dir }}
+  when: not zk_pkg.stat.exists
+  connection: local
+
+- name: Ensure existence of zookeeper installation package directory
+  file: path={{ zk_install_dir }} state=directory
+  
+- name: Unarchive zookeeper package
+  unarchive: src={{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz dest={{ zk_install_dir }}/
+  
+- name: Copy zoo.cfg
+  tempalte: src=zoo.cfg.j2 dest={{ zk_conf_dir }}/zoo.cfg
+   
+- name: Ensure existence of zookeeper data directory
+  file: path={{ zk_data_dir }} state=directory
+  
+- name: Ensure existence of zookeeper data directory
+  copy: content={{ item.0 }} dest={{ zk_data_dir }}/myid
+  with_indexed_items: {{ groups['zks'] }}
+  
+- name: Config environment variable of zookeeper
+  lineinfile:
+  path: {{ env_path }}
+  line: {{ item.line }}
+  regexp: {{ item.regexp }}
+  with_items:
+  - line: "export ZK_HOME={{ zk_home }}"
+    regexp: "^export ZK_HOME="
+  - line: "export PATH={{ zk_home }}/bin:{{ path }}"
+    regexp: "^export PATH=="
+    
+- name: Let environment variable of config file take effect
+  shell: source {{ env_path }}
+  
+- name: start zookeeper
+  shell: zkServer.sh start
+  tags: start_zk
