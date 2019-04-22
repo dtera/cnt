@@ -2,7 +2,7 @@
   include_vars: "{{ ansible_os_family }}.yml"
 
 - name: set hostname.
-  hostname: name={{ hostname }}
+  hostname: name="{{ hostname }}.{{ domainname }}"
   
 - name: ensure existence of installation package directory in local
   file: path={{ local_pkg_dir }} state=directory
@@ -44,14 +44,18 @@
 - name: config environment variable of zookeeper
   lineinfile:
     path: "{{ env_path }}"
-    line: "{{ item.line }}"
     regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backrefs: yes
   with_items:
-  - line: "export ZK_HOME={{ zk_home }}"
-    regexp: "^export ZK_HOME="
-  - line: "export PATH=$ZK_HOME/bin:{{ path }}"
-    regexp: "^export PATH="
+  - regexp: "^export ZK_HOME="
+    line: "export ZK_HOME={{ zk_home }}"
+  - regexp: "^export PATH=(.*)?({{ path }})?"
+    line: "export PATH=$ZK_HOME/bin:\1{{ path }}"
     
+- name: remove duplicate variable
+  shell: sed -i 's#$ZK_HOME/bin:##g2' {{ env_path }}
+  
 - name: let environment variable of config file take effect
   shell: source {{ env_path }}
   
