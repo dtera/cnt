@@ -14,7 +14,7 @@
   register: zk_pkg
   connection: local
   
-- name: download zookeeper package if not exists
+- name: download zookeeper package if not exists in local
   get_url: url={{ zk_pkg_url }} dest={{ local_pkg_dir }}
   when: not zk_pkg.stat.exists
   connection: local
@@ -27,14 +27,19 @@
   
 - name: copy zoo.cfg
   template: src=zoo.cfg.j2 dest="{{ zk_conf_dir }}/zoo.cfg"
-# notify: restart zookeeper
-   
+  notify: restart zookeeper
+  
+- name: obtain zookeeper id
+  shell: "line=$(grep {{ inventory_hostname }} {{ zk_conf_dir }}/zoo.cfg);tmp=${line#*.};echo ${tmp%=*}"
+  register: zk_id
+  
 - name: ensure existence of zookeeper data directory
   file: path={{ zk_data_dir }} state=directory
   
 - name: ensure existence of zookeeper data directory
-  copy: content={{ item.0 }} dest="{{ zk_data_dir }}/myid"
-  with_indexed_items: "{{ groups['zks'] }}"
+  copy: content={{ zk_id.stdout }} dest="{{ zk_data_dir }}/myid"
+# copy: content={{ item.0 }} dest="{{ zk_data_dir }}/myid"
+# with_indexed_items: "{{ groups.zks }}"
   
 - name: config environment variable of zookeeper
   lineinfile:
@@ -44,8 +49,8 @@
   with_items:
   - line: "export ZK_HOME={{ zk_home }}"
     regexp: "^export ZK_HOME="
-  - line: "export PATH={{ zk_home }}/bin:{{ path }}"
-    regexp: "^export PATH=="
+  - line: "export PATH=$ZK_HOME/bin:{{ path }}"
+    regexp: "^export PATH="
     
 - name: let environment variable of config file take effect
   shell: source {{ env_path }}
