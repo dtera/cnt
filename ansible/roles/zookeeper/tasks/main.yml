@@ -36,7 +36,7 @@
 - name: ensure existence of zookeeper data directory
   file: path={{ zk_data_dir }} state=directory
   
-- name: ensure existence of zookeeper data directory
+- name: setup zookeeper id
   copy: content={{ zk_id.stdout }} dest="{{ zk_data_dir }}/myid"
 # copy: content={{ item.0 }} dest="{{ zk_data_dir }}/myid"
 # with_indexed_items: "{{ groups.zks }}"
