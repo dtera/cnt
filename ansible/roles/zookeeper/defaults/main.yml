@@ -1,12 +1,14 @@
-zk_version: 3.4.14
-zk_pkg_name: "zookeeper-{{ zk_version }}"
-zk_pkg_url: "https://apache.org/dist/zookeeper/stable/{{ zk_pkg_name }}.tar.gz"
-zk_install_dir: "/usr/local/cnt"
-zk_home: "{{ zk_install_dir }}/{{ zk_pkg_name }}"
-zk_conf_dir: "{{ zk_home }}/conf"
-zk_conf_path: "{{ zk_conf_dir }}/zoo.cfg"
-zk_data_dir: "{{ zk_home }}/data"
+zk_version: '3.4.14'
+zk_pkg_name: 'zookeeper-{{ zk_version }}'
+zk_pkg_url: 'https://apache.org/dist/zookeeper/stable/{{ zk_pkg_name }}.tar.gz'
+zk_install_dir: '/usr/local/cnt'
+zk_home: '{{ zk_install_dir }}/{{ zk_pkg_name }}'
+zk_conf_dir: '{{ zk_home }}/conf'
+zk_conf_path: '{{ zk_conf_dir }}/zoo.cfg'
+zk_data_dir: '{{ zk_home }}/data'
 
-local_pkg_dir: "/usr/local/src/pkg"
-local_zk_pkg_path: "{{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz"
-path: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+local_pkg_dir: '/usr/local/src/pkg'
+local_zk_pkg_path: '{{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz'
+home_name: 'ZK_HOME'
+home_path: '{{ zk_home }}'
+# path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
