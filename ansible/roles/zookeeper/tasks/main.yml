@@ -43,9 +43,9 @@
   
 - name: config environment variable of zookeeper
   lineinfile:
-  path: "{{ env_path }}"
-  line: "{{ item.line }}"
-  regexp: "{{ item.regexp }}"
+    path: "{{ env_path }}"
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp }}"
   with_items:
   - line: "export ZK_HOME={{ zk_home }}"
     regexp: "^export ZK_HOME="
