@@ -1,0 +1,27 @@
+- name: check existence of path variable
+  shell: sed -n '/^PATH=/p' '{{ env_path }}'
+  register: path_var
+  
+- name: append path variable if not existence 
+  lineinfile:
+    path: '{{ env_path }}'
+    line: 'PATH={{ path }}'
+  when: path_var.stdout == ''
+    
+- name: config environment variable
+  lineinfile:
+    path: '{{ env_path }}'
+    regexp: '{{ item.regexp }}'
+    line: '{{ item.line }}'
+    backrefs: yes
+  with_items:
+  - regexp: '^export {{ home_name }}='
+    line: 'export {{ home_name }}={{ home_path }}'
+  - regexp: '^export PATH=(.*)?{{ path }}'
+    line: 'export PATH=${{ home_name }}/bin:\1{{ path }}'
+    
+- name: remove duplicate variable
+  shell: sed -i 's#${{ home_name }}/bin:##g2' {{ env_path }}
+  
+- name: let environment variable of config file take effect
+  shell: source {{ env_path }}
