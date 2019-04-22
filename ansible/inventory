@@ -1,4 +1,7 @@
 [zks]
-192.168.88.123 hostname=z1.cnt.io
-192.168.88.124 hostname=z2.cnt.io
-192.168.88.125 hostname=z3.cnt.io
+192.168.88.123 hostname=z1
+192.168.88.124 hostname=z2
+192.168.88.125 hostname=z3
+
+[zks:vars]
+domainname=cnt.io
