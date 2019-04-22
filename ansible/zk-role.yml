@@ -3,4 +3,9 @@
   remote_user: root
 
   roles:
-  - zookeeper
+  - role: java
+    tags: 
+    - java
+  - role: zookeeper
+    tags:
+    - zk
