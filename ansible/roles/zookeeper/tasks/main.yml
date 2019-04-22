@@ -26,11 +26,11 @@
   unarchive: src="{{ local_zk_pkg_path }}" dest="{{ zk_install_dir }}/"
   
 - name: copy zoo.cfg
-  template: src=zoo.cfg.j2 dest="{{ zk_conf_dir }}/zoo.cfg"
+  template: src=zoo.cfg.j2 dest="{{ zk_conf_path }}"
   notify: restart zookeeper
   
 - name: obtain zookeeper id
-  shell: "line=$(grep {{ inventory_hostname }} {{ zk_conf_dir }}/zoo.cfg);tmp=${line#*.};echo ${tmp%=*}"
+  shell: "line=$(grep {{ inventory_hostname }} {{ zk_conf_path }});tmp=${line#*.};echo ${tmp%%=*}"
   register: zk_id
   
 - name: ensure existence of zookeeper data directory
