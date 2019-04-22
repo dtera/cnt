@@ -7,4 +7,5 @@ zk_conf_dir: "{{ zk_home }}/conf"
 zk_data_dir: "{{ zk_home }}/data"
 
 local_pkg_dir: "/storage/pkg"
+local_zk_pkg_path: "{{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz"
 path: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
