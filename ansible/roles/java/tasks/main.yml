@@ -1,0 +1,35 @@
+- name: include OS-specific variables.
+  include_vars: 'roles/common/vars/{{ ansible_os_family }}.yml'
+
+- name: ensure existence of installation package directory in local
+  file: path={{ local_pkg_dir }} state=directory
+  connection: local
+
+- name: check for existence of java package in local
+  stat:
+    path: '{{ local_java_pkg_path }}'
+  register: java_pkg
+  connection: local
+
+# wget --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" --no-cookies 
+# --no-check-certificate https://download.oracle.com/otn/java/jdk/8u212-b10/59066701cf1a433da9770636fbc4c9aa/jdk-8u212-linux-x64.tar.gz
+- name: download java package if not exists in local
+  get_url: 
+    url: '{{ java_pkg_url }}'
+    dest: '{{ local_pkg_dir }}'
+    headers: 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'
+    validate_certs: no 
+  when: not java_pkg.stat.exists
+  connection: local
+
+- name: ensure existence of zookeeper installation package directory
+  file: path={{ java_install_dir }} state=directory
+  
+- name: unarchive zookeeper package
+  unarchive: src='{{ local_java_pkg_path }}' dest="{{ java_install_dir }}/'
+  
+- name: include tasks of environment variable setup
+  include_tasks: roles/common/tasks/env-var-setup.yml
+    
+- name: let environment variable of config file take effect
+  shell: source {{ env_path }}
