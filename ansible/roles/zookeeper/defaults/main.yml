@@ -7,6 +7,6 @@ zk_conf_dir: "{{ zk_home }}/conf"
 zk_conf_path: "{{ zk_conf_dir }}/zoo.cfg"
 zk_data_dir: "{{ zk_home }}/data"
 
-local_pkg_dir: "/storage/pkg"
+local_pkg_dir: "/usr/local/src/pkg"
 local_zk_pkg_path: "{{ local_pkg_dir }}/{{ zk_pkg_name }}.tar.gz"
 path: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
