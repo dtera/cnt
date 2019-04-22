@@ -1,0 +1,9 @@
+java_version: '1.8.0_212'
+java_pkg_name: 'jdk-8u212-linux-x64.tar.gz'
+java_pkg_url: 'https://apache.org/dist/zookeeper/stable/{{ java_pkg_name }}'
+java_install_dir: '/usr/local/cnt'
+java_home: '{{ java_install_dir }}/jdk{{ java_version }}'
+
+local_java_pkg_path: '{{ local_pkg_dir }}/{{ java_pkg_name }}'
+home_name: 'JAVA_HOME'
+home_path: '{{ java_home }}'
