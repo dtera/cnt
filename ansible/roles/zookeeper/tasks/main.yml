@@ -56,5 +56,5 @@
   shell: source {{ env_path }}
   
 - name: start zookeeper
-  shell: zkServer.sh start
+  shell: "{{ zk_home }}/bin/zkServer.sh start"
   tags: start_zk
