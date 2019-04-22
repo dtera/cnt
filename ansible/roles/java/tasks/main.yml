@@ -22,14 +22,11 @@
   when: not java_pkg.stat.exists
   connection: local
 
-- name: ensure existence of zookeeper installation package directory
+- name: ensure existence of java installation package directory
   file: path={{ java_install_dir }} state=directory
   
-- name: unarchive zookeeper package
-  unarchive: src='{{ local_java_pkg_path }}' dest="{{ java_install_dir }}/'
+- name: unarchive java package
+  unarchive: src='{{ local_java_pkg_path }}' dest='{{ java_install_dir }}/'
   
 - name: include tasks of environment variable setup
   include_tasks: roles/common/tasks/env-var-setup.yml
-    
-- name: let environment variable of config file take effect
-  shell: source {{ env_path }}
