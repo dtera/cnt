@@ -1,0 +1,25 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: zhaohq
+  description: Installation of zookeeper cluster.
+  company: "HUST"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: EL
+      versions:
+        - 7
+    - name: Debian
+      versions:
+        - stretch
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+  galaxy_tags:
+    - bigdata
+    - cloud compute
+    - distributed coordination
+    - ha
