@@ -1,8 +1,8 @@
 - name: include OS-specific variables.
-  include_vars: "{{ ansible_os_family }}.yml"
+  include_vars: '{{ ansible_os_family }}.yml'
 
 - name: set hostname.
-  hostname: name="{{ hostname }}.{{ domainname }}"
+  hostname: name='{{ hostname }}.{{ domainname }}'
   
 - name: ensure existence of installation package directory in local
   file: path={{ local_pkg_dir }} state=directory
@@ -10,7 +10,7 @@
 
 - name: check for existence of zookeeper package in local
   stat:
-    path: "{{ local_zk_pkg_path }}"
+    path: '{{ local_zk_pkg_path }}'
   register: local_zk_pkg
   connection: local
   
@@ -23,42 +23,27 @@
   file: path={{ zk_install_dir }} state=directory
   
 - name: unarchive zookeeper package
-  unarchive: src="{{ local_zk_pkg_path }}" dest="{{ zk_install_dir }}/"
+  unarchive: src='{{ local_zk_pkg_path }}' dest='{{ zk_install_dir }}/'
   
 - name: copy zoo.cfg
-  template: src=zoo.cfg.j2 dest="{{ zk_conf_path }}"
+  template: src=zoo.cfg.j2 dest='{{ zk_conf_path }}'
   notify: restart zookeeper
   
 - name: obtain zookeeper id
-  shell: "line=$(grep {{ inventory_hostname }} {{ zk_conf_path }});tmp=${line#*.};echo ${tmp%%=*}"
+  shell: 'line=$(grep {{ inventory_hostname }} {{ zk_conf_path }});tmp=${line#*.};echo ${tmp%%=*}'
   register: zk_id
   
 - name: ensure existence of zookeeper data directory
   file: path={{ zk_data_dir }} state=directory
   
 - name: setup zookeeper id
-  copy: content={{ zk_id.stdout }} dest="{{ zk_data_dir }}/myid"
-# copy: content={{ item.0 }} dest="{{ zk_data_dir }}/myid"
-# with_indexed_items: "{{ groups.zks }}"
-  
-- name: config environment variable of zookeeper
-  lineinfile:
-    path: "{{ env_path }}"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    backrefs: yes
-  with_items:
-  - regexp: "^export ZK_HOME="
-    line: "export ZK_HOME={{ zk_home }}"
-  - regexp: "^export PATH=(.*)?({{ path }})?"
-    line: "export PATH=$ZK_HOME/bin:\1{{ path }}"
-    
-- name: remove duplicate variable
-  shell: sed -i 's#$ZK_HOME/bin:##g2' {{ env_path }}
-  
-- name: let environment variable of config file take effect
-  shell: source {{ env_path }}
+  copy: content={{ zk_id.stdout }} dest='{{ zk_data_dir }}/myid'
+# copy: content={{ item.0 }} dest='{{ zk_data_dir }}/myid'
+# with_indexed_items: '{{ groups.zks }}'
+
+- name: include tasks of environment variable setup
+  include_tasks: roles/common/tasks/env-var-setup.yml
   
 - name: start zookeeper
-  shell: "{{ zk_home }}/bin/zkServer.sh start"
+  shell: '{{ zk_home }}/bin/zkServer.sh start'
   tags: start_zk
