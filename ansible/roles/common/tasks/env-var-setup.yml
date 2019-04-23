@@ -18,7 +18,7 @@
 - name: export PATH environment variable
   lineinfile:
     path: '{{ env_path }}'
-    regexp: '^export PATH=(.*)?{{ path }}'
+    regexp: '^export PATH=(.*){{ path }}'
     line: 'export PATH=${{ home_name }}/bin:\1{{ path }}'
     backrefs: yes
     
