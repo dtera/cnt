@@ -9,22 +9,22 @@
     <name>dfs.ha.namenodes.ns1</name>
     <value>nn1,nn2</value>
   </property>
-  <!-- specify the rpc conmunication address of nn1 -->
+  <!-- specify the rpc communication address of nn1 -->
   <property>
     <name>dfs.namenode.rpc-address.ns1.nn1</name>
     <value>m1.cnt.io:9000</value>
   </property>
-  <!-- specify the http conmunication address of nn1 -->
+  <!-- specify the http communication address of nn1 -->
   <property>
     <name>dfs.namenode.http-address.ns1.nn1</name>
     <value>m1.cnt.io:50070</value>
   </property>
-  <!-- specify the rpc conmunication address of nn2 -->
+  <!-- specify the rpc communication address of nn2 -->
   <property>
     <name>dfs.namenode.rpc-address.ns1.nn2</name>
     <value>m2.cnt.io:9000</value>
   </property>
-  <!-- specify the http conmunication address of nn2 -->
+  <!-- specify the http communication address of nn2 -->
   <property>
     <name>dfs.namenode.http-address.ns1.nn2</name>
     <value>m2.cnt.io:50070</value>
@@ -37,7 +37,7 @@
   <!-- specify the location of depositing data in local disk for journalnode -->
   <property>
     <name>dfs.journalnode.edits.dir</name>
-    <value>/usr/local/bigdata/hadoop-2.8.1/journaldata</value>
+    <value>/usr/local/cnt/hadoop-3.2.0/journal/data</value>
   </property>
   <!-- enable the automatic shifting of failover for namenode -->
   <property>
@@ -49,7 +49,7 @@
     <name>dfs.client.failover.proxy.provider.ns1</name>
     <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
   </property>
-  <!-- config methods of isolation mechanism, different methods are seperated by a line break -->
+  <!-- config methods of isolation mechanism, different methods are separated by a line break -->
   <property>
     <name>dfs.ha.fencing.methods</name>
     <value>
