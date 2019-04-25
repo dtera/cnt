@@ -1,9 +1,14 @@
 java_version: '1.8.0_212'
-java_pkg_name: 'jdk-8u212-linux-x64.tar.gz'
-java_pkg_url: 'https://apache.org/dist/zookeeper/stable/{{ java_pkg_name }}'
-java_install_dir: '/usr/local/java'
-java_home: '{{ java_install_dir }}/jdk{{ java_version }}'
+java_home: '{{ pkg_install_dir }}/jdk{{ java_version }}'
 
-local_java_pkg_path: '{{ local_pkg_dir }}/{{ java_pkg_name }}'
-home_name: 'JAVA_HOME'
-home_path: '{{ java_home }}'
+pkg_name: 'jdk-8u212-linux-x64.tar.gz'
+pkg_url: 'https://apache.org/dist/zookeeper/stable/{{ pkg_name }}'
+pkg_install_dir: '/usr/local/java'
+
+local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}'
+
+home:
+- name: 'JAVA_HOME'
+  path: '{{ java_home }}'
+  exports:
+  - 'bin'

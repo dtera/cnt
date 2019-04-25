@@ -1,29 +1,8 @@
-- name: include OS-specific variables.
-  include_vars: 'roles/common/vars/{{ ansible_os_family }}.yml'
+- name: set hostname
+  hostname: name='{{ host }}.{{ domain }}'
 
-- name: set hostname.
-  hostname: name='{{ hostname }}.{{ domainname }}'
-  
-- name: ensure existence of installation package directory in local
-  file: path={{ local_pkg_dir }} state=directory
-  connection: local
-
-- name: check for existence of zookeeper package in local
-  stat:
-    path: '{{ local_zk_pkg_path }}'
-  register: local_zk_pkg
-  connection: local
-  
-- name: download zookeeper package if not exists in local
-  get_url: url={{ zk_pkg_url }} dest={{ local_pkg_dir }}
-  when: not local_zk_pkg.stat.exists
-  connection: local
-
-- name: ensure existence of zookeeper installation package directory
-  file: path={{ zk_install_dir }} state=directory
-  
-- name: unarchive zookeeper package
-  unarchive: src='{{ local_zk_pkg_path }}' dest='{{ zk_install_dir }}/'
+- name: include tasks of installing package
+  include_tasks: roles/common/tasks/install-by-unarchive.yml
   
 - name: copy zoo.cfg
   template: src=zoo.cfg.j2 dest='{{ zk_conf_path }}'
@@ -40,9 +19,6 @@
   copy: content={{ zk_id.stdout }} dest='{{ zk_data_dir }}/myid'
 # copy: content={{ item.0 }} dest='{{ zk_data_dir }}/myid'
 # with_indexed_items: '{{ groups.zks }}'
-
-- name: include tasks of environment variable setup
-  include_tasks: roles/common/tasks/env-var-setup.yml
   
 - name: start zookeeper
   shell: '{{ zk_home }}/bin/zkServer.sh start'

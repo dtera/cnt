@@ -1,0 +1,47 @@
+- name: set hostname
+  hostname: name='{{ host }}.{{ domain }}'
+
+- name: include tasks of installing package
+  include_tasks: roles/common/tasks/install-by-unarchive.yml
+
+- name: copy several config files to {{ hadoop_conf_dir }}
+  template: src='{{ item }}.j2' dest='{{ hadoop_conf_dir }}/{{ item }}'
+  with_items:
+  - 'core-site.xml'
+  - 'hdfs-site.xml'
+  - 'mapred-site.xml'
+  - 'yarn-site.xml'
+  - 'slaves'
+
+- name: ensure existence of hadoop tmp directory
+  file: path={{ hadoop_tmp_dir }} state=directory
+
+#- name: start hadoop journalnode
+#  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode'
+#  when: inventory_hostname == groups.zks
+#  tags: start_jn
+
+- name: format hadoop namenode
+  shell: '{{ hadoop_home }}/bin/hdfs namenode -format'
+  when: inventory_hostname == groups.nn[0]
+  tags: format_nn
+
+- name: bootstrap standby namenode
+  shell: '{{ hadoop_home }}/bin/hdfs namenode -bootstrapStandby'
+  when: inventory_hostname == groups.nn[0]
+  tags: bootstrap_standby_nn
+
+- name: format zkfc
+  shell: '{{ hadoop_home }}/bin/hdfs zkfc -formatZK'
+  when: inventory_hostname == groups.nn[0]
+  tags: format_zkfc
+
+- name: start dfs
+  shell: '{{ hadoop_home }}/sbin/start-dfs.sh'
+  when: inventory_hostname == groups.nn[0]
+  tags: start_dfs
+
+- name: start yarn
+  shell: '{{ hadoop_home }}/sbin/start-yarn.sh'
+  when: inventory_hostname == groups.rm[0]
+  tags: start_yarn

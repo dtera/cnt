@@ -1,11 +1,16 @@
 ---
-- hosts: zks
+- hosts: cnt
   remote_user: root
 
   roles:
   - role: java
-    tags: 
+    tags:
     - java
   - role: zookeeper
+    when: inventory_hostname in groups.zks
     tags:
     - zk
+  - role: hadoop
+    when: inventory_hostname in groups.hadoop
+    tags:
+    - hadoop

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+  <!--specify the nameservice of hdfs, should be in consistence with the one in core-site.xml -->
+  <property>
+    <name>dfs.nameservices</name>
+    <value>{{ dfs_nameservice }}</value>
+  </property>
+  <!-- specify namenodes for {{ dfs_nameservice }} -->
+  <property>
+    <name>dfs.ha.namenodes.{{ dfs_nameservice }}</name>
+    <value>{% for host in groups.nn %}{{ hostvars[host].id }}{% if not loop.last %},{% endif %}{% endfor %}</value>
+  </property>
+
+{% for host in groups.nn %}
+  <!-- specify the rpc communication address of {{ hostvars[host].id }} -->
+  <property>
+    <name>dfs.namenode.rpc-address.{{ dfs_nameservice }}.{{ hostvars[host].id }}</name>
+    <value>{{ host }}:9000</value>
+  </property>
+  <!-- specify the http communication address of {{ hostvars[host].id }} -->
+  <property>
+    <name>dfs.namenode.http-address.{{ dfs_nameservice }}.{{ hostvars[host].id }}</name>
+    <value>{{ host }}:50070</value>
+  </property>
+{% endfor %}
+
+  <!-- specify the location of depositing namenode's metadata in journalnode -->
+  <property>
+    <name>dfs.namenode.shared.edits.dir</name>
+    <value>qjournal://{% for host in groups.zks %}{{ host }}:8485{% if not loop.last %};{% endif %}{% endfor %}/{{ dfs_nameservice }}</value>
+  </property>
+  <!-- specify the location of depositing data in local disk for journalnode -->
+  <property>
+    <name>dfs.journalnode.edits.dir</name>
+    <value>{{ dfs_edits_dir }}</value>
+  </property>
+
+  <!-- enable the automatic shifting of failover for namenode -->
+  <property>
+    <name>dfs.ha.automatic-failover.enabled</name>
+    <value>{{ dfs_ha_enabled }}</value>
+  </property>
+  <!-- specify the implementation provider of failover mechanism -->
+  <property>
+    <name>dfs.client.failover.proxy.provider.{{ dfs_nameservice }}</name>
+    <value>{{ dfs_failover_provider }}</value>
+  </property>
+  <!-- config methods of isolation mechanism, different methods are separated by a line break -->
+  <property>
+    <name>dfs.ha.fencing.methods</name>
+    <value>
+        {% for method in dfs_ha_fencing_methods %}
+            {{ method }}
+        {% endfor %}
+    </value>
+  </property>
+  <!-- specify the private key files to login with no need for password -->
+  <property>
+    <name>dfs.ha.fencing.ssh.private-key-files</name>
+    <value>{{ dfs_ha_fencing_pkfiles }}</value>
+  </property>
+  <!-- config the timeout time of isolation mechanism for sshfence -->
+  <property>
+    <name>dfs.ha.fencing.ssh.connect-timeout</name>
+    <value>{{ dfs_ha_fencing_timeout }}</value>
+  </property>
+</configuration>

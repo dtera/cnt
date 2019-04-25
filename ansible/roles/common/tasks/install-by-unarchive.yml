@@ -1,0 +1,36 @@
+- name: include os-specific variables.
+  include_vars: 'roles/common/vars/{{ ansible_os_family }}.yml'
+
+- name: ensure existence of installation package directory in local
+  file: path={{ local_pkg_dir }} state=directory
+  connection: local
+
+- name: check for existence of {{ pkg_name|default("software") }} package in local
+  stat:
+    path: '{{ local_pkg_path }}'
+  register: pkg
+  connection: local
+
+# example:
+# wget --no-cookies --no-check-certificate
+# --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie"
+# https://download.oracle.com/otn/java/jdk/8u212-b10/59066701cf1a433da9770636fbc4c9aa/jdk-8u212-linux-x64.tar.gz
+- name: download {{ pkg_name|default("software") }} package if not exists in local
+  get_url:
+    url: '{{ pkg_url }}'
+    dest: '{{ local_pkg_dir }}'
+    headers: '{{ pkg_headers|default() }}'
+    validate_certs: '{{ pkg_url_validate_certs|default("no") }}'
+    url_username: '{{ pkg_url_username|default() }}'
+    url_password: '{{ pkg_url_password|default() }}'
+  when: not pkg.stat.exists
+  connection: local
+
+- name: ensure existence of {{ pkg_install_dir|default("/usr/local") }} installation package directory
+  file: path={{ pkg_install_dir }} state=directory
+  
+- name: unarchive {{ pkg_name|default("software") }} package
+  unarchive: src='{{ local_pkg_path }}' dest='{{ pkg_install_dir }}/'
+  
+- name: include tasks of environment variable setup
+  include_tasks: roles/common/tasks/env-var-setup.yml
