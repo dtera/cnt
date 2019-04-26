@@ -12,7 +12,7 @@
 192.168.88.24  host=r1 id=rm1
 192.168.88.178 host=r2 id=rm2
 
-[dn-nm]
+[dn_nm]
 # 192.168.88.120 host=n0
 # 192.168.88.121 host=n1
 192.168.88.122 host=n2
@@ -23,7 +23,7 @@
 zks
 nn
 rm
-dn-nm
+dn_nm
 
 [cnt:children]
 hadoop

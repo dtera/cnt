@@ -21,14 +21,14 @@
 #  when: inventory_hostname == groups.zks
 #  tags: start_jn
 
-- name: format hadoop namenode
+- name: format one of namenodes in hadoop cluster
   shell: '{{ hadoop_home }}/bin/hdfs namenode -format'
   when: inventory_hostname == groups.nn[0]
-  tags: format_nn
+  tags: format_first_nn
 
-- name: bootstrap standby namenode
+- name: bootstrap other standby namenodes
   shell: '{{ hadoop_home }}/bin/hdfs namenode -bootstrapStandby'
-  when: inventory_hostname == groups.nn[0]
+  when: inventory_hostname != groups.nn[0] and inventory_hostname in groups.nn
   tags: bootstrap_standby_nn
 
 - name: format zkfc
