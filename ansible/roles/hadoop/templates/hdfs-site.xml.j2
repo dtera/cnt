@@ -44,7 +44,7 @@
   <!-- specify the location of depositing namenode's metadata in journalnode -->
   <property>
     <name>dfs.namenode.shared.edits.dir</name>
-    <value>qjournal://{% for host in groups.zks %}{{ host }}:8485{% if not loop.last %};{% endif %}{% endfor %}/{{ dfs_nameservice }}</value>
+    <value>qjournal://{% for host in groups.zk %}{{ host }}:8485{% if not loop.last %};{% endif %}{% endfor %}/{{ dfs_nameservice }}</value>
   </property>
   <!-- specify the location of depositing data in local disk for journalnode -->
   <property>

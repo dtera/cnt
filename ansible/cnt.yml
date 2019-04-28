@@ -17,12 +17,12 @@
   - name: start hadoop journalnode
     shell: '{{ hadoop_home }}/bin/hdfs --daemon start journalnode'
 #    script: roles/hadoop/files/hadoop-daemon.sh start journalnode
-    when: inventory_hostname in groups.zks
+    when: inventory_hostname in groups.zk
     tags:
     - hadoop_start_jn
   - name: stop hadoop journalnode
     shell: '{{ hadoop_home }}/bin/hdfs --daemon stop journalnode'
-    when: inventory_hostname in groups.zks
+    when: inventory_hostname in groups.zk
     tags:
     - hadoop_stop_jn
   - name: stop processes related with hadoop cluster
@@ -43,22 +43,22 @@
     - hadoop_rmdata
   - name: start zookeeper
     shell: '{{ zk_home }}/bin/zkServer.sh start'
-    when: inventory_hostname in groups.zks
+    when: inventory_hostname in groups.zk
     tags:
     - zk_start
   - name: stop zookeeper
     shell: '{{ zk_home }}/bin/zkServer.sh stop'
-    when: inventory_hostname in groups.zks
+    when: inventory_hostname in groups.zk
     tags:
     - zk_stop
   - name: show zookeeper status
     shell: '{{ zk_home }}/bin/zkServer.sh status'
-    when: inventory_hostname in groups.zks
+    when: inventory_hostname in groups.zk
     tags:
     - zk_status
   - name: remove hadoop ha from zookeeper cluster
     shell: '{{ zk_home }}/bin/zkCli.sh rmr /{{ item }}'
-    when: inventory_hostname == groups.zks[0]
+    when: inventory_hostname == groups.zk[0]
     with_items:
     - 'hadoop-ha'
     - 'yarn-leader-election'

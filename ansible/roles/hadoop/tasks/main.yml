@@ -52,13 +52,13 @@
 - name: check for whether namenode and zkfc have been formatted
   shell: '{{ zk_home }}/bin/zkCli.sh ls /|grep hadoop-ha||echo ""'
   register: hadoop_ha
-  delegate_to: '{{ groups.zks[0] }}'
+  delegate_to: '{{ groups.zk[0] }}'
   when: inventory_hostname == groups.nn[0]
 
 - name: check for existence of journalnode process
   shell: 'ps -ef|grep proc_journalnode|grep -v grep||echo ""'
   register: jn_process
-  when: inventory_hostname in groups.zks
+  when: inventory_hostname in groups.zk
 
 - name: check for existence of namenode process
   shell: '{{ java_home.stdout }}/bin/jps|grep NameNode||echo ""'
@@ -72,7 +72,7 @@
 
 - name: start journalnodes
   shell: '{{ hadoop_home }}/bin/hdfs --daemon start journalnode' # sbin/hadoop-daemon.sh start journalnode(deprecated)
-  when: inventory_hostname in groups.zks and jn_process.stdout == ''
+  when: inventory_hostname in groups.zk and jn_process.stdout == ''
   tags: start_jn
 
 - name: format any of the namenodes

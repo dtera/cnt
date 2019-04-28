@@ -7,7 +7,7 @@
     tags:
     - java
   - role: zookeeper
-    when: inventory_hostname in groups.zks
+    when: inventory_hostname in groups.zk
     tags:
     - zk
   - role: hadoop

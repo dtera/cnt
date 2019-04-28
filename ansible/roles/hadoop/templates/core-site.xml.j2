@@ -30,6 +30,6 @@
   <!-- specify the addresses of zookeeper cluster -->
   <property>
     <name>ha.zookeeper.quorum</name>
-    <value>{% for host in groups.zks %}{{ host }}:2181{% if not loop.last %},{% endif %}{% endfor %}</value>
+    <value>{% for host in groups.zk %}{{ host }}:2181{% if not loop.last %},{% endif %}{% endfor %}</value>
   </property>
 </configuration>
