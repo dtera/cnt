@@ -7,7 +7,7 @@
 192.168.88.24  host=rm1 id=rm1
 192.168.88.178 host=rm2 id=rm2
 
-[dn_nm]
+[dn]
 192.168.88.120 host=dn0
 192.168.88.121 host=dn1
 192.168.88.122 host=dn2
@@ -20,7 +20,7 @@
 [hadoop:children]
 nn
 rm
-dn_nm
+dn
 zks
 
 [cnt:children]
