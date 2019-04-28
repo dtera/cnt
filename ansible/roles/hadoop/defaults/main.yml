@@ -23,6 +23,7 @@ dfs_ha_fencing_methods:
 - 'shell(/bin/true)'
 dfs_ha_fencing_pkfiles: '/root/.ssh/id_rsa'
 dfs_ha_fencing_timeout: 30000
+dfs_replicas: 3
 dfs_sbin_arg:
 - 'HDFS_NAMENODE_USER=root'
 - 'HDFS_SECONDARYNAMENODE_USER=root'

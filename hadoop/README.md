@@ -148,6 +148,10 @@ export JAVA_HOME=/usr/local/java/jdk1.8.0_172
     <name>dfs.ha.fencing.ssh.connect-timeout</name>
     <value>30000</value>
   </property>
+  <property>
+    <name>dfs.replication</name>
+    <value>3</value>
+  </property>
 </configuration>
 ```
 * vim mapred-site.xml
@@ -219,7 +223,7 @@ ssh-copy-id z3.cnt.io
 ssh-copy-id z1.cnt.io  
 ssh-copy-id z2.cnt.io  
 ssh-copy-id z3.cnt.io
-* copy configed hadoop to other nodes(in host m1.cnt.io)
+* copy configured hadoop to other nodes(in host m1.cnt.io)
 > scp -r /usr/local/cnt/hadoop-3.2.0 m2.cnt.io:/usr/local/cnt/  
 scp -r /usr/local/cnt/hadoop-3.2.0 r1.cnt.io:/usr/local/cnt/  
 scp -r /usr/local/cnt/hadoop-3.2.0 r2.cnt.io:/usr/local/cnt/  
