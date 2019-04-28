@@ -2,6 +2,7 @@
 - hosts: hadoop
   remote_user: root
   vars:
+  - path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   - zk_home: '/usr/local/cnt/zookeeper-3.4.14'
   - hadoop_home: '/usr/local/cnt/hadoop-3.2.0'
   - firewall_rules:
@@ -15,7 +16,7 @@
     tags:
     - hadoop_start_all
   - name: start hadoop journalnode
-    shell: '{{ hadoop_home }}/bin/hdfs --daemon start journalnode'
+    shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode'
 #    script: roles/hadoop/files/hadoop-daemon.sh start journalnode
     when: inventory_hostname in groups.zk
     tags:
@@ -41,21 +42,6 @@
     tags:
     - hadoop_clean
     - hadoop_rmdata
-  - name: start zookeeper
-    shell: '{{ zk_home }}/bin/zkServer.sh start'
-    when: inventory_hostname in groups.zk
-    tags:
-    - zk_start
-  - name: stop zookeeper
-    shell: '{{ zk_home }}/bin/zkServer.sh stop'
-    when: inventory_hostname in groups.zk
-    tags:
-    - zk_stop
-  - name: show zookeeper status
-    shell: '{{ zk_home }}/bin/zkServer.sh status'
-    when: inventory_hostname in groups.zk
-    tags:
-    - zk_status
   - name: remove hadoop ha from zookeeper cluster
     shell: '{{ zk_home }}/bin/zkCli.sh rmr /{{ item }}'
     when: inventory_hostname == groups.zk[0]
@@ -63,5 +49,27 @@
     - 'hadoop-ha'
     - 'yarn-leader-election'
     tags:
-    - zk_rm_hadoop_ha
     - hadoop_clean
+    - zk_rm_hadoop_ha
+  - name: start zookeeper
+    shell: '{{ zk_home }}/bin/zkServer.sh start'
+    when: inventory_hostname in groups.zk
+    tags:
+    - zk_start
+  - name: show zookeeper status
+    shell: '{{ zk_home }}/bin/zkServer.sh status'
+    when: inventory_hostname in groups.zk
+    tags:
+    - zk_status
+  - name: stop zookeeper
+    shell: '{{ zk_home }}/bin/zkServer.sh stop'
+    when: inventory_hostname in groups.zk
+    tags:
+    - zk_stop
+    - zk_clean
+  - name: remove hadoop journal data
+    shell: 'rm {{ zk_home }}/data/* -rf'
+    when: inventory_hostname in groups.zk
+    tags:
+    - zk_rmdata
+    - zk_clean
