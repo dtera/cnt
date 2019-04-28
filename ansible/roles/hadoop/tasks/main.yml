@@ -23,12 +23,7 @@
 
 - name: copy several config files to {{ hadoop_conf_dir }}
   template: src='{{ item }}.j2' dest='{{ hadoop_conf_dir }}/{{ item }}'
-  with_items:
-  - 'core-site.xml'
-  - 'hdfs-site.xml'
-  - 'mapred-site.xml'
-  - 'yarn-site.xml'
-  - 'slaves'
+  with_items: '{{ hadoop_conf_files }}'
 
 - name: 'add some user args into {% for f in dfs_sbin_file %}{{ f }}{% if not loop.last %}, {% endif %}{% endfor %}'
   lineinfile:
