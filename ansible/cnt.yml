@@ -1,0 +1,66 @@
+---
+- hosts: hadoop
+  remote_user: root
+  vars:
+  - zk_home: '/usr/local/cnt/zookeeper-3.4.14'
+  - hadoop_home: '/usr/local/cnt/hadoop-3.2.0'
+  - firewall_rules:
+    - port: 9000
+    - port: 50070
+
+  tasks:
+  - name: start processes related with hadoop cluster
+    shell: '{{ hadoop_home }}/sbin/start-all.sh'
+    when: inventory_hostname == groups.nn[0]
+    tags:
+    - hadoop_start_all
+  - name: start hadoop journalnode
+    shell: '{{ hadoop_home }}/bin/hdfs --daemon start journalnode'
+    when: inventory_hostname in groups.zks
+    tags:
+    - hadoop_start_jn
+  - name: stop hadoop journalnode
+    shell: '{{ hadoop_home }}/bin/hdfs --daemon stop journalnode'
+    when: inventory_hostname in groups.zks
+    tags:
+    - hadoop_stop_jn
+  - name: stop processes related with hadoop cluster
+    shell: '{{ hadoop_home }}/sbin/stop-all.sh'
+    when: inventory_hostname == groups.nn[0]
+    tags:
+    - hadoop_clean
+    - hadoop_stop_all
+  - name: remove hadoop tmp data
+    shell: 'rm {{ hadoop_home }}/tmp/* -rf'
+    tags:
+    - hadoop_clean
+    - hadoop_rmdata
+  - name: remove hadoop journal data
+    shell: 'rm {{ hadoop_home }}/journal/data/* -rf'
+    tags:
+    - hadoop_clean
+    - hadoop_rmdata
+  - name: start zookeeper
+    shell: '{{ zk_home }}/bin/zkServer.sh start'
+    when: inventory_hostname in groups.zks
+    tags:
+    - zk_start
+  - name: stop zookeeper
+    shell: '{{ zk_home }}/bin/zkServer.sh stop'
+    when: inventory_hostname in groups.zks
+    tags:
+    - zk_stop
+  - name: show zookeeper status
+    shell: '{{ zk_home }}/bin/zkServer.sh status'
+    when: inventory_hostname in groups.zks
+    tags:
+    - zk_status
+  - name: remove hadoop ha from zookeeper cluster
+    shell: '{{ zk_home }}/bin/zkCli.sh rmr /{{ item }}'
+    when: inventory_hostname == groups.zks[0]
+    with_items:
+    - 'hadoop-ha'
+    - 'yarn-leader-election'
+    tags:
+    - zk_rm_hadoop_ha
+    - hadoop_clean

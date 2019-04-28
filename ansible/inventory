@@ -1,29 +1,27 @@
-[zks]
-192.168.88.123 host=z1
-192.168.88.124 host=z2
-192.168.88.125 host=z3
-
 [nn]
-192.168.88.181 host=m1 id=nn1
-192.168.88.182 host=m2 id=nn2
-192.168.88.183 host=m3 id=nn3
+192.168.88.181 host=nn1 id=nn1
+192.168.88.182 host=nn2 id=nn2
+192.168.88.183 host=nn3 id=nn3
 
 [rm]
-192.168.88.24  host=r1 id=rm1
-192.168.88.178 host=r2 id=rm2
+192.168.88.24  host=rm1 id=rm1
+192.168.88.178 host=rm2 id=rm2
 
 [dn_nm]
-# 192.168.88.120 host=n0
-# 192.168.88.121 host=n1
-192.168.88.122 host=n2
-192.168.88.24  host=r1
-192.168.88.178 host=r2
+192.168.88.120 host=dn0
+192.168.88.121 host=dn1
+192.168.88.122 host=dn2
+
+[zks]
+192.168.88.123 host=zk1
+192.168.88.124 host=zk2
+192.168.88.125 host=zk3
 
 [hadoop:children]
-zks
 nn
 rm
 dn_nm
+zks
 
 [cnt:children]
 hadoop

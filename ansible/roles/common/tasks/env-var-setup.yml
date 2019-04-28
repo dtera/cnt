@@ -1,14 +1,18 @@
+#- name: check whether env_path is /etc/profile
+#  shell: 'echo {% if env_path == "/etc/profile" %}"export "{% endif %}'
+#  register: profile_export
+
 - name: check existence of path variable
   shell: sed -n '/^export PATH=/p' '{{ env_path }}'
   register: path_var
-  
+
 - name: append path variable if not existence 
   lineinfile:
     path: '{{ env_path }}'
     line: 'export PATH={{ path }}'
   when: path_var.stdout == ''
 
-- name: export {% for h in home %}{{ h.name }}{% if not loop.last %}, {% endif %}{% endfor %} environment variables
+- name: 'export {% for h in home %}{{ h.name }}{% if not loop.last %}, {% endif %}{% endfor %} environment variables'
   lineinfile:
     path: '{{ env_path }}'
     regexp: '^export {{ item.name }}='
@@ -28,5 +32,6 @@
   shell: "{% for export in item.exports %}sed -i 's#${{ item.name }}/{{ export }}:##g2' {{ env_path }}{% if not loop.last %};{% endif %}{% endfor %}"
   with_items: '{{ home }}'
   
-- name: let environment variable of config file take effect
-  shell: source {{ env_path }}
+- name: source {{ env_path }}
+  shell: . {{ env_path }} # source {{ env_path }}
+  become: true

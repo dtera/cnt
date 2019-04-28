@@ -1,2 +1,3 @@
 path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
 local_pkg_dir: '/usr/local/src/pkg'
+# pkg_install_dir: '/usr/local'

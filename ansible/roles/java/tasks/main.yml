@@ -1,2 +1,6 @@
 - name: include tasks of installing package
   include_tasks: roles/common/tasks/install-by-unarchive.yml
+  tags: unarchive_pkg
+
+- name: check JAVA_HOME
+  shell: echo $JAVA_HOME

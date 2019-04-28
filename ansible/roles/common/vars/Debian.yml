@@ -1,1 +1,1 @@
-env_path: /etc/environment
+env_path: /etc/profile # /etc/environment

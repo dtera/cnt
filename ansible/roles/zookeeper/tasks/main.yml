@@ -3,6 +3,7 @@
 
 - name: include tasks of installing package
   include_tasks: roles/common/tasks/install-by-unarchive.yml
+  tags: unarchive_pkg
   
 - name: copy zoo.cfg
   template: src=zoo.cfg.j2 dest='{{ zk_conf_path }}'
@@ -19,7 +20,12 @@
   copy: content={{ zk_id.stdout }} dest='{{ zk_data_dir }}/myid'
 # copy: content={{ item.0 }} dest='{{ zk_data_dir }}/myid'
 # with_indexed_items: '{{ groups.zks }}'
-  
+
+- name: check for existence of zookeeper process
+  shell: ps -ef|grep zookeeper|grep -v grep||echo ''
+  register: zk_process
+
 - name: start zookeeper
   shell: '{{ zk_home }}/bin/zkServer.sh start'
   tags: start_zk
+  when: zk_process.stdout == ''

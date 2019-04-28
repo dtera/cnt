@@ -7,6 +7,7 @@
       <w>apiserver</w>
       <w>datacenter</w>
       <w>datacenters</w>
+      <w>datanode</w>
       <w>datastore</w>
       <w>dest</w>
       <w>domainname</w>
@@ -40,13 +41,17 @@
       <w>nodemanager</w>
       <w>nodename</w>
       <w>oraclelicense</w>
+      <w>proc</w>
       <w>qjournal</w>
       <w>rbac</w>
       <w>resourcemanager</w>
       <w>rhel</w>
       <w>sbin</w>
+      <w>secondarynamenode</w>
       <w>securebackup</w>
       <w>sshfence</w>
+      <w>stdin</w>
+      <w>unarchive</w>
       <w>vsphere</w>
       <w>webhook</w>
       <w>wget</w>

@@ -66,9 +66,9 @@
   <property>
     <name>dfs.ha.fencing.methods</name>
     <value>
-        {% for method in dfs_ha_fencing_methods %}
-            {{ method }}
-        {% endfor %}
+    {% for method in dfs_ha_fencing_methods %}
+      {{ method }}
+    {% endfor %}
     </value>
   </property>
   <!-- specify the private key files to login with no need for password -->

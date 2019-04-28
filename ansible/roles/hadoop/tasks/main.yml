@@ -2,7 +2,24 @@
   hostname: name='{{ host }}.{{ domain }}'
 
 - name: include tasks of installing package
-  include_tasks: roles/common/tasks/install-by-unarchive.yml
+  include_tasks: 'roles/common/tasks/install-by-unarchive.yml'
+  tags: unarchive_pkg
+
+- name: 'expose ports {% for fr in firewall_rules %}{{ fr.port }} {% endfor %}in namenodes'
+  include_tasks: 'roles/common/tasks/firewall-{{ ansible_os_family }}.yml'
+  when: inventory_hostname in groups.nn
+  tags: expose_ports
+
+- name: check for JAVA_HOME environment variable
+  shell: sed -n '/^export JAVA_HOME=/p' {{ env_path }}|cut -d'=' -f2
+  register: java_home
+
+- name: export JAVA_HOME environment variable in hadoop-env.sh
+  lineinfile:
+    path: '{{ hadoop_conf_dir }}/hadoop-env.sh'
+    regexp: '^export JAVA_HOME='
+    line: 'export JAVA_HOME={{ java_home.stdout }}'
+  when: java_home.stdout != ''
 
 - name: copy several config files to {{ hadoop_conf_dir }}
   template: src='{{ item }}.j2' dest='{{ hadoop_conf_dir }}/{{ item }}'
@@ -13,35 +30,82 @@
   - 'yarn-site.xml'
   - 'slaves'
 
+- name: 'add some user args into {% for f in dfs_sbin_file %}{{ f }}{% if not loop.last %}, {% endif %}{% endfor %}'
+  lineinfile:
+    path: '{{ hadoop_home }}/sbin/{{ item.0 }}'
+    insertafter: '^# limitations'
+    line: '{{ item.1 }}'
+  loop: '{{ dfs_sbin_file|product(dfs_sbin_arg)|list }}'
+
+- name: 'add some user args into {% for f in yarn_sbin_file %}{{ f }}{% if not loop.last %}, {% endif %}{% endfor %}'
+  lineinfile:
+    path: '{{ hadoop_home }}/sbin/{{ item.0 }}'
+    insertafter: '^# limitations'
+    line: '{{ item.1 }}'
+  loop: '{{ yarn_sbin_file|product(yarn_sbin_arg)|list }}'
+
 - name: ensure existence of hadoop tmp directory
   file: path={{ hadoop_tmp_dir }} state=directory
 
-#- name: start hadoop journalnode
-#  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode'
-#  when: inventory_hostname == groups.zks
-#  tags: start_jn
+- name: ensure existence of hadoop log directory
+  file: path={{ hadoop_log_dir }} state=directory
 
-- name: format one of namenodes in hadoop cluster
-  shell: '{{ hadoop_home }}/bin/hdfs namenode -format'
+- name: check for whether {{ hadoop_tmp_dir }} has contents
+  shell: 'ls {{ hadoop_tmp_dir }}'
+  register: tmp_dir
+
+- name: check for whether namenode and zkfc have been formatted
+  shell: '{{ zk_home }}/bin/zkCli.sh ls /|grep hadoop-ha||echo ""'
+  register: hadoop_ha
+  delegate_to: '{{ groups.zks[0] }}'
   when: inventory_hostname == groups.nn[0]
-  tags: format_first_nn
 
-- name: bootstrap other standby namenodes
-  shell: '{{ hadoop_home }}/bin/hdfs namenode -bootstrapStandby'
-  when: inventory_hostname != groups.nn[0] and inventory_hostname in groups.nn
-  tags: bootstrap_standby_nn
+- name: check for existence of journalnode process
+  shell: 'ps -ef|grep proc_journalnode|grep -v grep||echo ""'
+  register: jn_process
+  when: inventory_hostname in groups.zks
+
+- name: check for existence of namenode process
+  shell: '{{ java_home.stdout }}/bin/jps|grep NameNode||echo ""'
+  register: nn_process
+  when: inventory_hostname in groups.nn
+
+- name: check for existence of resourcemanager process
+  shell: '{{ java_home.stdout }}/bin/jps|grep ResourceManager||echo ""'
+  register: rm_process
+  when: inventory_hostname in groups.rm
+
+- name: start journalnodes
+  shell: '{{ hadoop_home }}/bin/hdfs --daemon start journalnode' # sbin/hadoop-daemon.sh start journalnode(deprecated)
+  when: inventory_hostname in groups.zks and jn_process.stdout == ''
+  tags: start_jn
+
+- name: format any of the namenodes
+  shell: 'echo Y|{{ hadoop_home }}/bin/hdfs namenode -format --stdin'
+  when: inventory_hostname == groups.nn[0] and tmp_dir.stdout == ''
+  tags: format_first_nn
 
 - name: format zkfc
   shell: '{{ hadoop_home }}/bin/hdfs zkfc -formatZK'
-  when: inventory_hostname == groups.nn[0]
+  when: inventory_hostname == groups.nn[0] and hadoop_ha.stdout == ''
   tags: format_zkfc
 
-- name: start dfs
+- name: start dfs on any of the namenodes
   shell: '{{ hadoop_home }}/sbin/start-dfs.sh'
-  when: inventory_hostname == groups.nn[0]
+  when: inventory_hostname == groups.nn[0] and nn_process.stdout == ''
   tags: start_dfs
+
+- name: bootstrap other standby namenodes
+  command: '{{ hadoop_home }}/bin/hdfs namenode -bootstrapStandby'
+  when: inventory_hostname in groups.nn and inventory_hostname != groups.nn[0] and tmp_dir.stdout == ''
+  tags: bootstrap_standby_nn
+
+- name: start other standby namenodes
+  shell: '{{ hadoop_home }}/bin/hdfs --daemon start namenode'
+  when: inventory_hostname in groups.nn and inventory_hostname != groups.nn[0] and nn_process.stdout == ''
+  tags: start_standby_nn
 
 - name: start yarn
   shell: '{{ hadoop_home }}/sbin/start-yarn.sh'
-  when: inventory_hostname == groups.rm[0]
+  when: inventory_hostname == groups.rm[0] and rm_process.stdout == ''
   tags: start_yarn

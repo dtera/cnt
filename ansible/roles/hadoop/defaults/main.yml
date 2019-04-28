@@ -1,10 +1,11 @@
 hadoop_version: '3.2.0'
-hadoop_home: '{{ hadoop_install_dir }}/{{ hadoop_pkg_name }}'
+hadoop_home: '{{ pkg_install_dir }}/{{ pkg_name }}'
 hadoop_conf_dir: '{{ hadoop_home }}/etc/hadoop'
 hadoop_tmp_dir: '{{ hadoop_home }}/tmp'
+hadoop_log_dir: '{{ hadoop_home }}/logs'
 
 pkg_name: 'hadoop-{{ hadoop_version }}'
-pkg_url: 'https://apache.org/dist/hadoop/core/stable/{{ hadoop_pkg_name }}.tar.gz'
+pkg_url: 'https://apache.org/dist/hadoop/core/stable/{{ pkg_name }}.tar.gz'
 pkg_install_dir: '/usr/local/cnt'
 
 dfs_nameservice: 'ns1'
@@ -16,14 +17,36 @@ dfs_ha_fencing_methods:
 - 'shell(/bin/true)'
 dfs_ha_fencing_pkfiles: '/root/.ssh/id_rsa'
 dfs_ha_fencing_timeout: 30000
+dfs_sbin_arg:
+- 'HDFS_NAMENODE_USER=root'
+- 'HDFS_SECONDARYNAMENODE_USER=root'
+- 'HDFS_DATANODE_USER=root'
+- 'HDFS_DATANODE_SECURE_USER=hdfs'
+- 'HDFS_JOURNALNODE_USER=root'
+- 'HDFS_ZKFC_USER=root'
+dfs_sbin_file:
+- 'start-dfs.sh'
+- 'stop-dfs.sh'
 
 mapreduce_framework_name: 'yarn'
 
 yarn_ha_enabled: true
-yarn_rm_cluster_id: 'yrc'
+yarn_rm_clusterid: 'yrc'
 yarn_aux_services: 'mapreduce_shuffle'
+yarn_sbin_arg:
+- 'YARN_RESOURCEMANAGER_USER=root'
+- 'YARN_NODEMANAGER_USER=root'
+yarn_sbin_file:
+- 'start-yarn.sh'
+- 'stop-yarn.sh'
+
+zk_home: '{{ pkg_install_dir }}/zookeeper-3.4.14'
 
 local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}.tar.gz'
+
+firewall_rules:
+- port: 9000
+- port: 50070
 
 home:
 - name: 'HADOOP_HOME'
