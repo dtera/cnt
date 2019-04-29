@@ -1,0 +1,4 @@
+services: 
+- name: firewalld
+  state: stopped
+  enabled: no

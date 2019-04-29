@@ -1,0 +1,4 @@
+services:
+- name: ufw
+  state: stopped
+  enabled: no

@@ -37,6 +37,11 @@
     tags:
     - hadoop_clean
     - hadoop_rmdata
+  - name: remove hadoop log data
+    shell: 'rm {{ hadoop_home }}/logs/* -rf'
+    tags:
+    - hadoop_clean
+    - hadoop_rmdata
   - name: remove hadoop journal data
     shell: 'rm {{ hadoop_home }}/journal/data/* -rf'
     tags:
