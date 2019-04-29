@@ -16,7 +16,7 @@
     tags:
     - hadoop_start_all
   - name: start hadoop journalnode
-    shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode'
+    shell: 'nohup {{ hadoop_home }}/bin/hdfs journalnode &> {{ hadoop_home }}/logs/jn.log &'
 #    script: roles/hadoop/files/hadoop-daemon.sh start journalnode
     when: inventory_hostname in groups.zk
     tags:
