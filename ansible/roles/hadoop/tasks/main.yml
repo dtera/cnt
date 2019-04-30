@@ -78,8 +78,8 @@
   when: inventory_hostname in groups.rm
 
 - name: start journalnodes
-  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode'
-#  shell: 'nohup {{ hadoop_home }}/bin/hdfs journalnode &> {{ hadoop_home }}/logs/jn.log &' # (for 3.x version)
+#  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode' # (for 2.x version)
+  shell: 'nohup {{ hadoop_home }}/bin/hdfs journalnode &> {{ hadoop_home }}/logs/jn.log &' # (for 3.x version)
   when: inventory_hostname in groups.zk and jn_process.stdout == ''
   tags: start_jn
 
@@ -106,13 +106,13 @@
   tags: bootstrap_standby_nn
 
 - name: start other standby namenodes
-  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start namenode'
-#  shell: 'nohup {{ hadoop_home }}/bin/hdfs namenode &> {{ hadoop_home }}/logs/nn.log &' # (for 3.x version)
+#  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start namenode' # (for 2.x version)
+  shell: 'nohup {{ hadoop_home }}/bin/hdfs namenode &> {{ hadoop_home }}/logs/nn.log &' # (for 3.x version)
   when: inventory_hostname in groups.nn[1:] and nn_process.stdout == ''
   tags: start_standby_nn
 
 - name: start yarn
   shell: '{{ hadoop_home }}/sbin/start-yarn.sh'
-  when: inventory_hostname in groups.rm and rm_process.stdout == ''
-#  when: inventory_hostname == groups.rm[0] and rm_process.stdout == '' # (for 3.x version)
+#  when: inventory_hostname in groups.rm and rm_process.stdout == '' # (for 2.x version)
+  when: inventory_hostname == groups.rm[0] and rm_process.stdout == '' # (for 3.x version)
   tags: start_yarn

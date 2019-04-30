@@ -1,5 +1,5 @@
-hadoop_version: '2.9.2'
-#hadoop_version: '3.2.0'
+#hadoop_version: '2.9.2'
+hadoop_version: '3.2.0'
 hadoop_home: '{{ pkg_install_dir }}/{{ pkg_name }}'
 hadoop_conf_dir: '{{ hadoop_home }}/etc/hadoop'
 hadoop_tmp_dir: '{{ hadoop_home }}/tmp'
@@ -9,8 +9,8 @@ hadoop_conf_files:
 - 'hdfs-site.xml'
 - 'mapred-site.xml'
 - 'yarn-site.xml'
-#- 'workers' # (for 3.x version)
-- 'slaves' # (for 2.x version)
+- 'workers' # (for 3.x version)
+#- 'slaves' # (for 2.x version)
 
 pkg_name: 'hadoop-{{ hadoop_version }}'
 pkg_url: 'https://apache.org/dist/hadoop/core/stable/{{ pkg_name }}.tar.gz'

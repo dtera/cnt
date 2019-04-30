@@ -4,11 +4,12 @@
   vars:
   - path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   - local_pkg_dir: '/usr/local/src/pkg'
-  - local_pkg_path: '{{ local_pkg_dir }}/hadoop-2.9.2'
+#  - pkg_name: 'hadoop-2.9.2'
+  - pkg_name: 'hadoop-3.2.0'
+  - local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}'
   - pkg_install_dir: '/usr/local/cnt'
   - zk_home: '/usr/local/cnt/zookeeper-3.4.14'
-  - hadoop_home: '{{ pkg_install_dir }}/hadoop-2.8.5'
-#  - hadoop_home: '{{ pkg_install_dir }}/hadoop-3.2.0'
+  - hadoop_home: '{{ pkg_install_dir }}/{{ pkg_name }}'
   - firewall_rules:
     - port: 9000
     - port: 50070
