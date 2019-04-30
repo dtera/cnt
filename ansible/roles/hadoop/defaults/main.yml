@@ -13,7 +13,7 @@ hadoop_conf_files:
 #- 'slaves' # (for 2.x version)
 
 pkg_name: 'hadoop-{{ hadoop_version }}'
-pkg_url: 'https://apache.org/dist/hadoop/core/stable/{{ pkg_name }}.tar.gz'
+pkg_url: 'http://mirror.bit.edu.cn/apache/hadoop/common/{{ pkg_name }}/{{ pkg_name }}.tar.gz'
 pkg_install_dir: '/usr/local/cnt'
 
 dfs_nameservice: 'ns1'
