@@ -4,18 +4,18 @@
 - name: set hostname
   hostname: name='{{ host }}.{{ domain }}'
 
-- name: include tasks of setting services
-  include_tasks: 'roles/common/tasks/service-setup.yml'
-  tags: setup_services
+#- name: include tasks of setting services
+#  include_tasks: 'roles/common/tasks/service-setup.yml'
+#  tags: setup_services
 
 - name: include tasks of installing package
   include_tasks: 'roles/common/tasks/install-by-unarchive.yml'
   tags: unarchive_pkg
 
-#- name: 'expose ports {% for fr in firewall_rules %}{{ fr.port }} {% endfor %}in namenodes'
-#  include_tasks: 'roles/common/tasks/firewall-{{ ansible_os_family }}.yml'
-#  when: inventory_hostname in groups.nn
-#  tags: expose_ports
+- name: expose some ports in different nodes
+  include_tasks: 'roles/common/tasks/firewall-{{ ansible_os_family }}.yml'
+  when: firewall_rules is defined
+  tags: expose_ports
 
 - name: check for JAVA_HOME environment variable
   shell: sed -n '/^export JAVA_HOME=/p' {{ env_path }}|cut -d'=' -f2
@@ -77,8 +77,9 @@
   register: rm_process
   when: inventory_hostname in groups.rm
 
-- name: start journalnodes # sbin/hadoop-daemon.sh start journalnode(deprecated)
-  shell: 'nohup {{ hadoop_home }}/bin/hdfs journalnode &> {{ hadoop_home }}/logs/jn.log &'
+- name: start journalnodes
+  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode'
+#  shell: 'nohup {{ hadoop_home }}/bin/hdfs journalnode &> {{ hadoop_home }}/logs/jn.log &' # (for 3.x version)
   when: inventory_hostname in groups.zk and jn_process.stdout == ''
   tags: start_jn
 
@@ -99,16 +100,19 @@
 
 - name: bootstrap other standby namenodes
   command: '{{ hadoop_home }}/bin/hdfs namenode -bootstrapStandby'
-  when: inventory_hostname in groups.nn and inventory_hostname != groups.nn[0] and
-        tmp_dir.stdout == '' and nn_process.stdout == ''
+  when: inventory_hostname in groups.nn[1:] and tmp_dir.stdout == '' and nn_process.stdout == ''
+#  when: inventory_hostname in groups.nn and inventory_hostname != groups.nn[0] and
+#        tmp_dir.stdout == '' and nn_process.stdout == ''
   tags: bootstrap_standby_nn
 
 - name: start other standby namenodes
-  shell: 'nohup {{ hadoop_home }}/bin/hdfs namenode &> {{ hadoop_home }}/logs/nn.log &'
-  when: inventory_hostname in groups.nn and inventory_hostname != groups.nn[0] and nn_process.stdout == ''
+  shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start namenode'
+#  shell: 'nohup {{ hadoop_home }}/bin/hdfs namenode &> {{ hadoop_home }}/logs/nn.log &' # (for 3.x version)
+  when: inventory_hostname in groups.nn[1:] and nn_process.stdout == ''
   tags: start_standby_nn
 
 - name: start yarn
   shell: '{{ hadoop_home }}/sbin/start-yarn.sh'
-  when: inventory_hostname == groups.rm[0] and rm_process.stdout == ''
+  when: inventory_hostname in groups.rm and rm_process.stdout == ''
+#  when: inventory_hostname == groups.rm[0] and rm_process.stdout == '' # (for 3.x version)
   tags: start_yarn

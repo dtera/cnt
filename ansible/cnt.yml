@@ -3,26 +3,52 @@
   remote_user: root
   vars:
   - path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  - local_pkg_dir: '/usr/local/src/pkg'
+  - local_pkg_path: '{{ local_pkg_dir }}/hadoop-2.9.2'
+  - pkg_install_dir: '/usr/local/cnt'
   - zk_home: '/usr/local/cnt/zookeeper-3.4.14'
-  - hadoop_home: '/usr/local/cnt/hadoop-3.2.0'
+  - hadoop_home: '{{ pkg_install_dir }}/hadoop-2.8.5'
+#  - hadoop_home: '{{ pkg_install_dir }}/hadoop-3.2.0'
   - firewall_rules:
     - port: 9000
     - port: 50070
 
   tasks:
+  - name: copy package
+    copy: src='{{ local_pkg_path }}' dest='{{ pkg_install_dir }}/'
+    tags: copy_pkg
+  - name: delete package
+    file: path='{{ hadoop_home }}' state=absent
+    tags: delete_pkg
+  - name: setup firewalld
+    service: name=firewalld state=started enabled=yes
+    when: ansible_os_family == 'RedHat'
+    tags: setup_fw
+  - name: setup ufw
+    service: name=ufw state=started enabled=yes
+    when: ansible_os_family == 'Debian'
+    tags: setup_fw
+  - name: copy over the contents of a NameNode metadata directories to the other
+    shell: 'scp -r {{ hadoop_home }}/tmp {{ item }}:{{ hadoop_home }}/'
+    with_items: '{{ groups.nn[1:] }}'
+    when: inventory_hostname == groups.nn[0]
+    tags:
+    - hadoop_copy_metadata
   - name: start processes related with hadoop cluster
     shell: '{{ hadoop_home }}/sbin/start-all.sh'
     when: inventory_hostname == groups.nn[0]
     tags:
     - hadoop_start_all
   - name: start hadoop journalnode
-    shell: 'nohup {{ hadoop_home }}/bin/hdfs journalnode &> {{ hadoop_home }}/logs/jn.log &'
+    shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh start journalnode'
+#    shell: 'nohup {{ hadoop_home }}/bin/hdfs journalnode &> {{ hadoop_home }}/logs/jn.log &' (for 3.x version)
 #    script: roles/hadoop/files/hadoop-daemon.sh start journalnode
     when: inventory_hostname in groups.zk
     tags:
     - hadoop_start_jn
   - name: stop hadoop journalnode
-    shell: '{{ hadoop_home }}/bin/hdfs --daemon stop journalnode'
+    shell: '{{ hadoop_home }}/sbin/hadoop-daemon.sh stop journalnode'
+#    shell: '{{ hadoop_home }}/bin/hdfs --daemon stop journalnode' (for 3.x version)
     when: inventory_hostname in groups.zk
     tags:
     - hadoop_stop_jn

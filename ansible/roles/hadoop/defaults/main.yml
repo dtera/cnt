@@ -1,4 +1,5 @@
-hadoop_version: '3.2.0'
+hadoop_version: '2.9.2'
+#hadoop_version: '3.2.0'
 hadoop_home: '{{ pkg_install_dir }}/{{ pkg_name }}'
 hadoop_conf_dir: '{{ hadoop_home }}/etc/hadoop'
 hadoop_tmp_dir: '{{ hadoop_home }}/tmp'
@@ -8,7 +9,8 @@ hadoop_conf_files:
 - 'hdfs-site.xml'
 - 'mapred-site.xml'
 - 'yarn-site.xml'
-- 'workers' # 'slaves'
+#- 'workers' # (for 3.x version)
+- 'slaves' # (for 2.x version)
 
 pkg_name: 'hadoop-{{ hadoop_version }}'
 pkg_url: 'https://apache.org/dist/hadoop/core/stable/{{ pkg_name }}.tar.gz'
@@ -24,6 +26,7 @@ dfs_ha_fencing_methods:
 dfs_ha_fencing_pkfiles: '/root/.ssh/id_rsa'
 dfs_ha_fencing_timeout: 30000
 dfs_replicas: 3
+dfs_ip_hostname_check: false
 dfs_sbin_arg:
 - 'HDFS_NAMENODE_USER=root'
 - 'HDFS_SECONDARYNAMENODE_USER=root'
@@ -50,10 +53,6 @@ yarn_sbin_file:
 zk_home: '{{ pkg_install_dir }}/zookeeper-3.4.14'
 
 local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}.tar.gz'
-
-firewall_rules:
-- port: 9000
-- port: 50070
 
 home:
 - name: 'HADOOP_HOME'

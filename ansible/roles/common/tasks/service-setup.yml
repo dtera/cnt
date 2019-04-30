@@ -1,6 +1,6 @@
 - name: setup services
   service:
-    name: '{{item.name}}'
-    state: '{{item.state|default("started")}}'
-    enabled: '{{item.enabled|default("yes")}}'
+    name: '{{ item.name }}'
+    state: '{{ item.state|default("started") }}'
+    enabled: '{{ item.enabled|default("yes") }}'
   with_items: '{{ services }}'

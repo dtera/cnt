@@ -1,0 +1,5 @@
+firewall_rules:
+- port: 2181
+- port: 2888
+- port: 3888
+- port: 8485

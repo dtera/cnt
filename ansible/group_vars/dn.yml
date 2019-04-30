@@ -1,0 +1,6 @@
+firewall_rules:
+- port: 9866
+- port: 44706
+- port: 50010
+- port: 50020
+- port: 50075

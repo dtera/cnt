@@ -81,9 +81,16 @@
     <name>dfs.ha.fencing.ssh.connect-timeout</name>
     <value>{{ dfs_ha_fencing_timeout }}</value>
   </property>
+  <!-- whether the namenode requires that a connecting datanode's address must be resolved to a hostname -->
+  <property>
+    <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
+    <value>{{ dfs_ip_hostname_check }}</value>
+  </property>
   <!-- specify the num of replicas for hdfs -->
+  <!--
   <property>
     <name>dfs.replication</name>
     <value>{{ dfs_replicas }}</value>
   </property>
+  -->
 </configuration>

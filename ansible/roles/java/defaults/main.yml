@@ -12,3 +12,5 @@ home:
   path: '{{ java_home }}'
   exports:
   - 'bin'
+- name: 'CLASSPATH'
+  path: '.:$JAVA_HOME/jre/lib/rt.jar:$JAVA_HOME/lib/tools.jar'

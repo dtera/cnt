@@ -24,12 +24,12 @@
   lineinfile:
     path: '{{ env_path }}'
     regexp: '^export PATH=(.*){{ path }}'
-    line: 'export PATH={% for export in item.exports %}${{ item.name }}/{{ export }}:{% endfor %}\1{{ path }}'
+    line: 'export PATH={% for export in item.exports|default() %}${{ item.name }}/{{ export }}:{% endfor %}\1{{ path }}'
     backrefs: yes
   with_items: '{{ home }}'
 
 - name: remove duplicate variable
-  shell: "{% for export in item.exports %}sed -i 's#${{ item.name }}/{{ export }}:##g2' {{ env_path }}{% if not loop.last %};{% endif %}{% endfor %}"
+  shell: "ls;{% for export in item.exports|default() %}sed -i 's#${{ item.name }}/{{ export }}:##g2' {{ env_path }}{% if not loop.last %};{% endif %}{% endfor %}"
   with_items: '{{ home }}'
   
 - name: source {{ env_path }}
