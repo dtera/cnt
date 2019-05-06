@@ -1,0 +1,14 @@
+scala_version: '2.12.8'
+scala_home: '{{ pkg_install_dir }}/{{ pkg_name }}'
+
+pkg_name: 'scala-{{ scala_version }}'
+pkg_url: 'https://downloads.lightbend.com/scala/{{ scala_version }}/{{ pkg_name }}.tgz'
+pkg_install_dir: '/usr/local/cnt'
+
+local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}.tgz'
+
+home:
+- name: 'SCALA_HOME'
+  path: '{{ scala_home }}'
+  exports:
+  - 'bin'

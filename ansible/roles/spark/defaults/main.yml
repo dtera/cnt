@@ -1,0 +1,22 @@
+spark_version: '2.4.2'
+spark_home: '{{ pkg_install_dir }}/{{ pkg_name }}'
+spark_conf_dir: '{{ spark_home }}/conf'
+spark_conf_files:
+- 'spark-env.sh'
+- 'slaves'
+
+hadoop_home: '{{ pkg_install_dir }}/hadoop-3.2.0'
+hadoop_conf_dir: '{{ hadoop_home }}/etc/hadoop'
+hadoop_version: '2.7'
+
+pkg_name: 'spark-{{ spark_version }}-bin-hadoop{{ hadoop_version }}'
+pkg_url: 'http://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-{{ spark_version }}/{{ pkg_name }}.tgz'
+pkg_install_dir: '/usr/local/cnt'
+
+local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}.tgz'
+
+home:
+- name: 'SPARK_HOME'
+  path: '{{ spark_home }}'
+  exports:
+  - 'bin'

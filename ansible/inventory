@@ -23,8 +23,19 @@ rm
 dn
 zk
 
+[master]
+192.168.88.24
+
+[worker]
+192.168.88.178
+
+[spark:children]
+master
+worker
+
 [cnt:children]
 hadoop
+spark
 
 [cnt:vars]
 domain=cnt.io

@@ -6,6 +6,10 @@
   - role: java
     tags:
     - java
+  - role: scala
+    when: inventory_hostname in groups.spark
+    tags:
+    - scala
   - role: zookeeper
     when: inventory_hostname in groups.zk
     tags:
@@ -14,3 +18,7 @@
     when: inventory_hostname in groups.hadoop
     tags:
     - hadoop
+  - role: spark
+    when: inventory_hostname in groups.spark
+    tags:
+    - spark

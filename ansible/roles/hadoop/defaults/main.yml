@@ -60,3 +60,5 @@ home:
   exports:
   - 'bin'
   - 'sbin'
+- name: 'HADOOP_CONF_DIR'
+  path: '{{ hadoop_home }}/etc/hadoop'

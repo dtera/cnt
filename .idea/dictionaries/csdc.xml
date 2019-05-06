@@ -5,6 +5,8 @@
       <w>ansible</w>
       <w>apiclient</w>
       <w>apiserver</w>
+      <w>blas</w>
+      <w>daemonize</w>
       <w>datacenter</w>
       <w>datacenters</w>
       <w>datanode</w>
@@ -23,6 +25,7 @@
       <w>healthcheck</w>
       <w>hostvars</w>
       <w>hust</w>
+      <w>ident</w>
       <w>initializers</w>
       <w>journalnode</w>
       <w>kube</w>
@@ -30,9 +33,12 @@
       <w>kubeconfig</w>
       <w>kubectl</w>
       <w>kubelet</w>
+      <w>libmesos</w>
+      <w>lineinfile</w>
       <w>mapred</w>
       <w>mapreduce</w>
       <w>maxage</w>
+      <w>mesos</w>
       <w>mkdir</w>
       <w>myid</w>
       <w>namenode</w>
@@ -42,6 +48,7 @@
       <w>nodemanager</w>
       <w>nodename</w>
       <w>nohup</w>
+      <w>openblas</w>
       <w>oraclelicense</w>
       <w>proc</w>
       <w>qjournal</w>
@@ -56,6 +63,7 @@
       <w>unarchive</w>
       <w>vsphere</w>
       <w>webhook</w>
+      <w>webui</w>
       <w>wget</w>
       <w>yaml</w>
       <w>zkfc</w>

@@ -1,0 +1,46 @@
+- name: include tasks of installing package
+  include_tasks: roles/common/tasks/install-by-unarchive.yml
+  tags: unarchive_pkg
+
+- name: copy several config files to {{ spark_conf_dir }}
+  template: src='{{ item }}.j2' dest='{{ spark_conf_dir }}/{{ item }}'
+  with_items: '{{ spark_conf_files }}'
+
+#- name: check for JAVA_HOME environment variable
+#  shell: sed -n '/^export JAVA_HOME=/p' {{ env_path }}|cut -d'=' -f2
+#  register: java_home
+#
+#- name: check for SCALA_HOME environment variable
+#  shell: sed -n '/^export SCALA_HOME=/p' {{ env_path }}|cut -d'=' -f2
+#  register: scala_home
+#
+#- name: check for HADOOP_HOME environment variable
+#  shell: sed -n '/^export HADOOP_HOME=/p' {{ env_path }}|cut -d'=' -f2
+#  register: hadoop_home
+
+#- name: check for HADOOP_CONF_DIR environment variable
+#  shell: sed -n '/^export HADOOP_CONF_DIR=/p' {{ env_path }}|cut -d'=' -f2
+#  register: hadoop_conf_dir
+#
+#- name: 'setup several environment variables in {{ spark_conf_dir }}/spark-env.sh'
+#  lineinfile:
+#    path: '{{ spark_conf_dir }}/spark-env.sh'
+#    regexp: '^export {{ item.name }}='
+#    line: 'export {{ item.name }}={{ item.path }}'
+#  with_items:
+#  - name: JAVA_HOME
+#    path: java_home.stdout
+#  - name: SCALA_HOME
+#    path: scala_home.stdout
+#  - name: HADOOP_HOME
+#    path: hadoop_home.stdout
+#  - name: HADOOP_CONF_DIR
+#    path: '{{ hadoop_conf_dir.stdout }}'
+#  - name: SPARK_MASTER_HOST
+#    path: '{{ groups.master }}'
+
+- name: start processes related with spark cluster
+  shell: '{{ spark_home }}/sbin/start-all.sh'
+  when: inventory_hostname == groups.master[0]
+  tags:
+  - spark_start_all
