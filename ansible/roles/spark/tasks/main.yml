@@ -2,6 +2,11 @@
   include_tasks: roles/common/tasks/install-by-unarchive.yml
   tags: unarchive_pkg
 
+- name: expose some ports in different nodes
+  include_tasks: 'roles/common/tasks/firewall-{{ ansible_os_family }}.yml'
+  when: firewall_rules is defined
+  tags: expose_ports
+
 - name: copy several config files to {{ spark_conf_dir }}
   template: src='{{ item }}.j2' dest='{{ spark_conf_dir }}/{{ item }}'
   with_items: '{{ spark_conf_files }}'
