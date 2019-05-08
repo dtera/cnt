@@ -1,2 +1,3 @@
 firewall_rules:
 - port: 7077
+- port: 8080
