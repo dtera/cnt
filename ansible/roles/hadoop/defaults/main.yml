@@ -1,5 +1,5 @@
-#hadoop_version: '2.9.2'
-hadoop_version: '3.2.0'
+hadoop_version: '2.7.7'
+#hadoop_version: '3.2.0'
 hadoop_home: '{{ pkg_install_dir }}/{{ pkg_name }}'
 hadoop_conf_dir: '{{ hadoop_home }}/etc/hadoop'
 hadoop_tmp_dir: '{{ hadoop_home }}/tmp'
@@ -9,11 +9,11 @@ hadoop_conf_files:
 - 'hdfs-site.xml'
 - 'mapred-site.xml'
 - 'yarn-site.xml'
-- 'workers' # (for 3.x version)
-#- 'slaves' # (for 2.x version)
+#- 'workers' # (for 3.x version)
+- 'slaves' # (for 2.x version)
 
 pkg_name: 'hadoop-{{ hadoop_version }}'
-pkg_url: 'http://mirror.bit.edu.cn/apache/hadoop/common/{{ pkg_name }}/{{ pkg_name }}.tar.gz'
+pkg_url: 'http://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/{{ pkg_name }}/{{ pkg_name }}.tar.gz'
 pkg_install_dir: '/usr/local/cnt'
 
 dfs_nameservice: 'ns1'

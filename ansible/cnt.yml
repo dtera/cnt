@@ -4,8 +4,8 @@
   vars:
   - path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
   - local_pkg_dir: '/usr/local/src/pkg'
-#  - pkg_name: 'hadoop-2.9.2'
-  - pkg_name: 'hadoop-3.2.0'
+  - pkg_name: 'hadoop-2.7.7'
+#  - pkg_name: 'hadoop-3.2.0'
   - local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}'
   - pkg_install_dir: '/usr/local/cnt'
   - zk_home: '/usr/local/cnt/zookeeper-3.4.14'

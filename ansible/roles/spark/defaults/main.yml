@@ -5,7 +5,7 @@ spark_conf_files:
 - 'spark-env.sh'
 - 'slaves'
 
-hadoop_home: '{{ pkg_install_dir }}/hadoop-3.2.0'
+hadoop_home: '{{ pkg_install_dir }}/hadoop-2.7.7'
 hadoop_conf_dir: '{{ hadoop_home }}/etc/hadoop'
 hadoop_version: '2.7'
 
