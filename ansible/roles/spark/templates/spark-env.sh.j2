@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export HADOOP_CONF_DIR={{ hadoop_conf_dir }}
-export SPARK_MASTER_HOST={{ groups.master[0] }}
+export SPARK_MASTER_HOST={{ groups.spark_master[0] }}
 
 # Options read when launching programs locally with
 # ./bin/run-example or ./bin/spark-submit

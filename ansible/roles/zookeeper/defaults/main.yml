@@ -6,7 +6,6 @@ zk_data_dir: '{{ zk_home }}/data'
 
 pkg_name: 'zookeeper-{{ zk_version }}'
 pkg_url: 'https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/{{ pkg_name }}/{{ pkg_name }}.tar.gz'
-pkg_install_dir: '/usr/local/cnt'
 
 local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}.tar.gz'
 

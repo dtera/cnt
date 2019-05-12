@@ -5,16 +5,24 @@
       <w>ansible</w>
       <w>apiclient</w>
       <w>apiserver</w>
+      <w>basearch</w>
+      <w>baseurl</w>
       <w>blas</w>
+      <w>cgroup</w>
+      <w>cgroupfs</w>
+      <w>coreos</w>
       <w>daemonize</w>
       <w>datacenter</w>
       <w>datacenters</w>
       <w>datanode</w>
       <w>datastore</w>
+      <w>debian</w>
       <w>dest</w>
+      <w>disablerepo</w>
       <w>domainname</w>
       <w>dropin</w>
       <w>elif</w>
+      <w>enablerepo</w>
       <w>endfor</w>
       <w>etcd</w>
       <w>etcdctl</w>
@@ -27,7 +35,9 @@
       <w>hust</w>
       <w>ident</w>
       <w>initializers</w>
+      <w>iptables</w>
       <w>journalnode</w>
+      <w>jsonpath</w>
       <w>kube</w>
       <w>kubeadm</w>
       <w>kubeconfig</w>
@@ -35,6 +45,7 @@
       <w>kubelet</w>
       <w>libmesos</w>
       <w>lineinfile</w>
+      <w>makecache</w>
       <w>mapred</w>
       <w>mapreduce</w>
       <w>maxage</w>
@@ -45,11 +56,13 @@
       <w>namenodes</w>
       <w>nameservice</w>
       <w>nameservices</w>
+      <w>netfilter</w>
       <w>nodemanager</w>
       <w>nodename</w>
       <w>nohup</w>
       <w>openblas</w>
       <w>oraclelicense</w>
+      <w>preflight</w>
       <w>proc</w>
       <w>qjournal</w>
       <w>rbac</w>
@@ -60,11 +73,13 @@
       <w>securebackup</w>
       <w>sshfence</w>
       <w>stdin</w>
+      <w>swapoff</w>
       <w>unarchive</w>
       <w>vsphere</w>
       <w>webhook</w>
       <w>webui</w>
       <w>wget</w>
+      <w>xenial</w>
       <w>yaml</w>
       <w>zkfc</w>
     </words>

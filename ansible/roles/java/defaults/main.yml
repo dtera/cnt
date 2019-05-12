@@ -2,8 +2,10 @@ java_version: '1.8.0_212'
 java_home: '{{ pkg_install_dir }}/jdk{{ java_version }}'
 
 pkg_name: 'jdk-8u212-linux-x64.tar.gz'
-pkg_url: 'https://apache.org/dist/zookeeper/stable/{{ pkg_name }}'
-pkg_install_dir: '/usr/local/java'
+pkg_headers: 'Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'
+pkg_url: 'https://download.oracle.com/otn/java/jdk/8u212-b10/59066701cf1a433da9770636fbc4c9aa/{{ pkg_name }}'
+pkg_url_username: '346091714@qq.com'
+pkg_url_password: ''
 
 local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}'
 

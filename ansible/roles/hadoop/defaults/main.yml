@@ -14,7 +14,6 @@ hadoop_conf_files:
 
 pkg_name: 'hadoop-{{ hadoop_version }}'
 pkg_url: 'http://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/{{ pkg_name }}/{{ pkg_name }}.tar.gz'
-pkg_install_dir: '/usr/local/cnt'
 
 dfs_nameservice: 'ns1'
 dfs_edits_dir: '{{ hadoop_home }}/journal/data'

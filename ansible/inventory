@@ -1,3 +1,10 @@
+# ================================zookeeper inventory============================
+[zk]
+192.168.88.123 host=zk1
+192.168.88.124 host=zk2
+192.168.88.125 host=zk3
+
+# ================================hadoop inventory===============================
 [nn]
 192.168.88.181 host=nn1 id=nn1
 192.168.88.182 host=nn2 id=nn2
@@ -12,30 +19,51 @@
 192.168.88.121 host=dn1
 192.168.88.122 host=dn2
 
-[zk]
-192.168.88.123 host=zk1
-192.168.88.124 host=zk2
-192.168.88.125 host=zk3
-
 [hadoop:children]
 nn
 rm
 dn
-zk
 
-[master]
+# ================================spark inventory================================
+[spark_master]
 192.168.88.24
 
-[worker]
+[spark_worker]
 192.168.88.178
 
 [spark:children]
-master
-worker
+spark_master
+spark_worker
 
+# ================================kubernetes inventory===========================
+[k8s_etcd]
+192.168.88.120 host=dn0
+192.168.88.121 host=dn1
+192.168.88.122 host=dn2
+
+[k8s_master]
+192.168.88.181 host=nn1
+192.168.88.182 host=nn2
+192.168.88.183 host=nn3
+
+[k8s_node]
+192.168.88.123 host=zk1
+192.168.88.124 host=zk2
+192.168.88.125 host=zk3
+192.168.88.24  host=rm1 id=rm1
+192.168.88.178 host=rm2 id=rm2
+
+[k8s:children]
+k8s_etcd
+k8s_master
+k8s_node
+
+# ================================global inventory===============================
 [cnt:children]
+zk
 hadoop
 spark
+k8s
 
 [cnt:vars]
 domain=cnt.io

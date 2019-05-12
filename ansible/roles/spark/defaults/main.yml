@@ -11,7 +11,6 @@ hadoop_version: '2.7'
 
 pkg_name: 'spark-{{ spark_version }}-bin-hadoop{{ hadoop_version }}'
 pkg_url: 'http://mirrors.tuna.tsinghua.edu.cn/apache/spark/spark-{{ spark_version }}/{{ pkg_name }}.tgz'
-pkg_install_dir: '/usr/local/cnt'
 
 local_pkg_path: '{{ local_pkg_dir }}/{{ pkg_name }}.tgz'
 

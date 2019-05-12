@@ -42,10 +42,10 @@
 #  - name: HADOOP_CONF_DIR
 #    path: '{{ hadoop_conf_dir.stdout }}'
 #  - name: SPARK_MASTER_HOST
-#    path: '{{ groups.master }}'
+#    path: '{{ groups.spark_master }}'
 
 - name: start processes related with spark cluster
   shell: '{{ spark_home }}/sbin/start-all.sh'
-  when: inventory_hostname == groups.master[0]
+  when: inventory_hostname == groups.spark_master[0]
   tags:
   - spark_start_all
