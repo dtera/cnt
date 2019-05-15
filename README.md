@@ -8,12 +8,12 @@
 > kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-nginx/mandatory.yml
 
 -- deploy ingress-traefik
-> kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-traefik/traefik-rbac.yml
+> kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-traefik/traefik-rbac.yml  
 > kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-traefik/traefik-ds.yml
 
 -- deploy kubernetes dashboard
-> kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/dashboard/dashboard-admin-rbac.yml
-> kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/dashboard/dashboard.yml
+> kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/dashboard/dashboard-admin-rbac.yml  
+> kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/dashboard/dashboard.yml  
 > kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
 
 -- install helm and tiller
