@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zk1
+  namespace: zookeeper
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: zk1    
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zk2
+  namespace: zookeeper
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: zk2    
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: zk3
+  namespace: zookeeper
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  volumeName: zk3    

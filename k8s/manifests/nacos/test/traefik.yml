@@ -1,0 +1,19 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+ name: nacostest-ingress
+ namespace: nacos
+ annotations:
+   kubernetes.io/ingress.class: traefik
+spec:
+ rules:
+ - host: nacos-test.cnt.io
+   http:
+    paths:
+    - backend:
+        serviceName: nacos
+        servicePort: 80
+      path: /
+
+
+ 

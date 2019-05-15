@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: gitlab-dind
+ namespace: gitlab
+spec:
+ selector:
+  matchLabels:
+   name: gitlab-dind
+ template:
+  metadata:
+   labels:
+    name: gitlab-dind
+  spec:
+   imagePullSecrets:
+   - name: cnt-registry
+   hostAliases:
+   - ip: "192.168.88.24"
+     hostnames:
+     - "registry.cnt.io"
+   nodeSelector:
+    gitlab: "true"
+   containers:
+   - image: registry.cnt.io/publish/docker:stable-dind
+     name: gitlab-dind
+     securityContext:
+      privileged: true
+     volumeMounts:
+     - mountPath: /var/lib/docker
+       name: dind
+   restartPolicy: Always   
+   volumes:
+   - name: dind
+     hostPath:
+      path: /var/lib/dind

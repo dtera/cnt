@@ -1,0 +1,19 @@
+kind: Ingress
+apiVersion: extensions/v1beta1
+metadata:
+ name: nacos-ingress
+ namespace: nacos
+ annotations:
+   kubernetes.io/ingress.class: traefik
+spec:
+ rules:
+ - host: nacos.cnt.io
+   http:
+    paths:
+    - backend:
+        serviceName: nacos-cs
+        servicePort: 8848
+      path: /
+
+
+ 

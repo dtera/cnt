@@ -1,0 +1,28 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+ name: nacos-controller
+ namespace: nacos
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: nacos
+ template: 
+  metadata:
+   labels:
+    app: nacos
+  spec:
+   imagePullSecrets:
+   - name: csdc-registry
+   containers:
+   - name: nacos
+     image: registry.cnt.io/nacos/nacos-server:0.9.0
+     env:
+     - name: PREFER_HOST_MODE
+       value: "hostname"
+     - name: MODE
+       value: "standalone"
+     ports:
+     - name: http
+       containerPort: 8848

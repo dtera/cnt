@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zk1
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  glusterfs:
+    endpoints: "zookeeper"
+    path: "zk1"
+    readOnly: false
+#  persistentVolumeReclaimPolicy: Recycle
+  
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zk2
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  glusterfs:
+    endpoints: "zookeeper"
+    path: "zk2"
+    readOnly: false
+#  persistentVolumeReclaimPolicy: Recycle
+ 
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: zk3
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  glusterfs:
+    endpoints: "zookeeper"
+    path: "zk3"
+    readOnly: false
+#  persistentVolumeReclaimPolicy: Recycle
+  

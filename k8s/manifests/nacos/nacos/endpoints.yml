@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: "nacos"
+  namespace: "nacos"
+subsets:
+- addresses:
+  - ip: "192.168.88.120"
+  ports:
+  - port: 7
+- addresses:
+  - ip: "192.168.88.121"
+  ports:
+  - port: 7
+- addresses:
+  - ip: "192.168.88.122"
+  ports:
+  - port: 7
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: "nacos"
+  namespace: "nacos"
+spec:
+  ports:
+  - port: 7

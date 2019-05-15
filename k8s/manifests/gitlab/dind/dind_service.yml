@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: gitlab-dind
+  namespace: gitlab
+spec:
+  selector:
+   name: gitlab-dind
+  ports:
+  - protocol: TCP
+    port: 2375
+    targetPort: 2375

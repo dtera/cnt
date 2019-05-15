@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: gitlab-runner
+ namespace: gitlab
+data:
+ config.toml: |
+    concurrent = 4
+    [[runners]]
+     name = "Kubernetes Runner Test"
+     url = "https://gitlab.cnt.io"
+     token = "N1nWTEJtVPdwTaYdrVTZ"
+     executor = "kubernetes"
+     [runners.kubernetes]
+       namespace = "gitlab"
+       privileged = true
+       image = "busybox"
+       image_pull_secrets = ["csdc-registry"]
+       [runners.kubernetes.node_selector]
+         gitlab = "true"
+       [[runners.kubernetes.volumes.host_path]]
+         name = "gitlab-runner-hosts"
+         host_path = "/root/k8s/gitlab/runner/hosts"
+         mount_path = "/etc/hosts"
+       [[runners.kubernetes.volumes.host_path]]
+         name = "gitlab-runner-gradle"
+         host_path = "/var/lib/gradle"
+         mount_path = "/home/gradle/.gradle"
+       [[runners.kubernetes.volumes.host_path]]
+         name = "gitlab-runner-maven"
+         host_path = "/var/lib/maven"
+         mount_path = "/root/.m2"
+       [[runners.kubernetes.volumes.host_path]]
+         name = "gitlab-runner-artifact"
+         mount_path = "/home/artifact"
+         host_path = "/var/lib/artifact"
+
+
+

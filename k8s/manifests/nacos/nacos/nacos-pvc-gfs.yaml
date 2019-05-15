@@ -1,0 +1,182 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nacos-cs
+  namespace: nacos
+  labels:
+    app: nacos
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  type: NodePort
+  ports:
+    - port: 8848
+      name: server
+      targetPort: 8848
+      nodePort: 30002
+  selector:
+    app: nacos
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nacos-hs
+  namespace: nacos
+  labels:
+    app: nacos
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+spec:
+  ports:
+    - port: 8848
+      name: server
+      targetPort: 8848
+  clusterIP: None
+  selector:
+    app: nacos
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nacos-cm
+  namespace: nacos
+data:
+  mysql.master.db.name: "nacos"
+  mysql.master.port: "3306"
+  mysql.slave.port: "3306"
+  mysql.master.user: "nacos"
+  mysql.master.password: "nacos"
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: nacos
+  namespace: nacos
+spec:
+  serviceName: nacos-hs
+  replicas: 2
+  template:
+    metadata:
+      namespace: nacos
+      labels:
+        app: nacos
+      annotations:
+        pod.alpha.kubernetes.io/initialized: "true"
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - nacos
+              topologyKey: "kubernetes.io/hostname"
+      imagePullSecrets:
+        - name: csdc-registry
+      initContainers:
+        - name: peer-finder-plugin-install
+          image: registry.cnt.io/nacos/nacos-peer-finder-plugin:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: "/home/nacos/plugins/peer-finder"
+              name: plugindir
+      containers:
+        - name: nacos
+          imagePullPolicy: Always
+          image: registry.cnt.io/nacos/nacos-server:0.9.0
+          resources:
+            requests:
+              memory: "2Gi"
+              cpu: "500m"
+          ports:
+            - containerPort: 8848
+              name: client-port
+          env:
+            - name: NACOS_REPLICAS
+              value: "3"
+            - name: SERVICE_NAME
+              value: "nacos-hs"
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: MYSQL_MASTER_SERVICE_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-cm
+                  key: mysql.master.db.name
+            - name: MYSQL_MASTER_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-cm
+                  key: mysql.master.port
+            - name: MYSQL_SLAVE_SERVICE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-cm
+                  key: mysql.slave.port
+            - name: MYSQL_MASTER_SERVICE_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-cm
+                  key: mysql.master.user
+            - name: MYSQL_MASTER_SERVICE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: nacos-cm
+                  key: mysql.master.password
+            - name: NACOS_SERVER_PORT
+              value: "8848"
+            - name: PREFER_HOST_MODE
+              value: "hostname"
+          readinessProbe:
+            httpGet:
+              port: client-port
+              path: /nacos/v1/console/health/readiness
+            initialDelaySeconds: 60
+            timeoutSeconds: 3
+          livenessProbe:
+            httpGet:
+              port: client-port
+              path: /nacos/v1/console/health/liveness
+            initialDelaySeconds: 60
+            timeoutSeconds: 3
+          volumeMounts:
+            - name: plugindir
+              mountPath: /home/nacos/plugins/peer-finder
+            - name: datadir
+              mountPath: /home/nacos/data
+            - name: logdir
+              mountPath: /home/nacos/logs
+  volumeClaimTemplates:
+    - metadata:
+        name: plugindir
+        namespace: nacos
+      spec:
+        accessModes: [ "ReadWriteMany" ]
+        resources:
+          requests:
+            storage: 5Gi
+    - metadata:
+        name: datadir
+        namespace: nacos
+      spec:
+        accessModes: [ "ReadWriteMany" ]
+        resources:
+          requests:
+            storage: 6Gi
+    - metadata:
+        name: logdir
+        namespace: nacos
+      spec:
+        accessModes: [ "ReadWriteMany" ]
+        resources:
+          requests:
+            storage: 7Gi
+  selector:
+    matchLabels:
+      app: nacos

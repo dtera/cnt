@@ -1,0 +1,125 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-plugin1
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-plugin1"
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-plugin2
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-plugin2"
+    readOnly: false
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-plugin3
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-plugin3"
+    readOnly: false
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-data1
+spec:
+  capacity:
+    storage: 6Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-data1"
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-data2
+spec:
+  capacity:
+    storage: 6Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-data2"
+    readOnly: false
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-data3
+spec:
+  capacity:
+    storage: 6Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-data3"
+    readOnly: false
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-log1
+spec:
+  capacity:
+    storage: 7Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-log1"
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-log2
+spec:
+  capacity:
+    storage: 7Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-log2"
+    readOnly: false
+--- 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nacos-log3
+spec:
+  capacity:
+    storage: 7Gi
+  accessModes:
+    - ReadWriteMany
+  glusterfs:
+    endpoints: "nacos"
+    path: "nacos-log3"
+    readOnly: false

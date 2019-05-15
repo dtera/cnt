@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+ name: gitlab-runner
+ namespace: gitlab
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   name: gitlab-runner
+ template:
+  metadata:
+   labels:
+    name: gitlab-runner
+  spec:
+   nodeSelector:
+    gitlab: "true"
+   hostAliases:   
+   - ip: "192.168.88.178"
+     hostnames:     
+     - "gitlab.cnt.io"
+   containers:
+   - args: 
+     - run
+     image: gitlab/gitlab-runner:v11.8.0
+     name: gitlab-runner
+     volumeMounts:
+     - mountPath: /etc/gitlab-runner
+       name: config
+   restartPolicy: Always   
+   volumes:
+   - configMap:
+      name: gitlab-runner
+     name: config

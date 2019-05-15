@@ -11,6 +11,7 @@
       <w>centos</w>
       <w>cgroup</w>
       <w>cgroupfs</w>
+      <w>cnxns</w>
       <w>coreos</w>
       <w>daemonize</w>
       <w>datacenter</w>
@@ -54,6 +55,7 @@
       <w>mesos</w>
       <w>mkdir</w>
       <w>myid</w>
+      <w>nacos</w>
       <w>namenode</w>
       <w>namenodes</w>
       <w>nameservice</w>
