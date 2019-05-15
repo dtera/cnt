@@ -111,3 +111,7 @@
 - name: print cluster-state
   debug: var=cluster_state.stdout
   when: inventory_hostname == groups.k8s_master[0]
+
+- name: include ingress controller tasks
+  include_tasks: ingress_controller.yml
+  when: inventory_hostname == groups.k8s_master[0]

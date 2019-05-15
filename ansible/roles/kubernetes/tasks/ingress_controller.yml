@@ -1,0 +1,5 @@
+- name: deploy ingress controller
+  command:  'kubectl apply -f {{ item }}'
+  with_items: '{{ k8s_ingress_controller }}'
+  register: ingress_controller
+  changed_when: ingress_controller.stdout is search("created")

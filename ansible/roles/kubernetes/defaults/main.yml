@@ -83,6 +83,16 @@ k8s_kubeadm_etcd_reset: false
 k8s_network_version: 'v3.7'
 k8s_network_index: 'https://docs.projectcalico.org/{{ k8s_network_version }}/manifests'
 
+k8s_traefik_version: 'v1.7'
+k8s_traefik_index: 'https://raw.githubusercontent.com/containous/traefik/{{ k8s_traefik_version }}/examples/k8s'
+k8s_traefik_ingress_controller_rbac: '{{ k8s_traefik_index }}/traefik-rbac.yaml'
+k8s_traefik_ingress_controller_ds: '{{ k8s_traefik_index }}/traefik-ds.yaml'
+k8s_traefik_ingress_deployment: '{{ k8s_traefik_index }}/traefik-deployment.yaml'
+
+k8s_ingress_controller:
+- '{{ k8s_traefik_ingress_rbac }}'
+- '{{ k8s_traefik_ingress_ds }}'
+
 k8s_cloud_provider: ''
 k8s_cloud_config_file: '{{ k8s_config_dir }}/{{ k8s_cloud_provider }}.conf'
 k8s_cloud_vsphere_workspace_server: ''
