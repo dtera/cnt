@@ -1,0 +1,157 @@
+- name: 'ensure existence of {{ k8s_etcd_certs_dir }}'
+  file: path='{{ k8s_etcd_certs_dir }}' state=directory
+
+# ====================================k8s_etcd_ca====================================
+- name: check k8s_etcd_ca cert exist
+  stat: path='{{ item }}'
+  with_items:
+    - '{{ k8s_etcd_ca_cert_file }}'
+    - '{{ k8s_etcd_ca_key_file }}'
+  register: etcd_ca
+  when: inventory_hostname == groups.k8s_etcd[0]
+
+- name: generate etcd-ca cert if not exists
+  command: kubeadm init phase certs etcd-ca --config={{ k8s_kubeadm_config_file }}
+  delegate_to: '{{ groups.k8s_etcd[0] }}'
+  when: not etcd_ca.results[0].stat.exists and not etcd_ca.results[1].stat.exists
+  run_once: true
+
+- name: get contents of etcd-ca files from first etcd node
+  slurp: src='{{ item }}'
+  with_items:
+    - '{{ k8s_etcd_ca_cert_file }}'
+    - '{{ k8s_etcd_ca_key_file }}'
+  delegate_to: '{{ groups.k8s_etcd[0] }}'
+  register: etcd_ca_certs
+  run_once: true
+
+- name: copy ca files to etcd nodes
+  copy: content='{{ item.content | b64decode }}' dest='{{ item.source }}'
+  with_items: "{{ etcd_ca_certs.results }}"
+
+# ====================================k8s_etcd_server=================================
+- name: check k8s_etcd_server cert exist
+  stat: path='{{ item }}'
+  with_items:
+    - '{{ k8s_etcd_server_cert_file }}'
+    - '{{ k8s_etcd_server_key_file }}'
+  register: etcd_server
+
+- name: generate etcd-server cert if not exists
+  command: kubeadm init phase certs etcd-server --config={{ k8s_kubeadm_config_file }}
+  when: not etcd_server.results[0].stat.exists and not etcd_server.results[1].stat.exists
+
+# ====================================k8s_etcd_peer===================================
+- name: check k8s_etcd_peer cert exist
+  stat: path='{{ item }}'
+  with_items:
+    - '{{ k8s_etcd_peer_cert_file }}'
+    - '{{ k8s_etcd_peer_key_file }}'
+  register: etcd_peer
+
+- name: generate etcd-peer cert if not exists
+  command: kubeadm init phase certs etcd-peer --config={{ k8s_kubeadm_config_file }}
+  when: not etcd_peer.results[0].stat.exists and not etcd_peer.results[1].stat.exists
+
+# ====================================k8s_etcd_healthcheck_client=====================
+- name: check k8s_etcd_healthcheck_client cert exist
+  stat: path='{{ item }}'
+  with_items:
+    - '{{ k8s_etcd_healthcheck_client_cert_file }}'
+    - '{{ k8s_etcd_healthcheck_client_key_file }}'
+  register: etcd_health
+
+- name: generate etcd-healthcheck-client cert if not exists
+  command: kubeadm init phase certs etcd-healthcheck-client --config={{ k8s_kubeadm_config_file }}
+  when: not etcd_health.results[0].stat.exists and not etcd_health.results[1].stat.exists
+
+# ====================================k8s_etcd_apiserver_client=======================
+- name: check k8s_etcd_apiserver_client cert exists
+  stat: path='{{ item }}'
+  with_items:
+    - '{{ k8s_etcd_apiserver_client_cert_file }}'
+    - '{{ k8s_etcd_apiserver_client_key_file }}'
+  register: etcd_apiserver_client
+
+- name: generate etcd-apiserver-etcd-client cert if not exists
+  command: kubeadm init phase certs apiserver-etcd-client --config={{ k8s_kubeadm_config_file }}
+  when: not etcd_apiserver_client.results[0].stat.exists and not etcd_apiserver_client.results[1].stat.exists
+
+# ====================================k8s_etcd_manifest===============================
+- name: 'check {{ k8s_etcd_manifest_file }} exists'
+  stat: path='{{ k8s_etcd_manifest_file }}'
+  register: etcd_manifest
+
+- name: 'generate {{ k8s_etcd_manifest_file }} if not exists'
+  command: kubeadm init phase etcd local --config={{ k8s_kubeadm_config_file }}
+  when: not etcd_manifest.stat.exists
+  register: etcd_pod
+
+# ====================================k8s_pause_image=================================
+- name: 'docker pull {{ k8s_pause_image }} image'
+  command: 'docker pull {{ k8s_pause_image }}'
+
+- name: 'docker tag {{ k8s_pause_image }} as {{ k8s_tagged_image_repository }}/pause:{{ k8s_pause_version }}'
+  command: 'docker tag {{ k8s_pause_image }} {{ k8s_tagged_image_repository }}/pause:{{ k8s_pause_version }}'
+
+# ====================================kubelet_service=================================
+- name: 'ensure existence of {{ k8s_kubelet_service_dir }} directory'
+  file: path={{ k8s_kubelet_service_dir }} state=directory
+
+- name: ensure right kubelet systemd file exists
+  template: src=20-etcd-service-manager.conf.j2 dest={{ k8s_kubelet_service_dir }}/20-etcd-service-manager.conf
+  register: kubelet_config_file
+
+- name: reload systemd unit if args were changed.
+  systemd: name=kubelet state=restarted daemon_reload=true
+#  when: kubelet_config_file is changed
+
+# ====================================etcd_cluster====================================
+#- name: run etcd cluster
+#  docker_container:
+#    name: '{{ ansible_hostname }}'
+#    image: '{{ k8s_etcd_image }}'
+#    state: started
+#    detach: yes
+#    interactive: yes
+#    tty: yes
+#    volumes:
+#    - '{{ k8s_config_dir }}:/etc/kubernetes'
+#    - '{{ k8s_etcd_data_dir }}:/var/lib/etcd'
+#    ports:
+#    - '2379:2379'
+#    - '2380:2380'
+#    - '4001:4001'
+#    - '7001:7001'
+#    command: >
+#      etcd --name {{ ansible_hostname }}
+#       --data-dir /var/lib/etcd
+#       --ca-file {{ k8s_etcd_ca_cert_file }}
+#       --cert-file {{ k8s_etcd_peer_cert_file }}
+#       --key-file {{ k8s_etcd_peer_key_file }}
+#       --initial-cluster {% for n in groups.k8s_etcd %}{{ hostvars[n]['ansible_hostname'] }}=https://{{ n }}:2380{% if not loop.last %},{% endif %}{% endfor %}
+#       --initial-cluster-state new
+#       --listen-peer-urls https://{{ inventory_hostname }}:2380
+#       --listen-client-urls https://{{ inventory_hostname }}:2379
+#       --advertise-client-urls https://{{ inventory_hostname }}:2379
+#       --initial-advertise-peer-urls https://{{ inventory_hostname }}:2380
+
+- name: wait for etcd cluster
+  wait_for: host='{{ ansible_host | default(ansible_default_ipv4["address"]) }}' port='{{ k8s_etcd_client_port }}'
+
+- name: test etcd cluster
+  docker_container:
+    name: etcdctl
+    image: '{{ k8s_etcd_image }}'
+    network_mode: host
+    cleanup: yes
+    detach: no
+    volumes:
+    - '{{ k8s_config_dir }}:/etc/kubernetes'
+    command: >
+      etcdctl --ca-file {{ k8s_etcd_ca_cert_file }}
+       --cert-file {{ k8s_etcd_peer_cert_file }}
+       --key-file {{ k8s_etcd_peer_key_file }}
+       --endpoints https://{{ ansible_host | default(ansible_default_ipv4["address"]) }}:{{ k8s_etcd_client_port }}
+       cluster-health
+  changed_when: False

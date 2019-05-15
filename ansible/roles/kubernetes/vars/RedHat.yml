@@ -1,0 +1,11 @@
+#packages:
+#- name: kubelet-{{ k8s_version }}-0
+#  state: present
+#- name: kubectl-{{ k8s_version }}-0
+#  state: present
+#- name: kubeadm-{{ k8s_version }}-0
+#  state: present
+#- name: kubernetes-cni
+#  state: present
+
+k8s_kubelet_environment_file: /etc/sysconfig/kubelet

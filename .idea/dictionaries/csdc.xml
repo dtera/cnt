@@ -8,6 +8,7 @@
       <w>basearch</w>
       <w>baseurl</w>
       <w>blas</w>
+      <w>centos</w>
       <w>cgroup</w>
       <w>cgroupfs</w>
       <w>coreos</w>
@@ -24,6 +25,7 @@
       <w>elif</w>
       <w>enablerepo</w>
       <w>endfor</w>
+      <w>epel</w>
       <w>etcd</w>
       <w>etcdctl</w>
       <w>etcds</w>
@@ -74,6 +76,7 @@
       <w>sshfence</w>
       <w>stdin</w>
       <w>swapoff</w>
+      <w>systemd</w>
       <w>unarchive</w>
       <w>vsphere</w>
       <w>webhook</w>

@@ -1,0 +1,5 @@
+- name: include tasks of repo-Debian.yml
+  include_tasks: 'roles/common/tasks/repo-Debian.yml'
+
+- name: include tasks of swapoff
+  include_tasks: roles/common/tasks/swapoff.yml

@@ -1,0 +1,17 @@
+[k8s:children]
+k8s_etcds
+k8s_masters
+k8s_nodes
+
+[k8s:vars]
+docker_version="18.09.1"
+k8s_image_repository="registry.aliyuncs.com/google_containers"
+
+[k8s_etcds]
+192.168.88.12[0:2] ansible_user=vagrant
+
+[k8s_masters]
+192.168.88.12[3:5] ansible_user=vagrant
+
+[k8s_nodes]
+192.168.88.12[6:7] ansible_user=vagrant

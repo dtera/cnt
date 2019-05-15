@@ -1,0 +1,1 @@
+k8s_kubelet_environment_file: /etc/default/kubelet

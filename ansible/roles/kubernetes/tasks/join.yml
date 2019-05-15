@@ -1,0 +1,34 @@
+- name: include join command tasks
+  include: join-command.yml
+
+#- name: ensure kubelet systemd service file exists
+#  template: src=origin-kubelet.service.d.j2 dest=/etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+#  register: kubelet_config_file
+#  when: ( 'node/' + ansible_nodename ) not in nodes.stdout_lines and inventory_hostname in groups.k8s_etcd
+
+- name: ensure kubelet is stopped and enabled at boot
+  service: name=kubelet state=stopped enabled=true
+  when: ( 'node/' + ansible_nodename ) not in nodes.stdout_lines
+
+- name: join node into cluster
+  command: '{{ join_command.stdout }} {{ k8s_kubeadm_ignore_err }}'
+  when: ( 'node/' + ansible_nodename ) not in nodes.stdout_lines
+  register: join_task_result
+  until: join_task_result is success
+  retries: 2
+
+#- name: check if node role label is set
+#  command: >
+#    kubectl get node {{ ansible_nodename }} -o jsonpath='{.metadata.labels}'
+#     --kubeconfig {{ k8s_config_dir }}/admin.conf
+#  delegate_to: '{{ groups.k8s_master[0] }}'
+#  register: check_label
+#  changed_when: false
+#  when: inventory_hostname in groups.k8s_etcd
+#
+#- name: label etcd node
+#  delegate_to: '{{ groups.k8s_master[0] }}'
+#  command: >
+#    kubectl label node {{ ansible_nodename }} node-role.kubernetes.io/etcd
+#     --kubeconfig {{ k8s_config_dir }}/admin.conf
+#  when: inventory_hostname in groups.k8s_etcd and "node-role.kubernetes.io/etcd" not in check_label.stdout

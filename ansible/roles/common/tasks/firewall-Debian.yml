@@ -1,6 +1,6 @@
 - name: setup firewall rule for linux of Debian family
   ufw:
     rule: '{{ item.rule|default("allow") }}'
-    port: '{{ item.port|default("22") }}'
+    port: '{{ item.port|default(item)|default("22") }}'
     proto: '{{ item.proto|default("tcp") }}'
   with_items: '{{ firewall_rules }}'

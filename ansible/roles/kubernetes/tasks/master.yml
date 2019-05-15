@@ -1,0 +1,26 @@
+- name: '{{ k8s_etcd_certs_dir }}'
+  file: path='{{ k8s_etcd_certs_dir }}' state=directory
+
+- name: 'get contents of {{ k8s_etcd_apiserver_client_cert_file }} and {{ k8s_etcd_apiserver_client_key_file }} from first etcd'
+  slurp: src='{{ item }}'
+  delegate_to: '{{ groups.k8s_etcd[0] }}'
+  with_items:
+    - '{{ k8s_etcd_apiserver_client_cert_file }}'
+    - '{{ k8s_etcd_apiserver_client_key_file }}'
+  register: etcd_apiserver_certs
+  when: not all_etcd_on_master
+
+- name: copy etcd cert files to master nodes
+  copy: content='{{ item.content | b64decode }}' dest='{{ item.source }}'
+  with_items:
+    - '{{ etcd_ca_certs.results }}'
+    - '{{ etcd_apiserver_certs.results }}'
+  when: not all_etcd_on_master
+
+- name: include master init tasks
+  include: master-init.yml
+  when: inventory_hostname == groups.k8s_master[0]
+
+- name: include master ha tasks
+  include: master-ha.yml
+  when: ( groups.k8s_master | length > 1 ) and inventory_hostname != groups.k8s_master[0]

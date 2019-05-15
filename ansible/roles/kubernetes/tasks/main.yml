@@ -1,0 +1,113 @@
+- name: set hostname
+  hostname: name='{{ host }}.{{ domain }}'
+
+- name: check if etcd on first master
+  set_fact:
+    all_etcd_on_master: true
+  when: not groups.k8s_etcd is defined or groups.k8s_etcd == groups.k8s_master
+
+- debug: var=all_etcd_on_master
+
+- name: Load a variable file based on the OS type, or a default if not found. Using free-form to specify the file.
+  include_vars: '{{ item }}'
+  with_first_found:
+    - '{{ ansible_distribution }}.yml'
+    - '{{ ansible_os_family }}.yml'
+    - default.yml
+
+- name: reset all nodes in k8s cluster
+  command: kubeadm reset -f
+  when: k8s_kubeadm_reset and (k8s_kubeadm_etcd_reset or not inventory_hostname in groups.k8s_etcd)
+
+- name: include os-specific prepare tasks
+  include_tasks: 'prepare-{{ ansible_os_family }}.yml'
+
+- name: include install tasks
+  import_tasks: install.yml
+
+- name: enabled kubelet service
+  service: name=kubelet enabled=true
+
+- name: set firewall rules for all nodes
+  set_fact:
+    firewall_rules: ['10250']
+
+- name: set firewall rules for etcd
+  set_fact:
+    firewall_rules: ['2379', '2380', '4001', '7001', '10250']
+  when: inventory_hostname in groups.k8s_etcd
+
+- name: set firewall rules for master
+  set_fact:
+    firewall_rules:
+    - port: 6443
+    - port: 10250
+  when: inventory_hostname in groups.k8s_master
+
+- name: expose some ports in different nodes
+  include_tasks: 'roles/common/tasks/firewall-{{ ansible_os_family }}.yml'
+  when: firewall_rules is defined
+  tags: expose_ports
+
+- name: 'ensure existence of {{ k8s_kubeadm_config_file_path }}'
+  file: path='{{ k8s_kubeadm_config_file_path }}' state=directory
+
+- name: 'copy kubeadm-config.yml.j2 to {{ k8s_kubeadm_config_file }}'
+  template: src=kubeadm-config.yml.j2 dest='{{ k8s_kubeadm_config_file }}'
+
+- name: ensure cloud provicer conf exists
+  template: src=cloud.conf.j2 dest='{{ k8s_cloud_config_file }}'
+  when: k8s_cloud_provider | length > 0
+
+- name: ensure kubelet env KUBELET_CGROUP_ARGS and KUBELET_EXTRA_ARGS are set
+  lineinfile:
+    path: '{{ k8s_kubelet_environment_file }}'
+    regexp: '^{{ item.name }}.*'
+    line: '{{ item.name }}="{{ item.value }}"'
+  with_items:
+  - name: KUBELET_CGROUP_ARGS
+    value: '--cgroup-driver={{ k8s_cgroup_driver }}'
+  - name: KUBELET_EXTRA_ARGS
+    value: '{{ k8s_kubelet_extra_args }}'
+#    value: '--node-ip={{ ansible_host | default(ansible_default_ipv4.address) }} {{ k8s_kubelet_extra_args }}'
+  register: k8s_systemd
+
+- debug: var=k8s_systemd
+
+- name: reload systemd unit if args were changed
+  systemd: daemon_reload=true
+  when: k8s_systemd is changed
+
+- name: include etcd tasks
+  include_tasks: etcd.yml
+  when: inventory_hostname in groups.k8s_etcd and inventory_hostname not in groups.k8s_master
+
+- name: include master tasks
+  include_tasks: master.yml
+  when: inventory_hostname in groups.k8s_master
+
+- name: include network plugin tasks
+  include_tasks: network_plugin.yml
+  when: inventory_hostname == groups.k8s_master[0]
+
+- name: include join worker tasks
+  include_tasks: join.yml
+  when: inventory_hostname in groups.k8s_node
+
+#- name: include update master tasks
+#  include_tasks: update_master.yml
+#  when: inventory_hostname in groups.k8s_master
+#  tags: k8s_update
+
+- name: wait for cluster get ready
+  pause: seconds=60
+
+- name: check cluster state
+  command: kubectl get nodes -o wide
+  register: cluster_state
+  when: inventory_hostname == groups.k8s_master[0]
+  changed_when: false
+
+- name: print cluster-state
+  debug: var=cluster_state.stdout
+  when: inventory_hostname == groups.k8s_master[0]

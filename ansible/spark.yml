@@ -1,0 +1,11 @@
+---
+- hosts: spark
+  remote_user: root
+
+  roles:
+  - role: scala
+    tags:
+    - scala
+  - role: spark
+    tags:
+    - spark

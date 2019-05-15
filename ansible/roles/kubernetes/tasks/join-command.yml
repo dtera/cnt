@@ -1,0 +1,12 @@
+- name: check which nodes are already in cluster
+  delegate_to: '{{ groups.k8s_master[0] }}'
+  command: 'kubectl get nodes -n kube-system --kubeconfig {{ k8s_config_dir }}/admin.conf -o name'
+  register: nodes
+  changed_when: false
+
+- name: get join command from primary master
+  command: 'kubeadm token create --print-join-command'
+  delegate_to: '{{ groups.k8s_master[0] }}'
+  changed_when: false
+  when: ( 'node/' + ansible_nodename ) not in nodes.stdout_lines
+  register: join_command

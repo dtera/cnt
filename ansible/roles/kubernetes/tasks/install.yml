@@ -1,0 +1,34 @@
+- name: ensure curl package is installed
+  package: name=curl state=present
+  register: task_result
+  until: task_result is success
+  retries: 2
+
+- name: include tasks of installing kubernetes packages
+  include_tasks: 'roles/common/tasks/pkg-install.yml'
+#  notify: restart kubelet
+
+- name: check pip is installed
+  command: pip -V
+  register: pip
+  failed_when: false
+  changed_when: false
+
+- name: get get-pip python script
+  get_url: url='https://bootstrap.pypa.io/get-pip.py' dest=/root/get-pip.py mode=0550
+  when: pip.rc != 0
+
+- name: install pip
+  command: python /root/get-pip.py
+  when: pip.rc != 0
+
+- name: remove get-pip python script
+  file: path=/root/get-pip.py state=absent
+  when: pip.rc != 0
+
+- name: install docker-py in k8s etcd nodes
+  pip: name=docker-py
+  register: task_result
+  until: task_result is success
+  retries: 2
+  when: inventory_hostname in groups.k8s_etcd

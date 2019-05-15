@@ -1,0 +1,7 @@
+- name: deploy canal network plugin
+  command:  'kubectl apply -f {{ k8s_network_index }}/{{ item }}'
+#  command:  'kubectl apply --kubeconfig {{ k8s_config_dir }}/admin.conf -f {{ k8s_network_index }}/{{ item }}'
+  with_items:
+  - canal.yaml
+  register: canal
+  changed_when: canal.stdout is search("created")

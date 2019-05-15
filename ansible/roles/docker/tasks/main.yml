@@ -1,0 +1,14 @@
+- name: include tasks of installing docker package
+  include_tasks: 'roles/common/tasks/pkg-install.yml'
+  register: task_result
+  until: task_result is success
+  retries: 2
+
+- name: include tasks of adding repo
+  include_tasks: 'roles/common/tasks/repo-{{ ansible_os_family }}.yml'
+
+- name: install docker package
+  package: name={{ docker_pkg_name }} state=present
+
+- name: start and enable docker service
+  service: name=docker state=started enabled=yes

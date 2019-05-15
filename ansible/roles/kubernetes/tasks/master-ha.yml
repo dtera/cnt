@@ -1,0 +1,34 @@
+- name: get config files from primary master
+  slurp: src='{{ item }}'
+  with_items:
+  - '{{ k8s_certs_dir }}/ca.crt'
+  - '{{ k8s_certs_dir }}/ca.key'
+  - '{{ k8s_certs_dir }}/etcd/ca.crt'
+  - '{{ k8s_certs_dir }}/etcd/ca.key'
+  - '{{ k8s_certs_dir }}/sa.key'
+  - '{{ k8s_certs_dir }}/sa.pub'
+  - '{{ k8s_certs_dir }}/front-proxy-ca.crt'
+  - '{{ k8s_certs_dir }}/front-proxy-ca.key'
+  - '{{ k8s_config_dir }}/admin.conf'
+  delegate_to: '{{ groups.k8s_master[0] }}'
+  register: master_certs_configs
+
+- name: copy config files to all masters
+  copy: content='{{ item.content | b64decode }}' dest='{{ item.source }}'
+  with_items: '{{ master_certs_configs.results }}'
+
+- name: include join command tasks
+  include: join-command.yml
+
+#- name: get certificate key from primary master
+#  shell: 'kubeadm init phase upload-certs --experimental-upload-certs 2>/dev/null|tail -1'
+#  delegate_to: '{{ groups.k8s_master[0] }}'
+#  register: master_cert_key
+
+- name: join master node into cluster
+  command: '{{ join_command.stdout }} --experimental-control-plane {{ k8s_kubeadm_ignore_err }}'
+#  command: >
+#    {{ join_command.stdout }} --experimental-control-plane
+#     --certificate-key {{ master_cert_key.stdout }}
+#     {{ k8s_kubeadm_ignore_err }}
+  when: ( 'node/' + ansible_nodename ) not in nodes.stdout_lines

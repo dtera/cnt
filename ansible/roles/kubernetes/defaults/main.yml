@@ -1,0 +1,99 @@
+k8s_version: 'stable' # '1.14.0'
+
+# kubeadm ClusterConfiguration vars
+k8s_tagged_image_repository: 'k8s.gcr.io'
+k8s_image_repository: 'registry.aliyuncs.com/google_containers' # 'k8s.gcr.io'
+k8s_useHyperKubeImage: 'false'
+k8s_dns_type: 'CoreDNS'
+k8s_master_version: 'stable' # 'v{{ k8s_version }}'
+k8s_config_dir: '/etc/kubernetes'
+k8s_certs_dir: '{{ k8s_config_dir }}/pki'
+k8s_pod_manifest_path: '{{ k8s_config_dir }}/manifests'
+k8s_cluster_name: 'kubernetes'
+k8s_log_dir: '/var/log/kubernetes'
+k8s_audit_log_dir: '{{ k8s_log_dir }}/audit'
+k8s_log_age: 2
+k8s_authorization_mode: 'Node,RBAC'
+k8s_enable_admission_plugins: 'Initializers,NamespaceLifecycle,LimitRanger,ServiceAccount,DefaultStorageClass,DefaultTolerationSeconds,NodeRestriction,MutatingAdmissionWebhook,ValidatingAdmissionWebhook,ResourceQuota'
+k8s_dns_domain: 'cluster.local'
+k8s_pod_subnet: '10.244.0.0/16'
+k8s_service_subnet: '10.96.0.0/16'
+k8s_cgroup_driver: 'cgroupfs'
+k8s_kubelet_extra_args: '--pod-manifest-path={{ k8s_pod_manifest_path }}{% if swapoff %}{% else %} --fail-swap-on=false{% endif %} --allow-privileged=true'
+k8s_kubelet_service_dir: '/etc/systemd/system/kubelet.service.d'
+k8s_enable_web_ui: true
+
+k8s_pause_version: '3.1'
+k8s_pause_image: '{{ k8s_image_repository }}/pause:{{ k8s_pause_version }}'
+
+k8s_etcd_version: '3.3.10'
+# k8s_etcd_image: 'quay.io/coreos/etcd:{{ k8s_etcd_version }}'
+k8s_etcd_image: '{{ k8s_image_repository }}/etcd:{{ k8s_etcd_version }}'
+k8s_etcd_data_dir: '/var/lib/etcd'
+k8s_etcd_certs_dir: '{{ k8s_certs_dir }}/etcd'
+k8s_etcd_ca_cert_file: '{{ k8s_etcd_certs_dir }}/ca.crt'
+k8s_etcd_ca_key_file: '{{ k8s_etcd_certs_dir }}/ca.key'
+k8s_etcd_server_cert_file: '{{ k8s_etcd_certs_dir }}/server.crt'
+k8s_etcd_server_key_file: '{{ k8s_etcd_certs_dir }}/server.key'
+k8s_etcd_peer_cert_file: '{{ k8s_etcd_certs_dir }}/peer.crt'
+k8s_etcd_peer_key_file: '{{ k8s_etcd_certs_dir }}/peer.key'
+k8s_etcd_healthcheck_client_cert_file: '{{ k8s_etcd_certs_dir }}/healthcheck-client.crt'
+k8s_etcd_healthcheck_client_key_file: '{{ k8s_etcd_certs_dir }}/healthcheck-client.key'
+k8s_etcd_apiserver_client_cert_file: '{{ k8s_certs_dir }}/apiserver-etcd-client.crt'
+k8s_etcd_apiserver_client_key_file: '{{ k8s_certs_dir }}/apiserver-etcd-client.key'
+k8s_etcd_manifest_file: '{{ k8s_pod_manifest_path }}/etcd.yaml'
+k8s_etcd_name: '{{ ansible_hostname }}'
+k8s_etcd_server_cert_sans:
+- '{{ ansible_hostname }}'
+- '{{ ansible_nodename }}'
+- '{{ ansible_host }}'
+k8s_etcd_peer_cert_sans:
+- '{{ ansible_hostname }}'
+- '{{ ansible_nodename }}'
+- '{{ ansible_host }}'
+k8s_etcd_server_port: 2380
+k8s_etcd_client_port: 2379
+k8s_etcd_advertise_client_urls: 'https://{{ ansible_host }}:{{ k8s_etcd_client_port }}'
+k8s_etcd_initial_cluster: |
+  {% set res = [] %}
+  {%- for n in groups.etcd %}
+  {% set ignored = res.extend([hostvars[n]['ansible_hostname'] ~ '=https://' ~ hostvars[n]['ansible_host'] ~ ':' ~ k8s_etcd_server_port]) %}
+  {% endfor %}
+  {{ res }}
+k8s_etcd_initial_advertise_peer_urls: 'https://{{ ansible_host }}:{{ k8s_etcd_server_port }}'
+k8s_etcd_listen_peer_urls: 'https://{{ ansible_host }}:{{ k8s_etcd_server_port }}'
+k8s_etcd_listen_client_urls: 'https://{{ ansible_host }}:{{ k8s_etcd_client_port }}'
+
+k8s_apiserver_dns: ''
+k8s_apiserver_port: 6443
+k8s_apiserver_manifest_file: '{{ k8s_pod_manifest_path }}/kube-apiserver.yaml'
+
+k8s_controller_manager_manifest_file: '{{ k8s_pod_manifest_path }}/kube-controller-manager.yaml'
+
+k8s_scheduler_manifest_file: '{{ k8s_pod_manifest_path }}/kube-scheduler.yaml'
+
+k8s_kubeadm_config_file_path: '{{ k8s_config_dir }}/kubeadm'
+k8s_kubeadm_config_file_name: 'kubeadm-config.yml'
+k8s_kubeadm_config_file: '{{ k8s_kubeadm_config_file_path }}/{{ k8s_kubeadm_config_file_name }}'
+k8s_kubeadm_ignore_err: '--ignore-preflight-errors=DirAvailable--etc-kubernetes-manifests{% if swapoff %}{% else %},Swap{% endif %}'
+k8s_kubeadm_init_extra_arg: '--experimental-upload-certs {{ k8s_kubeadm_ignore_err }}'
+k8s_kubeadm_reset: true
+k8s_kubeadm_etcd_reset: false
+
+k8s_network_version: 'v3.7'
+k8s_network_index: 'https://docs.projectcalico.org/{{ k8s_network_version }}/manifests'
+
+k8s_cloud_provider: ''
+k8s_cloud_config_file: '{{ k8s_config_dir }}/{{ k8s_cloud_provider }}.conf'
+k8s_cloud_vsphere_workspace_server: ''
+k8s_cloud_vsphere_workspace_datacenter: ''
+k8s_cloud_vsphere_workspace_default_datastore: ''
+k8s_cloud_vsphere_workspace_folder: ''
+k8s_cloud_vsphere_default_user: ''
+k8s_cloud_vsphere_default_password: ''
+k8s_cloud_vsphere_datacenters: []
+k8s_cloud_vsphere_network_options: []
+k8s_cloud_vsphere_disk_options: []
+
+#not use, changed in tasks
+all_etcd_on_master: false

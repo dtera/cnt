@@ -1,0 +1,3 @@
+firewall_rules:
+- port: 6443
+- port: 10250

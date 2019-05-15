@@ -1,0 +1,36 @@
+galaxy_info:
+  role_name: k8s
+  author: zhaohq
+  description: this role install an high available / non high available kubernetes cluster with kubeadm.
+  license: license (BSD, MIT)
+  min_ansible_version: 2.4
+  github_branch: master
+
+  # platforms is a list of platforms, and each platform has a name and a list of versions.
+  platforms:
+  - name: EL
+    versions:
+    - 7
+  - name: Debian
+    versions:
+    - stretch
+  - name: Ubuntu
+    versions:
+    - xenial
+    - bionic
+
+  galaxy_tags:
+  - kubernetes
+  - k8s
+  - orchestration
+  - kubeadm
+  - kubectl
+  - ha
+  - docker
+  - containers
+  - system
+  - development
+  - paas
+  - saas
+
+dependencies: []

@@ -1,0 +1,20 @@
+- name: run preflight checks
+  command: 'kubeadm init phase preflight --config {{ k8s_kubeadm_config_file }} {{ k8s_kubeadm_ignore_err }}'
+  register: master_preflight
+  changed_when: false
+  failed_when: false
+
+- debug: var=master_preflight
+
+- name: init at first master
+  command: 'kubeadm init --config {{ k8s_kubeadm_config_file }} {{ k8s_kubeadm_init_extra_arg }}'
+  when: master_preflight.rc == 0
+  register: init_output
+
+- debug: var=init_output
+
+- name: ensure .kube folder exists on first master
+  file: path=/root/.kube state=directory
+
+- name: ensure kube config exists on first master
+  copy: src='{{ k8s_config_dir }}/admin.conf' dest=/root/.kube/config remote_src=yes

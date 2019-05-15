@@ -1,0 +1,22 @@
+- name: 'add {{ repo_name }} repository and install gpg key'
+  yum_repository:
+    name: '{{ repo_name }}'
+    description: '{{ repo_name }} repository'
+    baseurl: '{{ yum_baseurl }}'
+    gpgcheck: 'yes'
+    enabled: 'yes'
+    repo_gpgcheck: 'yes'
+    gpgkey: '{{ yum_pkg_keys }}'
+
+- name: 'add {{ repo_name }} GPG keys'
+  rpm_key: key='{{ item }}' state=present
+  with_items: '{{ yum_pkg_keys }}'
+  register: rpm_key
+  until: rpm_key is success
+  retries: 2
+
+- name: make cache if {{ repo_name }} GPG key changed
+  command: 'yum -q makecache -y --disablerepo="*" --enablerepo="{{ repo_name }}"'
+  when: rpm_key is changed
+  args:
+    warn: false

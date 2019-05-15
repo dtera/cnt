@@ -1,0 +1,5 @@
+firewall_rules:
+- port: 2379
+- port: 2380
+- port: 4001
+- port: 7001

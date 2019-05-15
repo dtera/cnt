@@ -1,0 +1,24 @@
+repo_name: 'kubernetes'
+packages:
+- name: kubelet
+  state: present
+- name: kubectl
+  state: present
+- name: kubeadm
+  state: present
+#- name: kubernetes-cni
+#  state: present
+pkg_index: 'https://mirrors.aliyun.com/kubernetes' # 'https://packages.cloud.google.com'
+
+yum_baseurl: '{{ pkg_index }}/yum/repos/kubernetes-el7-$basearch'
+yum_pkg_keys:
+- '{{ pkg_index }}/yum/doc/yum-key.gpg'         # yum_key
+- '{{ pkg_index }}/yum/doc/rpm-package-key.gpg' # rpm_package_key
+
+apt_keys:
+- '{{ pkg_index }}/apt/doc/apt-key.gpg'
+apt_repo_url: 'https://mirrors.aliyun.com/kubernetes/apt/' # apt_repo_url: http://apt.kubernetes.io/
+apt_repo_pool: 'kubernetes-xenial'
+apt_repo_version: 'main'
+
+swapoff: false

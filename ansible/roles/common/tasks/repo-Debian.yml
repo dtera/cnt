@@ -1,0 +1,19 @@
+- name: 'add {{ repo_name }} repository source list'
+  apt_repository:
+    repo: 'deb {{ apt_repo_url }} {{ apt_repo_pool }} {{ apt_repo_version }}'
+    state: present
+    filename: '{{ repo_name }}'
+
+- name: 'add {{ repo_name }} GPG keys'
+  apt_key: url='{{ item }}' state=present
+  with_items: '{{ apt_keys }}'
+  register: task_result
+  until: task_result is success
+  retries: 2
+
+- name: update the repository cache
+  apt: update_cache=yes
+  changed_when: false
+  register: task_result
+  until: task_result is success
+  retries: 2

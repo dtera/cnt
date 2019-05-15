@@ -22,7 +22,11 @@
     when: inventory_hostname in groups.spark
     tags:
     - spark
-  - role: k8s
+  - role: docker
+    when: inventory_hostname in groups.k8s
+    tags:
+    - docker
+  - role: kubernetes
     when: inventory_hostname in groups.k8s
     tags:
     - k8s

@@ -1,0 +1,16 @@
+repo_name: 'docker'
+pkg_index: 'https://download.docker.com/linux'
+
+yum_baseurl: '{{ pkg_index }}/centos/7/$basearch/stable'
+yum_pkg_keys:
+- '{{ pkg_index }}/centos/gpg'
+
+apt_keys:
+- '{{ pkg_index }}/ubuntu/gpg'
+apt_repo_url: '{{ pkg_index }}/ubuntu'
+apt_repo_pool: 'bionic'
+apt_repo_version: 'stable'
+
+packages:
+- curl
+# - epel-release

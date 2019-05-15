@@ -1,0 +1,9 @@
+[Service]
+{#Environment="KUBELET_EXTRA_ARGS={{ k8s_kubelet_extra_args }}"#}
+EnvironmentFile=-/var/lib/kubelet/kubeadm-flags.env
+EnvironmentFile=-/etc/sysconfig/kubelet
+ExecStart=
+ExecStart=/usr/bin/kubelet {{ k8s_kubelet_extra_args }}
+Restart=always
+{#ExecStart=/usr/bin/kubelet $KUBELET_KUBECONFIG_ARGS $KUBELET_CONFIG_ARGS $KUBELET_KUBEADM_ARGS $KUBELET_EXTRA_ARGS#}
+{#Restart=on-failure#}

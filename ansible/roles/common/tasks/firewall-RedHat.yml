@@ -1,7 +1,7 @@
 - name: setup firewall rule for linux of RedHat family
   firewalld:
     state: '{{ item.state|default("enabled") }}'
-    port: '{{ item.port|default("22") }}{% if "/" not in item %}/tcp{% endif %}'
+    port: '{{ item.port|default(item)|default("22") }}{% if "/" not in item %}/tcp{% endif %}'
     zone: '{{ item.zone|default("public") }}'
     immediate: '{{ item.immediate|default("true") }}'
     permanent: '{{ item.permanent|default("true") }}'

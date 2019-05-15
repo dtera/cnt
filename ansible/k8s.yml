@@ -1,0 +1,11 @@
+---
+- hosts: k8s
+  remote_user: root
+
+  roles:
+  - role: docker
+    tags:
+    - docker
+  - role: kubernetes
+    tags:
+    - k8s
