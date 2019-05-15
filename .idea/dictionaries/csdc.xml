@@ -12,6 +12,7 @@
       <w>cgroup</w>
       <w>cgroupfs</w>
       <w>cnxns</w>
+      <w>configmaps</w>
       <w>coreos</w>
       <w>daemonize</w>
       <w>datacenter</w>
@@ -34,6 +35,7 @@
       <w>fwww</w>
       <w>hdfs</w>
       <w>healthcheck</w>
+      <w>heapster</w>
       <w>hostvars</w>
       <w>hust</w>
       <w>ident</w>
@@ -61,6 +63,7 @@
       <w>nameservice</w>
       <w>nameservices</w>
       <w>netfilter</w>
+      <w>nginx</w>
       <w>nodemanager</w>
       <w>nodename</w>
       <w>nohup</w>
@@ -79,6 +82,7 @@
       <w>stdin</w>
       <w>swapoff</w>
       <w>systemd</w>
+      <w>tolerations</w>
       <w>traefik</w>
       <w>unarchive</w>
       <w>vsphere</w>
