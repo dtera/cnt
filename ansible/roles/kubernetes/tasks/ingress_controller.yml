@@ -1,3 +1,12 @@
+- name: 'ensure existence of {{ k8s_manifests_dir }}'
+  file: path='{{ k8s_manifests_dir }}' state=directory
+  when: k8s_manifests_dir is defined
+
+- name: 'copy some manifests to {{ k8s_manifests_dir }}'
+  copy: src='{{ item | replace(k8s_manifests_dir + "/", "") }}' dest='{{ item }}'
+  with_items: '{{ k8s_ingress_controller }}'
+  when: k8s_manifests_dir is defined
+
 - name: deploy ingress controller
   command:  'kubectl apply -f {{ item }}'
   with_items: '{{ k8s_ingress_controller }}'

@@ -115,3 +115,8 @@
 - name: include ingress controller tasks
   include_tasks: ingress_controller.yml
   when: inventory_hostname == groups.k8s_master[0]
+
+- name: 'label the nodes used for ingress controller with custom/ingress-controller-ready=true'
+  command: 'kubectl label node {{ ansible_nodename }} custom/ingress-controller-ready=true'
+  delegate_to: '{{ groups.k8s_master[0] }}'
+  when: inventory_hostname in groups.k8s_node and lb_ready is defined

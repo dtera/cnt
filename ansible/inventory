@@ -23,6 +23,7 @@
 nn
 rm
 dn
+zk
 
 # ================================spark inventory================================
 [spark_master]
@@ -51,7 +52,7 @@ spark_worker
 192.168.88.124 host=zk2
 192.168.88.125 host=zk3
 192.168.88.24  host=rm1 id=rm1
-192.168.88.178 host=rm2 id=rm2
+192.168.88.178 host=rm2 id=rm2 lb_ready=true
 
 [k8s:children]
 k8s_etcd
