@@ -10,24 +10,24 @@ show_usage="args: [-h|--help  -c|--is_ctl_plane]  \n\
 -h|--help         \t\t show help information  \n\
 -c|--is_ctl_plane \t   whether current node is control plane"
 ARGS=`getopt -o hc -l help,is_ctl_plane -n 'kube-setup.sh' -- "$@"`
-if [ $? != 0 ]; then
+if [[ $? != 0 ]]; then
   echo "Terminating..."
   exit 1
 fi
-eval set -- "$ARGS"
+eval set -- "${ARGS}"
 
 while true
 do
   case $1 in
-    -h|--help) echo -e $show_usage; exit 0;;
+    -h|--help) echo -e ${show_usage}; exit 0;;
     -c|--is_ctl_plane) shift; is_ctl_plane=true;;
     --) shift; break;;
-    *) echo "unknow args"; exit 1;; 
+    *) echo "unknown args"; exit 1;;
   esac
 done
 
 function add_yum_repo() {
-  if [ ! -e /etc/yum.repos.d/${1##*/} ]; then
+  if [[ ! -e /etc/yum.repos.d/${1##*/} ]]; then
     yum-config-manager --add-repo=$1
   fi
 }
@@ -37,8 +37,8 @@ if [[ "$os_family" =~ "rhel" ]]; then
   if [[ $? != 0 ]]; then
     yum install -y yum-utils
   fi
-  add_yum_repo $WD/yum/repos/docker-ce.repo
-  add_yum_repo $WD/yum/repos/kubernetes.repo
+  add_yum_repo ${WD}/yum/repos/docker-ce.repo
+  add_yum_repo ${WD}/yum/repos/kubernetes.repo
 cat <<EOF >/etc/sysctl.d/k8s.conf
 net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
@@ -64,27 +64,27 @@ fi
 
 which docker &> /dev/null
 if [[ $? != 0 ]]; then
-  $install_cmd install -y docker-ce
+  ${install_cmd} install -y docker-ce
   systemctl start docker
   systemctl enable docker
 fi
 
 which kubeadm &> /dev/null
 if [[ $? != 0 ]]; then
-  $install_cmd install -y kubelet kubeadm
+  ${install_cmd} install -y kubelet kubeadm
   systemctl enable kubelet
 fi
 
 DOCKER_CGROUPS=$(docker info | grep 'Cgroup' | cut -d' ' -f3)
-cat <<EOF >$kubelet_conf
-KUBELET_CGROUP_ARGS="--cgroup-driver=$DOCKER_CGROUPS"
+cat <<EOF >${kubelet_conf}
+KUBELET_CGROUP_ARGS="--cgroup-driver=${DOCKER_CGROUPS}"
 KUBELET_EXTRA_ARGS="--fail-swap-on=false"
 EOF
 
-if $is_ctl_plane; then
-  kubeadm init --config=$WD/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap|tee $WD/kubeadm-init.log
+if ${is_ctl_plane}; then
+  kubeadm init --config=${WD}/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap|tee ${WD}/kubeadm-init.log
   mkdir -p $HOME/.kube
   cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
 
-  kubectl apply -f $WD/kube-flannel.yml
+  kubectl apply -f ${WD}/kube-flannel.yml
 fi

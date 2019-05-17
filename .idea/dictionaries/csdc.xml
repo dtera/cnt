@@ -11,6 +11,7 @@
       <w>centos</w>
       <w>cgroup</w>
       <w>cgroupfs</w>
+      <w>cgroups</w>
       <w>cnxns</w>
       <w>configmaps</w>
       <w>coreos</w>
@@ -33,6 +34,7 @@
       <w>etcds</w>
       <w>failover</w>
       <w>fwww</w>
+      <w>getopts</w>
       <w>hdfs</w>
       <w>healthcheck</w>
       <w>heapster</w>
@@ -68,6 +70,7 @@
       <w>nodename</w>
       <w>nohup</w>
       <w>openblas</w>
+      <w>optarg</w>
       <w>oraclelicense</w>
       <w>preflight</w>
       <w>proc</w>
