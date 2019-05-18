@@ -56,6 +56,10 @@ tar -xvf harbor-online-installer-v${harbor_version}.tgz -C /usr/local/cnt/
 - vim harbor.cfg  
 ```
 hostname=harbor.cnt.io
+ui_url_protocol = https
+ssl_cert = /data/cert/registry.cnt.io.crt
+ssl_cert_key = /data/cert/registry.cnt.io.key
+  
 email_server=smtp.qq.com
 email_server_port=25
 email_username=346091714@qq.com
@@ -66,9 +70,61 @@ harbor_admin_password = harbor@5133
 self_registration=off
 project_creation_restriction=adminonly
 ```
-- issue the following commands
+- ./install.sh
+- issue the following commands to configure harbor with https access
 ```bash
+mkdir pki
+cd pki
+
+# ===============================Getting Certificate Authority========================================
+openssl genrsa -out ca.key 4096
+openssl req -x509 -new -nodes -sha512 -days 3650 \
+-subj "/C=CN/ST=Wuhan/L=Wuhan/O=registry/OU=Personal/CN=registry.cnt.io" \
+-key ca.key \
+-out ca.crt
+
+# ===============================Getting Server Certificate===========================================
+# 1. Create your own Private Key:
+openssl genrsa -out registry.cnt.io.key 4096
+# 2. Generate a Certificate Signing Request:
+openssl req -new -sha512 \
+-subj "/C=CN/ST=Wuhan/L=Wuhan/O=registry/OU=Personal/CN=registry.cnt.io" \
+-key registry.cnt.io.key \
+-out registry.cnt.io.csr
+# 3. Generate the certificate of your registry host:
+cat > v3.ext <<-EOF
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+extendedKeyUsage = serverAuth 
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1=registry.cnt.io
+DNS.2=registry
+EOF
+
+openssl x509 -req -sha512 -days 3650 \
+-extfile v3.ext \
+-CA ca.crt -CAkey ca.key -CAcreateserial \
+-in registry.cnt.io.csr \
+-out registry.cnt.io.crt
+
+# ===============================Configuration and Installation=======================================
+# 1. Configure Server Certificate and Key for Harbor
+cp registry.cnt.io.crt /data/cert/
+cp registry.cnt.io.key /data/cert/
+# 2. Configure Server Certificate, Key and CA for Docker
+openssl x509 -inform PEM -in registry.cnt.io.crt -out registry.cnt.io.cert
+mkdir -p /etc/docker/certs.d/registry.cnt.io
+cp ca.crt registry.cnt.io.key registry.cnt.io.cert /etc/docker/certs.d/registry.cnt.io/
+cd ../
+# Generate configuration files for Harbor:
 ./prepare
-./install.sh
+# If Harbor is already running, stop and remove the existing instance. Your image data remain in the file system
+docker-compose down -v
+# Finally, restart Harbor:
+docker-compose up -d
+# Open a browser and enter the address: https://registry.cnt.io. It should display the user interface of Harbor
 ```
 
