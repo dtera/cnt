@@ -5,7 +5,7 @@ if [[ $1 != "" ]]; then
   endpoints=$1
 fi
 
-docker run --rm -it --net host \
+docker run -it --rm --net host \
 -v /etc/kubernetes:/etc/kubernetes \
 registry.aliyuncs.com/google_containers/etcd:3.3.10 \
 etcdctl \
