@@ -1,0 +1,21 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-ingress-service
+  namespace: kube-system
+spec:
+  selector:
+    k8s-app: traefik-ingress-lb
+  type: NodePort
+  ports:
+  - name: http
+    nodePort: 30080
+    port: 80
+    targetPort: 80
+    protocol: TCP
+  - name: https
+    nodePort: 30443
+    port: 443
+    targetPort: 443
+    protocol: TCP
+---
