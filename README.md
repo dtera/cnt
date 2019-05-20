@@ -19,8 +19,7 @@ kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifest
 
 #### deploy ingress-traefik
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-traefik/traefik-rbac.yml  
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-traefik/traefik-ds.yml
+kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-traefik/mandatory.yml  
 ```
 
 #### deploy kubernetes dashboard
