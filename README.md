@@ -3,7 +3,8 @@
 
 #### install tensorflow-gpu
 ```bash
-pip install tensorflow-gpu -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install tensorflow-gpu -i https://pypi.tuna.tsinghua.edu.cn/simple  # https://mirrors.aliyun.com/pypi/simple
+
 ```
 
 #### install docker composer
