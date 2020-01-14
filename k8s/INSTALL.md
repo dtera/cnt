@@ -3,8 +3,8 @@ The following is about how to install k8s cluster, take centos7 as an example:
 -- On the node of k8s cluster, install the related components about k8s--
 ```bash
 yum install -y yum-utils
-yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/docker-ce.repo
-yum-config-manager --add-repo=https://raw.githubusercontent.com/dtera/cnt/master/k8s/yum/repos/kubernetes.repo
+yum-config-manager --add-repo=https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/yum/repos/docker-ce.repo
+yum-config-manager --add-repo=https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/yum/repos/kubernetes.repo
 yum install -y docker-ce kubelet kubeadm
 systemctl start docker
 systemctl enable docker kubelet
@@ -31,5 +31,5 @@ kubeadm join master_ip:6443 --token xxxxxx --discovery-token-ca-cert-hash yyyyyy
 -- Deploying flannel manually--  
 Flannel can be added to any existing Kubernetes cluster though it's simplest to add flannel before any pods using the pod network have been started. For Kubernetes v1.7+:
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/kube-flannel.yml
 ```
