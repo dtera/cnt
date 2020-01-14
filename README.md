@@ -20,18 +20,18 @@ curl -L https://raw.githubusercontent.com/docker/compose/master/contrib/completi
 
 #### deploy ingress-nginx
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-nginx/mandatory.yml
+kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/ingress-nginx/mandatory.yml
 ```
 
 #### deploy ingress-traefik
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/ingress-traefik/mandatory.yml  
+kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/ingress-traefik/mandatory.yml  
 ```
 
 #### deploy kubernetes dashboard
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/dashboard/dashboard-admin-rbac.yml  
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/dashboard/dashboard.yml  
+kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/dashboard/dashboard-admin-rbac.yml  
+kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/dashboard/dashboard.yml  
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
 ```
 
@@ -46,7 +46,7 @@ tar -xvf helm-${helm_version}-linux-amd64.tgz
 mv linux-amd64/helm /usr/local/bin/helm
 rm linux-amd64 -rf
 chmod +x /usr/local/bin/helm
-kubectl apply -f https://raw.githubusercontent.com/dtera/cnt/master/k8s/manifests/helm/rbac-config.yml
+kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/helm/rbac-config.yml
 helm init -i registry.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account tiller
 ```
 
