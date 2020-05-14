@@ -1,21 +1,17 @@
-version: '3.1'
+version: '3'
 
 services:
-
-  db:
-    image: mysql
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
+  zookeeper:
+    image: zookeeper
     ports:
-      - 3306:3306
-    volumes:
-        - '/storage/docker/mysql/etc/conf.d:/etc/mysql/conf.d'
-        - '/storage/docker/mysql/var/lib:/var/lib/mysql'
+      - 2181:2181
+  admin:
+    image: apache/dubbo-admin
+    depends_on:
+      - zookeeper
+    ports:
+      - 8080
     environment:
-      MYSQL_ROOT_PASSWORD: root
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
+      - admin.registry.address=zookeeper://zookeeper:2181
+      - admin.config-center=zookeeper://zookeeper:2181
+      - admin.metadata-report.address=zookeeper://zookeeper:2181
