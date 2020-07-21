@@ -54,7 +54,7 @@ helm init -i registry.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-rep
 - download package and unarchive it  
 ```bash
 harbor_version='1.10.4'
-curl -L https://github.com/goharbor/harbor/releases/download/v${harbor_version}/harbor-offline-installer-v${harbor_version}.tgz
+wget https://github.com/goharbor/harbor/releases/download/v${harbor_version}/harbor-offline-installer-v${harbor_version}.tgz
 # curl -L https://storage.googleapis.com/harbor-releases/release-${harbor_version}/harbor-online-installer-v${harbor_version}.tgz
 tar -xvf harbor-online-installer-v${harbor_version}.tgz -C /usr/local/cnt/
 ```
