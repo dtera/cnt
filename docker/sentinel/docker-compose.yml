@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3
+    hostname: sentinel-rabbit
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  sentinel:
+    image: fredboat/sentinel:dev-v0
+    restart: always
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+    depends_on:
+      - rabbitmq
+    ports:
+      - 27212:27212
+    volumes:
+      - ./sentinel.yml:/opt/sentinel/sentinel.yml
+      - ./sentinel_logs:/opt/sentinel/logs
+
+
+  #watchtower:
+  #  image: v2tec/watchtower
+  #    restart: on-failure:3
+  #      labels:
+  #          - "com.centurylinklabs.watchtower.enable=true"
+  #          volumes:
+  #              - /var/run/docker.sock:/var/run/docker.sock
+  #              command: --cleanup --label-enable --interval 300 #seconds

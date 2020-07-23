@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+  proxy:
+    image: envoyproxy/envoy:v1.14.4
+    container_name: envoy
+    ports:
+        - '9901:9901/tcp'
+        - '10001:10000/tcp'
+    restart: always

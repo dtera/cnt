@@ -1,0 +1,30 @@
+# Note: Make sure to rename this file to "sentinel.yaml" for Sentinel to pick it up
+sentinel:
+discordToken: ""
+# The range of shards to start from shardStart (inclusively) to shardEndExcl (exclusively)
+shardStart: 0
+shardEnd: 0
+shardCount: 1 # The total number of shards of your entire bot
+instance: dev # A human-readable identifier
+sentry:
+dsn: ""
+# tags:
+# some_key: some_value
+# another_key: another_value
+server:
+port: 27212
+spring:
+rabbitmq:
+# These default settings should work without configuring the server
+host: "localhost"
+#host: rabbitmq # use this when running with the attached docker-compose file
+port: 5672
+username: "guest"
+password: "guest"
+logging:
+file: './logs/sentinel.log'
+file.max-history: 30
+file.max-size: 1GB
+level:
+root: INFO
+com.fredboat: DEBUG
