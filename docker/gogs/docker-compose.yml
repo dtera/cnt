@@ -1,12 +1,12 @@
 version: '3.3'
 
 services:
-  gogs:
+  git:
     image: gogs/gogs
     container_name: gogs
     ports:
         - '10022:22/tcp'
         - '10080:3000/tcp'
     volumes:
-        - '/storage/docker/gogs/data:/data'
+        - '/var/docker/gogs/data:/data'
     restart: always

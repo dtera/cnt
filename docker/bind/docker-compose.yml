@@ -1,7 +1,7 @@
 version: '3.3'
 
 services:
-  bind:
+  dns:
     image: sameersbn/bind
     container_name: bind
     ports:
@@ -9,5 +9,5 @@ services:
         - '53:53/udp'
         - '10000:10000/tcp'
     volumes:
-        - '/storage/docker/bind/data:/data'
+        - '/var/docker/bind/data:/data'
     restart: always

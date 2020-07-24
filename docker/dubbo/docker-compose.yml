@@ -3,10 +3,12 @@ version: '3'
 services:
   zookeeper:
     image: zookeeper
+    container_name: zookpeer
     ports:
       - 2181:2181
-  admin:
+  dubbo-admin:
     image: apache/dubbo-admin
+    container_name: dubbo-admin
     depends_on:
       - zookeeper
     ports:

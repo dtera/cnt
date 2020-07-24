@@ -1,9 +1,9 @@
 version: '3.1'
 
 services:
-
-  xxl-job-admin:
+  scheduler:
     image: xuxueli/xxl-job-admin:2.2.0
+    container_name: xxl-job-admin
     restart: always
     ports:
       - 28080:8080

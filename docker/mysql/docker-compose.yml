@@ -1,21 +1,22 @@
 version: '3.1'
 
 services:
-
   db:
     image: mysql
+    container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     ports:
       - 3306:3306
     volumes:
-        - '/storage/docker/mysql/etc/conf.d:/etc/mysql/conf.d'
-        - '/storage/docker/mysql/var/lib:/var/lib/mysql'
+        - '/var/docker/mysql/etc/conf.d:/etc/mysql/conf.d'
+        - '/var/docker/mysql/var/lib:/var/lib/mysql'
     environment:
       MYSQL_ROOT_PASSWORD: root
 
   adminer:
     image: adminer
+    container_name: adminer
     restart: always
     ports:
-      - 8080:8080
+      - 38080:8080
