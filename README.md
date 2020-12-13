@@ -33,6 +33,9 @@ kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/m
 kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/dashboard/dashboard-admin-rbac.yml  
 kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/dashboard/dashboard.yml  
 kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+
+# recommended
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/aio/deploy/recommended.yaml
 ```
 
 #### install helm and tiller
@@ -40,7 +43,7 @@ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | gre
 - Unpack it (tar -xvf helm-v2.0.0-linux-amd64.tgz)
 - Find the helm binary in the unpacked directory, and move it to its desired destination (mv linux-amd64/helm /usr/local/bin/helm)
 ```bash
-helm_version='v2.14.0'
+helm_version='v3.4.2'
 curl -L https://storage.googleapis.com/kubernetes-helm/helm-${helm_version}-linux-amd64.tar.gz
 tar -xvf helm-${helm_version}-linux-amd64.tgz
 mv linux-amd64/helm /usr/local/bin/helm
