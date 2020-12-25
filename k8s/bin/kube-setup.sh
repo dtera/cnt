@@ -82,6 +82,7 @@ KUBELET_EXTRA_ARGS="--fail-swap-on=false"
 EOF
 
 if ${is_ctl_plane}; then
+  echo 1 > /proc/sys/net/ipv4/ip_forward
   kubeadm init --config=${WD}/kubeadm-config.yml --ignore-preflight-errors=Swap,NumCPU|tee ${WD}/kubeadm-init.log
   mkdir -p $HOME/.kube
   cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
