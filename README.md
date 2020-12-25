@@ -40,7 +40,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.1.0/a
 
 #### install helm and tiller
 - Download your [desired version](https://github.com/helm/helm/releases)
-- Unpack it (tar -xvf helm-v2.0.0-linux-amd64.tgz)
+- Unpack it (tar -xvf helm-v3.4.2-linux-amd64.tgz)
 - Find the helm binary in the unpacked directory, and move it to its desired destination (mv linux-amd64/helm /usr/local/bin/helm)
 ```bash
 helm_version='v3.4.2'
@@ -50,13 +50,13 @@ mv linux-amd64/helm /usr/local/bin/helm
 rm linux-amd64 -rf
 chmod +x /usr/local/bin/helm
 kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/helm/rbac-config.yml
-helm init -i registry.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account tiller
+#helm init -i registry.aliyuncs.com/google_containers/tiller:v2.13.0 --stable-repo-url https://kubernetes.oss-cn-hangzhou.aliyuncs.com/charts --service-account tiller
 ```
 
 #### install harbor
 - download package and unarchive it  
 ```bash
-harbor_version='1.10.4'
+harbor_version='2.1.2'
 wget https://github.com/goharbor/harbor/releases/download/v${harbor_version}/harbor-offline-installer-v${harbor_version}.tgz
 # curl -L https://storage.googleapis.com/harbor-releases/release-${harbor_version}/harbor-online-installer-v${harbor_version}.tgz
 tar -xvf harbor-online-installer-v${harbor_version}.tgz -C /usr/local/cnt/
