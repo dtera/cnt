@@ -18,8 +18,9 @@ EOF
 
 -- On the master node, init the k8s cluster--
 ```bash
+echo 1 > /proc/sys/net/ipv4/ip_forward
 workdir=$(cd $(dirname $(dirname $0)); pwd)
-kubeadm init --config=${workdir}/kubeadm-config.yml --experimental-upload-certs --ignore-preflight-errors=Swap
+kubeadm init --config=${workdir}/kubeadm-config.yml --ignore-preflight-errors=Swap,NumCPU
 mkdir -p $HOME/.kube
 cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 ```
