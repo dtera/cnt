@@ -68,7 +68,7 @@ tar -xvf harbor-online-installer-v${harbor_version}.tgz -C /usr/local/cnt/
 - cd /usr/local/harbor
 - vim harbor.cfg  
 ```
-hostname=harbor.cnt.io
+hostname=harbor.zhaohuiqiang.cn
 ui_url_protocol = https
 ssl_cert = /data/cert/registry.zhaohuiqiang.cn.crt
 ssl_cert_key = /data/cert/registry.zhaohuiqiang.cn.key
