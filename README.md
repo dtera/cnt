@@ -70,8 +70,8 @@ tar -xvf harbor-online-installer-v${harbor_version}.tgz -C /usr/local/cnt/
 ```
 hostname=harbor.cnt.io
 ui_url_protocol = https
-ssl_cert = /data/cert/registry.cnt.io.crt
-ssl_cert_key = /data/cert/registry.cnt.io.key
+ssl_cert = /data/cert/registry.zhaohuiqiang.cn.crt
+ssl_cert_key = /data/cert/registry.zhaohuiqiang.cn.key
   
 email_server=smtp.qq.com
 email_server_port=25
@@ -98,12 +98,12 @@ openssl req -x509 -new -nodes -sha512 -days 3650 \
 
 # ===============================Getting Server Certificate===========================================
 # 1. Create your own Private Key:
-openssl genrsa -out registry.cnt.io.key 4096
+openssl genrsa -out registry.zhaohuiqiang.cn.key 4096
 # 2. Generate a Certificate Signing Request:
 openssl req -new -sha512 \
--subj "/C=CN/ST=Wuhan/L=Wuhan/O=registry/OU=Personal/CN=registry.cnt.io" \
--key registry.cnt.io.key \
--out registry.cnt.io.csr
+-subj "/C=CN/ST=Wuhan/L=Wuhan/O=registry/OU=Personal/CN=registry.zhaohuiqiang.cn" \
+-key registry.zhaohuiqiang.cn.key \
+-out registry.zhaohuiqiang.cn.csr
 # 3. Generate the certificate of your registry host:
 cat > v3.ext <<-EOF
 authorityKeyIdentifier=keyid,issuer
@@ -113,24 +113,24 @@ extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1=registry.cnt.io
+DNS.1=registry.zhaohuiqiang.cn
 DNS.2=registry
 EOF
 
 openssl x509 -req -sha512 -days 3650 \
 -extfile v3.ext \
 -CA ca.crt -CAkey ca.key -CAcreateserial \
--in registry.cnt.io.csr \
--out registry.cnt.io.crt
+-in registry.zhaohuiqiang.cn.csr \
+-out registry.zhaohuiqiang.cn.crt
 
 # ===============================Configuration and Installation=======================================
 # 1. Configure Server Certificate and Key for Harbor
-cp registry.cnt.io.crt /data/cert/
-cp registry.cnt.io.key /data/cert/
+cp registry.zhaohuiqiang.cn.crt /data/cert/
+cp registry.zhaohuiqiang.cn.key /data/cert/
 # 2. Configure Server Certificate, Key and CA for Docker
-openssl x509 -inform PEM -in registry.cnt.io.crt -out registry.cnt.io.cert
-mkdir -p /etc/docker/certs.d/registry.cnt.io
-cp ca.crt registry.cnt.io.key registry.cnt.io.cert /etc/docker/certs.d/registry.cnt.io/
+openssl x509 -inform PEM -in registry.zhaohuiqiang.cn.crt -out registry.zhaohuiqiang.cn.cert
+mkdir -p /etc/docker/certs.d/registry.zhaohuiqiang.cn
+cp ca.crt registry.zhaohuiqiang.cn.key registry.zhaohuiqiang.cn.cert /etc/docker/certs.d/registry.zhaohuiqiang.cn/
 cd ../
 # Generate configuration files for Harbor:
 ./prepare
@@ -138,6 +138,6 @@ cd ../
 docker-compose down -v
 # Finally, restart Harbor:
 docker-compose up -d
-# Open a browser and enter the address: https://registry.cnt.io. It should display the user interface of Harbor
+# Open a browser and enter the address: https://registry.zhaohuiqiang.cn. It should display the user interface of Harbor
 ```
 
