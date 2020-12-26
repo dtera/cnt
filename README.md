@@ -25,7 +25,11 @@ kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/m
 
 #### deploy ingress-traefik
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/ingress-traefik/mandatory.yml  
+# deprecated
+# kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/manifests/ingress-traefik/mandatory.yml
+kubectl create ns traefik-v2
+helm install --namespace=traefik-v2 traefik traefik/traefik
+kubectl port-forward $(kubectl get pods -n traefik-v2 --selector "app.kubernetes.io/name=traefik" --output=name) -n traefik-v2 9000:9000    
 ```
 
 #### deploy kubernetes dashboard
