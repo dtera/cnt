@@ -3,13 +3,15 @@
 WD=$(cd $(dirname $(dirname $0)); pwd)
 os_family=$(cat /etc/os-release|grep ID_LIKE)
 is_ctl_plane=false
+is_standalone=false
 install_cmd="yum"
 kubelet_conf="/etc/sysconfig/kubelet"
 
-show_usage="args: [-h|--help  -c|--is_ctl_plane]  \n\
+show_usage="args: [-h|--help  -c|--is_ctl_plane  -s|--is_standalone]  \n\
 -h|--help         \t\t show help information  \n\
--c|--is_ctl_plane \t   whether current node is control plane"
-ARGS=`getopt -o hc -l help,is_ctl_plane -n 'kube-setup.sh' -- "$@"`
+-c|--is_ctl_plane \t   whether current node is control plane \n\
+-s|--is_standalone  \t whether the kubenates cluster is standalone"
+ARGS=`getopt -o hcs -l help,is_ctl_plane,standalone -n 'kube-setup.sh' -- "$@"`
 if [[ $? != 0 ]]; then
   echo "Terminating..."
   exit 1
@@ -21,6 +23,7 @@ do
   case $1 in
     -h|--help) echo -e ${show_usage}; exit 0;;
     -c|--is_ctl_plane) shift; is_ctl_plane=true;;
+    -s|--is_standalone) shift; is_standalone=true;;
     --) shift; break;;
     *) echo "unknown args"; exit 1;;
   esac
@@ -88,4 +91,8 @@ if ${is_ctl_plane}; then
   cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
 
   kubectl apply -f ${WD}/kube-flannel.yml
+
+  if ${is_standalone}; then
+    kubectl taint nodes --all node-role.kubernetes.io/master-
+  fi
 fi
