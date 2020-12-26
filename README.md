@@ -92,7 +92,7 @@ cd pki
 # ===============================Getting Certificate Authority========================================
 openssl genrsa -out ca.key 4096
 openssl req -x509 -new -nodes -sha512 -days 3650 \
--subj "/C=CN/ST=Wuhan/L=Wuhan/O=registry/OU=Personal/CN=registry.cnt.io" \
+-subj "/C=CN/ST=Wuhan/L=Wuhan/O=registry/OU=Personal/CN=registry.zhaohuiqiang.cn" \
 -key ca.key \
 -out ca.crt
 
