@@ -63,15 +63,15 @@ kubectl apply -f https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/m
 harbor_version='2.1.2'
 wget https://github.com/goharbor/harbor/releases/download/v${harbor_version}/harbor-offline-installer-v${harbor_version}.tgz
 # curl -L https://storage.googleapis.com/harbor-releases/release-${harbor_version}/harbor-online-installer-v${harbor_version}.tgz
-tar -xvf harbor-online-installer-v${harbor_version}.tgz -C /usr/local/cnt/
+tar xvf harbor-online-installer-v${harbor_version}.tgz -C /usr/local/cnt/
 ```
 - cd /usr/local/harbor
 - vim harbor.cfg  
 ```
 hostname=harbor.zhaohuiqiang.cn
 ui_url_protocol = https
-ssl_cert = /data/cert/registry.zhaohuiqiang.cn.crt
-ssl_cert_key = /data/cert/registry.zhaohuiqiang.cn.key
+ssl_cert = /var/certs/registry.zhaohuiqiang.cn.crt
+ssl_cert_key = /var/certs/registry.zhaohuiqiang.cn.key
   
 email_server=smtp.qq.com
 email_server_port=25
@@ -125,8 +125,8 @@ openssl x509 -req -sha512 -days 3650 \
 
 # ===============================Configuration and Installation=======================================
 # 1. Configure Server Certificate and Key for Harbor
-cp registry.zhaohuiqiang.cn.crt /data/cert/
-cp registry.zhaohuiqiang.cn.key /data/cert/
+cp registry.zhaohuiqiang.cn.crt /var/certs/
+cp registry.zhaohuiqiang.cn.key /var/certs/
 # 2. Configure Server Certificate, Key and CA for Docker
 openssl x509 -inform PEM -in registry.zhaohuiqiang.cn.crt -out registry.zhaohuiqiang.cn.cert
 mkdir -p /etc/docker/certs.d/registry.zhaohuiqiang.cn
