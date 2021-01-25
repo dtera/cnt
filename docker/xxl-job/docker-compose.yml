@@ -10,7 +10,19 @@ services:
     volumes:
         - '/storage/docker/xxl-job-admin/applogs:/data/applogs'
     environment:
-      PARAMS: '--spring.datasource.url=jdbc:mysql://172.19.0.2:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai 
-               --spring.datasource.username=root 
-               --spring.datasource.password=root'
+      PARAMS: |
+        --spring.datasource.url=jdbc:mysql://172.19.0.2:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+        --spring.datasource.username=root 
+        --spring.datasource.password=root
+        --xxl.job.login.username=admin
+        --xxl.job.login.password=admin
+
+  executor:
+    image: caryyu/xxl-job-executor-sample-springboot
+    links:
+      - scheduler:scheduler
+    depends_on:
+      - scheduler
+    command: |
+      --xxl.job.admin.addresses=http://scheduler:8080/xxl-job-admin
 
