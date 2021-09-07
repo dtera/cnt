@@ -3,8 +3,9 @@ The following is about how to install k8s cluster, take centos7 as an example:
 -- On the node of k8s cluster, install the related components about k8s--
 ```bash
 yum install -y yum-utils
-# https://download.docker.com/linux/centos/docker-ce.repo
+# https://download.docker.com/linux/centos/docker-ce.repo  https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 yum-config-manager --add-repo=https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/yum/repos/docker-ce.repo
+# https://mirrors.aliyun.com/kubernetes/
 yum-config-manager --add-repo=https://raw.githubusercontent.com/zhaohuiqiang/cnt/master/k8s/yum/repos/kubernetes.repo
 yum install -y docker-ce kubelet kubeadm
 systemctl start docker
