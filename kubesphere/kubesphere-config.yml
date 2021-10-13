@@ -1,0 +1,32 @@
+spec:
+  hosts:
+  - {name: ks-etcd1, address: 172.18.0.1, internalAddress: 172.18.0.1, user: root, password: root}
+  - {name: ks-etcd2, address: 172.18.0.2, internalAddress: 172.18.0.2, user: root, password: root}
+  - {name: ks-etcd3, address: 172.18.0.3, internalAddress: 172.18.0.3, user: root, password: root}
+  - {name: ks-master1, address: 172.18.0.11, internalAddress: 172.18.0.11, user: root, password: root}
+  - {name: ks-master2, address: 172.18.0.12, internalAddress: 172.18.0.12, user: root, password: root}
+  - {name: ks-master3, address: 172.18.0.13, internalAddress: 172.18.0.13, user: root, password: root}
+  - {name: ks-node1, address: 172.18.0.21, internalAddress: 172.18.0.21, user: root, password: root}
+  - {name: ks-node2, address: 172.18.0.22, internalAddress: 172.18.0.22, user: root, password: root}
+  - {name: ks-node3, address: 172.18.0.23, internalAddress: 172.18.0.23, user: root, password: root}
+  - {name: ks-node4, address: 172.18.0.24, internalAddress: 172.18.0.24, user: root, password: root}
+  - {name: ks-node5, address: 172.18.0.25, internalAddress: 172.18.0.25, user: root, password: root}
+  roleGroups:
+    etcd:
+    - ks-etcd1
+    - ks-etcd2
+    - ks-etcd3
+    master:
+    - ks-master1
+    - ks-master2
+    - ks-master3
+    worker:
+    - ks-node1
+    - ks-node2
+    - ks-node3
+    - ks-node4
+    - ks-node5
+  controlPlaneEndpoint:
+    domain: lb.kubesphere.local
+    address: ""
+    port: "6443"
