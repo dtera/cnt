@@ -14,7 +14,7 @@ spec:
     - "ks-admin-gpu"
     worker:
     - "ks-node1"
-    #- "ks-node2"
+    # - "ks-node2"
   controlPlaneEndpoint:
     domain: lb.kubesphere.local
     address: ""
