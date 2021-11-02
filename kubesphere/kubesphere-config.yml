@@ -4,9 +4,9 @@ metadata:
   name: ks-cluster
 spec:
   hosts:
-  - {name: "ks-admin-gpu", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: ZHQ@5133}
-  - {name: "ks-node1", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: ZHQ@5133}
-  # - {name: "ks-node2", address: 9.135.18.249, internalAddress: 9.135.18.249, port: 36000, user: root, password: ZHQ@5133}
+  - {name: "ks-admin-gpu", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: ZHQ@5133zhq}
+  - {name: "ks-node1", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: ZHQ@5133zhq}
+  # - {name: "ks-node2", address: 9.135.18.249, internalAddress: 9.135.18.249, port: 36000, user: root, password: ZHQ@5133zhq}
   roleGroups:
     etcd:
     - "ks-admin-gpu"
