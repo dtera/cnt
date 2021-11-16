@@ -4,13 +4,13 @@ metadata:
   name: cnt
 spec:
   hosts:
-  - {name: "ks-admin-gpu", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: ZHQ@5133zhq}
-  - {name: "ks-node1", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: ZHQ@5133zhq}
+  - {name: "ks-admin", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: ZHQ@5133zhq}
+  - {name: "ks-node1", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: ZHQ@5133zhq}
   roleGroups:
     etcd:
-    - ks-admin-gpu
+    - ks-admin
     master: 
-    - ks-admin-gpu
+    - ks-admin
     worker:
     - ks-node1
   controlPlaneEndpoint:
@@ -18,7 +18,7 @@ spec:
     #internalLoadbalancer: haproxy
 
     domain: lb.kubesphere.local
-    address: "9.135.117.186"
+    address: ""
     port: 6443
   kubernetes:
     version: v1.21.5
@@ -31,7 +31,6 @@ spec:
     registryMirrors: []
     insecureRegistries: []
   addons: []
-
 
 
 ---
@@ -50,7 +49,7 @@ spec:
   local_registry: ""
   # dev_tag: ""
   etcd:
-    monitoring: true
+    monitoring: false
     endpointIps: localhost
     port: 2379
     tlsEnable: true
@@ -81,7 +80,7 @@ spec:
       kinds:         
       - resourceName: "nvidia.com/gpu"
         resourceType: "GPU"
-        default: true
+        default: false
     es:
       # master:
       #   volumeSize: 4Gi
@@ -100,12 +99,12 @@ spec:
       externalElasticsearchUrl: ""
       externalElasticsearchPort: ""
   alerting:
-    enabled: true
+    enabled: false
     # thanosruler:
     #   replicas: 1
     #   resources: {}
   auditing:
-    enabled: true
+    enabled: false
     # operator:
     #   resources: {}
     # webhook:
@@ -119,7 +118,7 @@ spec:
     jenkinsJavaOpts_Xmx: 512m
     jenkinsJavaOpts_MaxRAM: 2g
   events:
-    enabled: true
+    enabled: false
     # operator:
     #   resources: {}
     # exporter:
@@ -129,14 +128,14 @@ spec:
     #   replicas: 2
     #   resources: {}
   logging:
-    enabled: true
+    enabled: false
     containerruntime: docker
     logsidecar:
-      enabled: true
+      enabled: false
       replicas: 2
       # resources: {}
   metrics_server:
-    enabled: true
+    enabled: false
   monitoring:
     storageClass: ""
     # kube_rbac_proxy:
@@ -164,13 +163,13 @@ spec:
     #     resources: {}
     gpu:
       nvidia_dcgm_exporter:
-        enabled: true
+        enabled: false
         # resources: {}
   multicluster:
     clusterRole: none 
   network:
     networkpolicy:
-      enabled: true
+      enabled: false
     ippool:
       type: none
     topology:
@@ -179,9 +178,9 @@ spec:
     store:
       enabled: true
   servicemesh:
-    enabled: true
+    enabled: false
   kubeedge:
-    enabled: true   
+    enabled: false   
     cloudCore:
       nodeSelector: {"node-role.kubernetes.io/worker": ""}
       tolerations: []
