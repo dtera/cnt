@@ -4,8 +4,8 @@ metadata:
   name: cnt
 spec:
   hosts:
-  - {name: "ks-admin", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: ZHQ@5133zhq}
-  - {name: "ks-node1", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: ZHQ@5133zhq}
+  - {name: "ks-admin", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: 123456}
+  - {name: "ks-node1", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: 123456}
   roleGroups:
     etcd:
     - ks-admin
