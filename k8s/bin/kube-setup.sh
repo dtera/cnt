@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
-WD=$(cd $(dirname $(dirname $0)); pwd)
+# shellcheck disable=SC2046
+# shellcheck disable=SC2164
+CD=$(cd $(dirname "$0"); pwd)
+WD=$(cd $(dirname "$CD"); pwd)
+echo "Current Directory: $CD"
+echo "Work Directory: $WD"
+
 os_family=$(cat /etc/os-release|grep ID_LIKE)
 is_ctl_plane=false
 is_standalone=false
