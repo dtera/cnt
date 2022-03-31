@@ -8,6 +8,5 @@ services:
     network_mode: host
     volumes:
       - './data:/data'
-    command:
-      - "sh /usr/local/bin/startup.sh"
-      - "sh /data/docker-entrypoint.sh"
+#    command:
+#      - "sh /data/docker-entrypoint.sh"
