@@ -1,12 +1,11 @@
 version: '3.1'
 
 services:
-  rstudio:
-    image: rstudio/rstudio-server-pro
+  rstudio-server-pro:
+    # image: rstudio/rstudio-server-pro
+    build: .
     container_name: rstudio
     restart: always
     network_mode: host
     volumes:
-      - './data:/data'
-#    command:
-#      - "sh /data/docker-entrypoint.sh"
+      - './data:/home/rstudio/data'
