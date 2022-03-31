@@ -2,10 +2,10 @@ version: '3.1'
 
 services:
   rstudio:
-    # image: rstudio/rstudio-server-pro
-    build: .
+    image: rstudio/rstudio-server-pro
+    # build: .
     container_name: rstudio
     restart: always
     network_mode: host
     volumes:
-      - './data:/home/rstudio/data'
+      - './data:/data'
