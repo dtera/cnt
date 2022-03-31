@@ -7,5 +7,5 @@ services:
     restart: always
     network_mode: host
     volumes:
-        - './rstudio:/home/rstudio'
-    command: sh /home/rstudio/docker-entrypoint.sh
+        - './data:/data'
+    entrypoint: "sh /data/docker-entrypoint.sh"
