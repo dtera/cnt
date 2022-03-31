@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+  redis:
+    image: rstudio/rstudio-server-pro
+    container_name: rstudio
+    restart: always
+    network_mode: host
+    volumes:
+        - './rstudio:/home/rstudio'
+    command:
+      - useradd -m -s /bin/bash rstudio
+      # - echo rstudio | passwd rstudio --stdin
+      - echo rstudio:rstudio | chpasswd
+      - rstudio-server start
