@@ -7,6 +7,3 @@ RUN useradd -m -s /bin/bash rstudio
 RUN echo rstudio:rstudio | chpasswd
 WORKDIR /home/rstudio
 VOLUME /home/rstudio/data
-
-ENTRYPOINT ["tini", "--"]
-CMD ["/usr/local/bin/startup.sh"]
