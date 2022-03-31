@@ -1,0 +1,25 @@
+version: '3.1'
+
+services:
+  rstudio-workbench:
+    image: rstudio/rstudio-workbench
+    # build: .
+    container_name: rstudio-workbench
+    restart: always
+    # network_mode: host
+    ports:
+      - "8787:8787"
+      - "5559:5559"
+    volumes:
+      - "./data/rsp:/home"
+      - "./server-pro/conf/:/etc/rstudio"
+    environment:
+      TZ: Asia/Shanghai
+      RSP_TESTUSER: rstudio
+      RSP_TESTUSER_PASSWD: rstudio
+      RSP_TESTUSER_UID: 10000
+      # RSP_LICENSE: $RSP_LICENSE
+      # RSP_LICENSE_SERVER: my.url.com:port
+      # RSP_LAUNCHER: "true"
+      # RSP_LAUNCHER_TIMEOUT: 10
+    privileged: true
