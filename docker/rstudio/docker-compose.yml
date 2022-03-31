@@ -1,11 +1,13 @@
 version: '3.1'
 
 services:
-  redis:
+  rstudio:
     image: rstudio/rstudio-server-pro
     container_name: rstudio
     restart: always
     network_mode: host
     volumes:
-        - './data:/data'
-    entrypoint: "sh /data/docker-entrypoint.sh"
+      - './data:/data'
+    command:
+      - "sh /usr/local/bin/startup.sh"
+      - "sh /data/docker-entrypoint.sh"
