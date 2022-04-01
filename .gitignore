@@ -1,4 +1,2 @@
-/docker/rstudio/data/.config/
-/docker/rstudio/data/.local/
 /docker/rstudio/workbench/data
 /docker/rstudio/workbench/server-pro

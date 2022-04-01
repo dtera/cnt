@@ -1,0 +1,6 @@
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+]0;/home/rstudiorstudio@10de8ee9a38b:~$ [Krstudio@10de8ee9a38b:~$ [Krstudio@10de8ee9a38b:~$ date
+Fri 01 Apr 2022 01:47:29 AM CST
+]0;/home/rstudiorstudio@10de8ee9a38b:~$ 
