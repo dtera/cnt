@@ -1,1 +1,5 @@
 1648748927588:install.packages("xgboost")
+1648789310066:res_social <- read.csv("test.csv", sep = ",", header = F)
+1648789310069:res_social
+1648789338611:res_social[c("V1", "V2")]
+1648789374151:install.packages("shiny")
