@@ -13,7 +13,7 @@ services:
       - "8080:8080"
     restart: unless-stopped
     networks:
-      - network_test_bed
+      - network_pulsar
 
   pulsar-manager:
     image: "apachepulsar/pulsar-manager"
@@ -25,7 +25,7 @@ services:
     environment:
       SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
     networks:
-      - network_test_bed
+      - network_pulsar
 
   redis:
     image: "redislabs/redistimeseries"
@@ -37,7 +37,7 @@ services:
       - REDIS_REPLICATION_MODE=master
       - PYTHONUNBUFFERED=1
     networks:
-      - network_test_bed
+      - network_pulsar
 
   alertmanager:
     image: prom/alertmanager
@@ -46,7 +46,7 @@ services:
     volumes:
       - ./alertmanager:/alertmanager
     networks:
-      - network_test_bed
+      - network_pulsar
     restart: always
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
@@ -59,7 +59,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - network_test_bed
+      - network_pulsar
 
   grafana:
     image: streamnative/apache-pulsar-grafana-dashboard
@@ -71,11 +71,11 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - network_test_bed
+      - network_pulsar
     depends_on:
       - prometheus
 
 networks:
-  network_test_bed:
-    name: network_test_bed
+  network_pulsar:
+    name: network_pulsar
     driver: bridge
