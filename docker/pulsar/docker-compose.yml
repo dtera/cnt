@@ -1,0 +1,81 @@
+version: "3.5"
+
+services:
+  pulsar:
+    image: "apachepulsar/pulsar"
+    command: bin/pulsar standalone
+    environment:
+      PULSAR_MEM: " -Xms512m -Xmx512m -XX:MaxDirectMemorySize=1g"
+    volumes:
+      - ./pulsar/data:/pulsar/data
+    ports:
+      - "6650:6650"
+      - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - network_test_bed
+
+  pulsar-manager:
+    image: "apachepulsar/pulsar-manager"
+    ports:
+      - "9527:9527"
+      - "7750:7750"
+    depends_on:
+      - pulsar
+    environment:
+      SPRING_CONFIGURATION_FILE: /pulsar-manager/pulsar-manager/application.properties
+    networks:
+      - network_test_bed
+
+  redis:
+    image: "redislabs/redistimeseries"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/redis-data:/var/lib/redis
+    environment:
+      - REDIS_REPLICATION_MODE=master
+      - PYTHONUNBUFFERED=1
+    networks:
+      - network_test_bed
+
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./alertmanager:/alertmanager
+    networks:
+      - network_test_bed
+    restart: always
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - network_test_bed
+
+  grafana:
+    image: streamnative/apache-pulsar-grafana-dashboard
+    environment:
+      PULSAR_CLUSTER: "standalone"
+      # export PULSAR_PROMETHEUS_URL=http://$(ifconfig|grep "inet "|grep -v 127.0.0.1|tail -1|awk '{ print $2 }'):9090
+      PULSAR_PROMETHEUS_URL: ${PULSAR_PROMETHEUS_URL}
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    networks:
+      - network_test_bed
+    depends_on:
+      - prometheus
+
+networks:
+  network_test_bed:
+    name: network_test_bed
+    driver: bridge
