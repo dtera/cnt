@@ -17,7 +17,7 @@ services:
       - network_pulsar
 
   dashboard:
-    image: "apachepulsar/pulsar-manager"
+    image: apachepulsar/pulsar-manager
     hostname: pulsar-manager
     ports:
       - "9527:9527"
@@ -32,7 +32,7 @@ services:
       - network_pulsar
 
   redis:
-    image: "redislabs/redistimeseries"
+    image: redislabs/redistimeseries
     hostname: redistimeseries
     ports:
       - "6379:6379"
