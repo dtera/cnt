@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC2155
-export PULSAR_PROMETHEUS_URL=http://$(ifconfig|grep "inet "|grep -v 127.0.0.1|head -1|awk '{ print $2 }'):9090
+export PULSAR_PROMETHEUS_URL=http://$(ifconfig|grep "inet "|grep -v 127.0.0.1|tail -1|awk '{ print $2 }'):9090
 
 CSRF_TOKEN=$(curl http://127.0.0.1:7750/pulsar-manager/csrf-token)
 
