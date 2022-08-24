@@ -8,9 +8,9 @@ hostnamectl set-hostname ks-admin
 # iptables -A INPUT -p tcp --dport 22 -j ACCEPT 
 # iptables -A OUTPUT -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 
-arg=""
-if [ "$1" != "" ]; then
-  arg=$1
+arg=$*
+if [ "$arg" == "" ]; then
+  arg="-f kk-config.yaml"
 fi
 
 ./kk create cluster --with-kubesphere v3.3.0 "$arg" # --with-kubernetes v1.22.10 
