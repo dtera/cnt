@@ -13,5 +13,5 @@ if [ "$arg" == "" ]; then
   arg="-f ks-config.yml"
 fi
 
-./kk create cluster --with-kubesphere v3.3.0 "$arg" # --with-kubernetes v1.22.10 
+./kk create cluster --with-kubesphere v3.3.0 $arg # --with-kubernetes v1.22.10 
 echo '==========================END install kubesphere============================='
