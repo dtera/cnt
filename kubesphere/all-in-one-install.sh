@@ -10,7 +10,7 @@ hostnamectl set-hostname ks-admin
 
 arg=$*
 if [ "$arg" == "" ]; then
-  arg="-f kk-config.yaml"
+  arg="-f kk-config.yml"
 fi
 
 ./kk create cluster --with-kubesphere v3.3.0 "$arg" # --with-kubernetes v1.22.10 
