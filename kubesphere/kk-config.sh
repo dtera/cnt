@@ -13,11 +13,11 @@ fi
 cd "$work_dir"
 
 export KKZONE=cn
-curl -sfL https://get-kk.kubesphere.io | VERSION=v1.2.0 sh -
+curl -sfL https://get-kk.kubesphere.io | VERSION=v2.2.1 sh -
 chmod +x kk
 cp kk /usr/local/bin
 echo '=====================END  download and insall KubeKey========================'
 
 echo '=====================BEGIN  generate config file============================='
-kk create config --with-kubesphere v3.2.0
+kk create config --with-kubesphere v3.3.0 # --with-kubernetes v1.22.10 
 echo '=====================END  generate config file==============================='
