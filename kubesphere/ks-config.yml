@@ -1,7 +1,8 @@
-apiVersion: kubekey.kubesphere.io/v1alpha1
+
+apiVersion: kubekey.kubesphere.io/v1alpha2
 kind: Cluster
 metadata:
-  name: cnt
+  name: ks-k8s
 spec:
   hosts:
   - {name: "ks-admin", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: 123456}
@@ -9,28 +10,38 @@ spec:
   roleGroups:
     etcd:
     - ks-admin
-    master: 
+    master:
     - ks-admin
     worker:
     - ks-node1
   controlPlaneEndpoint:
-    ##Internal loadbalancer for apiservers 
-    #internalLoadbalancer: haproxy
+    ## Internal loadbalancer for apiservers 
+    # internalLoadbalancer: haproxy
 
     domain: lb.kubesphere.local
     address: ""
     port: 6443
   kubernetes:
-    version: v1.21.5
+    version: v1.23.7
     clusterName: cluster.local
+    autoRenewCerts: true
+    containerManager: docker
+  etcd:
+    type: kubekey
   network:
     plugin: calico
     kubePodsCIDR: 10.233.64.0/18
     kubeServiceCIDR: 10.233.0.0/18
+    ## multus support. https://github.com/k8snetworkplumbingwg/multus-cni
+    multusCNI:
+      enabled: false
   registry:
+    privateRegistry: ""
+    namespaceOverride: ""
     registryMirrors: []
     insecureRegistries: []
   addons: []
+
 
 
 ---
@@ -40,13 +51,15 @@ metadata:
   name: ks-installer
   namespace: kubesphere-system
   labels:
-    version: v3.2.0
+    version: v3.3.0
 spec:
   persistence:
     storageClass: ""
   authentication:
     jwtSecret: ""
+  zone: ""
   local_registry: ""
+  namespace_override: ""
   # dev_tag: ""
   etcd:
     monitoring: false
@@ -77,10 +90,10 @@ spec:
       GPUMonitoring:
         enabled: false
     gpu:
-      kinds:         
+      kinds:
       - resourceName: "nvidia.com/gpu"
         resourceType: "GPU"
-        default: false
+        default: true
     es:
       # master:
       #   volumeSize: 4Gi
@@ -96,7 +109,7 @@ spec:
         enabled: false
         username: ""
         password: ""
-      externalElasticsearchUrl: ""
+      externalElasticsearchHost: ""
       externalElasticsearchPort: ""
   alerting:
     enabled: false
@@ -110,12 +123,13 @@ spec:
     # webhook:
     #   resources: {}
   devops:
-    enabled: true
+    enabled: false
+    # resources: {}
     jenkinsMemoryLim: 2Gi
     jenkinsMemoryReq: 1500Mi
     jenkinsVolumeSize: 8Gi
-    jenkinsJavaOpts_Xms: 512m
-    jenkinsJavaOpts_Xmx: 512m
+    jenkinsJavaOpts_Xms: 1200m
+    jenkinsJavaOpts_Xmx: 1600m
     jenkinsJavaOpts_MaxRAM: 2g
   events:
     enabled: false
@@ -129,15 +143,17 @@ spec:
     #   resources: {}
   logging:
     enabled: false
-    containerruntime: docker
     logsidecar:
-      enabled: false
+      enabled: true
       replicas: 2
       # resources: {}
   metrics_server:
     enabled: false
   monitoring:
     storageClass: ""
+    node_exporter:
+      port: 9100
+      # resources: {}
     # kube_rbac_proxy:
     #   resources: {}
     # kube_state_metrics:
@@ -148,10 +164,6 @@ spec:
     #   resources: {}
     #   operator:
     #     resources: {}
-    #   adapter:
-    #     resources: {}
-    # node_exporter:
-    #   resources: {}
     # alertmanager:
     #   replicas: 1
     #   resources: {}
@@ -166,7 +178,7 @@ spec:
         enabled: false
         # resources: {}
   multicluster:
-    clusterRole: none 
+    clusterRole: none
   network:
     networkpolicy:
       enabled: false
@@ -176,32 +188,38 @@ spec:
       type: none
   openpitrix:
     store:
-      enabled: true
+      enabled: false
   servicemesh:
     enabled: false
-  kubeedge:
-    enabled: false   
-    cloudCore:
-      nodeSelector: {"node-role.kubernetes.io/worker": ""}
-      tolerations: []
-      cloudhubPort: "10000"
-      cloudhubQuicPort: "10001"
-      cloudhubHttpsPort: "10002"
-      cloudstreamPort: "10003"
-      tunnelPort: "10004"
-      cloudHub:
-        advertiseAddress:
-          - ""
-        nodeLimit: "100"
-      service:
-        cloudhubNodePort: "30000"
-        cloudhubQuicNodePort: "30001"
-        cloudhubHttpsNodePort: "30002"
-        cloudstreamNodePort: "30003"
-        tunnelNodePort: "30004"
-    edgeWatcher:
-      nodeSelector: {"node-role.kubernetes.io/worker": ""}
-      tolerations: []
-      edgeWatcherAgent:
-        nodeSelector: {"node-role.kubernetes.io/worker": ""}
-        tolerations: []
+    istio:
+      components:
+        ingressGateways:
+        - name: istio-ingressgateway
+          enabled: false
+        cni:
+          enabled: false
+  edgeruntime:
+    enabled: false
+    kubeedge:
+      enabled: false
+      cloudCore:
+        cloudHub:
+          advertiseAddress:
+            - ""
+        service:
+          cloudhubNodePort: "30000"
+          cloudhubQuicNodePort: "30001"
+          cloudhubHttpsNodePort: "30002"
+          cloudstreamNodePort: "30003"
+          tunnelNodePort: "30004"
+        # resources: {}
+        # hostNetWork: false
+      iptables-manager:
+        enabled: true
+        mode: "external"
+        # resources: {}
+      # edgeService:
+      #   resources: {}
+  terminal:
+    timeout: 600
+
