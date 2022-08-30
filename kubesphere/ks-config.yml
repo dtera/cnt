@@ -1,19 +1,18 @@
-
 apiVersion: kubekey.kubesphere.io/v1alpha2
 kind: Cluster
 metadata:
   name: ks-k8s
 spec:
   hosts:
-  - {name: "ks-admin", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: 123456}
-  - {name: "ks-node1", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: 123456}
+    - { name: "ks-admin", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: 1 }
+    - { name: "ks-node1", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: 1 }
   roleGroups:
     etcd:
-    - ks-admin
+      - ks-admin
     master:
-    - ks-admin
+      - ks-admin
     worker:
-    - ks-node1
+      - ks-node1
   controlPlaneEndpoint:
     ## Internal loadbalancer for apiservers 
     # internalLoadbalancer: haproxy
@@ -36,11 +35,18 @@ spec:
     multusCNI:
       enabled: false
   registry:
+    # type: harbor
+    # auths:
+    #   "dockerhub.kubekey.local":
+    #     username: admin
+    #     password: Harbor123456
+    # privateRegistry: "dockerhub.kubekey.local"
+    # namespaceOverride: "kubesphereio"
     privateRegistry: ""
     namespaceOverride: ""
-    registryMirrors: []
-    insecureRegistries: []
-  addons: []
+    registryMirrors: [ ]
+    insecureRegistries: [ ]
+  addons: [ ]
 
 
 
@@ -91,9 +97,9 @@ spec:
         enabled: false
     gpu:
       kinds:
-      - resourceName: "nvidia.com/gpu"
-        resourceType: "GPU"
-        default: true
+        - resourceName: "nvidia.com/gpu"
+          resourceType: "GPU"
+          default: true
     es:
       # master:
       #   volumeSize: 4Gi
@@ -188,14 +194,14 @@ spec:
       type: none
   openpitrix:
     store:
-      enabled: false
+      enabled: true
   servicemesh:
     enabled: false
     istio:
       components:
         ingressGateways:
-        - name: istio-ingressgateway
-          enabled: false
+          - name: istio-ingressgateway
+            enabled: false
         cni:
           enabled: false
   edgeruntime:
