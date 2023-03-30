@@ -20,5 +20,5 @@ cp kk /usr/local/bin
 echo '=====================END  download and install KubeKey========================'
 
 echo '=====================BEGIN  generate config file============================='
-kk create config --with-kubesphere v3.3.2 # --with-kubernetes v1.22.12
+kk create config --with-kubesphere v3.3.0 # --with-kubernetes v1.22.12
 echo '=====================END  generate config file==============================='
