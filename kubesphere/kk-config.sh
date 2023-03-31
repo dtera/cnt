@@ -5,10 +5,10 @@ yum install -y socat conntrack ebtables ipset
 echo '====================END install Dependency requirements======================'
 
 echo '=====================BEGIN  download and install KubeKey======================'
-work_dir="/data/kubesphere"
+work_dir="/data/workspace/kubesphere"
 
 if [[ ! -d "$work_dir" ]]; then
- mkdir "$work_dir"
+ mkdir -p "$work_dir"
 fi
 # shellcheck disable=SC2164
 cd "$work_dir"
