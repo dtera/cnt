@@ -13,6 +13,7 @@ if [ "$arg" == "" ]; then
 fi
 
 [ "$1" == "config" ] && (which kk || sh ./kk-config.sh) && arg=${arg:6}
+[ "$1" == "allinone" ] && arg=""
 
 kk create cluster --with-kubesphere v3.3.2 $arg # --with-kubernetes v1.22.12
 echo '==========================END install kubesphere============================='
