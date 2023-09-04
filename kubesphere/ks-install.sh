@@ -15,5 +15,5 @@ fi
 [ "$1" == "config" ] && (which kk || sh ./kk-config.sh) && arg=${arg:6} && (shift 1)
 [ "$1" == "allinone" ] && arg=""
 
-kk create cluster --with-kubesphere v3.3.2 $arg # --with-kubernetes v1.22.12
+kk create cluster --with-kubesphere v3.4.0 $arg # --with-kubernetes v1.22.12
 echo '==========================END install kubesphere============================='
