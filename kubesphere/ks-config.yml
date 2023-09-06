@@ -4,14 +4,15 @@ metadata:
   name: ks-k8s
 spec:
   hosts:
-    - { name: "ks-admin", address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: 1 }
-    - { name: "ks-node1", address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: 1 }
+    - {name: ks-admin, address: 9.135.90.159, internalAddress: 9.135.90.159, port: 36000, user: root, password: "123"}
+    - {name: ks-node1, address: 9.135.117.186, internalAddress: 9.135.117.186, port: 36000, user: root, password: "123"}
   roleGroups:
     etcd:
       - ks-admin
-    master:
+    control-plane:
       - ks-admin
     worker:
+      - ks-admin
       - ks-node1
   controlPlaneEndpoint:
     ## Internal loadbalancer for apiservers 
@@ -21,7 +22,7 @@ spec:
     address: ""
     port: 6443
   kubernetes:
-    version: v1.23.7
+    version: v1.23.10
     clusterName: cluster.local
     autoRenewCerts: true
     containerManager: docker
@@ -35,18 +36,11 @@ spec:
     multusCNI:
       enabled: false
   registry:
-    # type: harbor
-    # auths:
-    #   "dockerhub.kubekey.local":
-    #     username: admin
-    #     password: Harbor123456
-    # privateRegistry: "dockerhub.kubekey.local"
-    # namespaceOverride: "kubesphereio"
     privateRegistry: ""
     namespaceOverride: ""
-    registryMirrors: [ ]
-    insecureRegistries: [ ]
-  addons: [ ]
+    registryMirrors: []
+    insecureRegistries: []
+  addons: []
 
 
 
@@ -57,7 +51,7 @@ metadata:
   name: ks-installer
   namespace: kubesphere-system
   labels:
-    version: v3.3.0
+    version: v3.4.0
 spec:
   persistence:
     storageClass: ""
@@ -84,6 +78,7 @@ spec:
     #  resources: {}
     redis:
       enabled: false
+      enableHA: false
       volumeSize: 2Gi
     openldap:
       enabled: false
@@ -97,9 +92,9 @@ spec:
         enabled: false
     gpu:
       kinds:
-        - resourceName: "nvidia.com/gpu"
-          resourceType: "GPU"
-          default: true
+      - resourceName: "nvidia.com/gpu"
+        resourceType: "GPU"
+        default: true
     es:
       # master:
       #   volumeSize: 4Gi
@@ -117,6 +112,26 @@ spec:
         password: ""
       externalElasticsearchHost: ""
       externalElasticsearchPort: ""
+    opensearch:
+      # master:
+      #   volumeSize: 4Gi
+      #   replicas: 1
+      #   resources: {}
+      # data:
+      #   volumeSize: 20Gi
+      #   replicas: 1
+      #   resources: {}
+      enabled: true
+      logMaxAge: 7
+      opensearchPrefix: whizard
+      basicAuth:
+        enabled: true
+        username: "admin"
+        password: "admin"
+      externalOpensearchHost: ""
+      externalOpensearchPort: ""
+      dashboard:
+        enabled: false
   alerting:
     enabled: false
     # thanosruler:
@@ -130,13 +145,11 @@ spec:
     #   resources: {}
   devops:
     enabled: false
-    # resources: {}
-    jenkinsMemoryLim: 2Gi
-    jenkinsMemoryReq: 1500Mi
-    jenkinsVolumeSize: 8Gi
-    jenkinsJavaOpts_Xms: 1200m
-    jenkinsJavaOpts_Xmx: 1600m
-    jenkinsJavaOpts_MaxRAM: 2g
+    jenkinsCpuReq: 0.5
+    jenkinsCpuLim: 1
+    jenkinsMemoryReq: 4Gi
+    jenkinsMemoryLim: 4Gi
+    jenkinsVolumeSize: 16Gi
   events:
     enabled: false
     # operator:
@@ -186,9 +199,9 @@ spec:
   multicluster:
     clusterRole: none
   network:
-    networkpolicy:
+    network policy:
       enabled: false
-    ippool:
+    pool:
       type: none
     topology:
       type: none
@@ -200,8 +213,8 @@ spec:
     istio:
       components:
         ingressGateways:
-          - name: istio-ingressgateway
-            enabled: false
+        - name: istio-ingressgateway
+          enabled: false
         cni:
           enabled: false
   edgeruntime:
@@ -210,7 +223,7 @@ spec:
       enabled: false
       cloudCore:
         cloudHub:
-          advertiseAddress:
+          advertise address:
             - ""
         service:
           cloudhubNodePort: "30000"
@@ -226,6 +239,11 @@ spec:
         # resources: {}
       # edgeService:
       #   resources: {}
+  gatekeeper:
+    enabled: false
+    # controller_manager:
+    #   resources: {}
+    # audit:
+    #   resources: {}
   terminal:
     timeout: 600
-
