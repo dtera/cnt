@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+CD=$(cd "$(dirname "$0")" || exit && pwd)
+cd "$CD" || exit
+. "$CD"/versions.sh
 
 echo '==========================BEGIN install kubesphere==========================='
 export KKZONE=cn
@@ -12,8 +15,11 @@ if [ "$arg" == "" ]; then
   arg="-f ks-config.yml"
 fi
 
-[ "$1" == "config" ] && (which kk || sh ./kk-config.sh) && arg=${arg:6} && (shift 1)
+[ "$1" == "config" ] && (which kk || sh "$CD"/kk-config.sh) && arg=${arg:6} && (shift 1)
 [ "$1" == "allinone" ] && arg=""
 
-kk create cluster --with-kubesphere v3.4.1 $arg # --with-kubernetes v1.22.12
+sh "$CD"/patches.sh
+
+# shellcheck disable=SC2154
+kk create cluster --with-kubesphere v"$ks_ver" $arg # --with-kubernetes v"$k8s_ver"
 echo '==========================END install kubesphere============================='

@@ -51,7 +51,7 @@ metadata:
   name: ks-installer
   namespace: kubesphere-system
   labels:
-    version: v3.4.1
+    version: v3.4.0
 spec:
   persistence:
     storageClass: ""

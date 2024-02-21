@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+CD=$(cd "$(dirname "$0")" || exit && pwd)
+cd "$CD" || exit
+. "$CD"/versions.sh
 
 echo '====================BEGIN install Dependency requirements===================='
 yum install -y socat conntrack ebtables ipset
@@ -14,11 +17,13 @@ fi
 cd "$work_dir"
 
 export KKZONE=cn
-curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 sh -
+# shellcheck disable=SC2154
+curl -sfL https://get-kk.kubesphere.io | VERSION=v"$kk_ver" sh -
 chmod +x kk
 cp kk /usr/local/bin
 echo '=====================END  download and install KubeKey========================'
 
 echo '=====================BEGIN  generate config file============================='
-kk create config --with-kubesphere v3.4.1 # --with-kubernetes v1.22.12
+# shellcheck disable=SC2154
+kk create config --with-kubesphere v"$ks_ver" # --with-kubernetes v"$k8s_ver"
 echo '=====================END  generate config file==============================='
