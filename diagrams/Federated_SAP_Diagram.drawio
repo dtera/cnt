@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36" version="24.7.6" pages="2">
   <diagram name="FedCasualLM" id="c7558073-3199-34d8-9f00-42111426c3f3">
-    <mxGraphModel dx="2506" dy="2080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="3066" dy="2384" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -74,7 +74,7 @@
           <mxGeometry x="-560" y="1048" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="sVfAgQeSOBTBw0H8juTk-70" value="vender" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Times New Roman;fontSize=18;fontStyle=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
-          <mxGeometry x="-95" y="1048" width="160" height="40" as="geometry" />
+          <mxGeometry x="15" y="1048" width="160" height="40" as="geometry" />
         </mxCell>
         <mxCell id="sVfAgQeSOBTBw0H8juTk-85" value="&lt;span style=&quot;font-size: 16px;&quot;&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Output Embedding&lt;/font&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=16;fontFamily=Times New Roman;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="-474" y="978" width="279" height="40" as="geometry" />
@@ -124,9 +124,9 @@
               <mxPoint x="-577" y="330" />
               <mxPoint x="-440" y="330" />
               <mxPoint x="-440" y="600" />
-              <mxPoint x="-150" y="600" />
-              <mxPoint x="-150" y="970" />
-              <mxPoint x="-15" y="970" />
+              <mxPoint x="-170" y="600" />
+              <mxPoint x="-170" y="1000" />
+              <mxPoint x="95" y="1000" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -348,9 +348,9 @@
             <mxPoint x="-15" y="680" as="sourcePoint" />
             <mxPoint x="-695.086" y="458.866" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="-15" y="600" />
-              <mxPoint x="100" y="600" />
-              <mxPoint x="100" y="-50" />
+              <mxPoint x="76" y="600" />
+              <mxPoint x="200" y="600" />
+              <mxPoint x="200" y="-50" />
               <mxPoint x="-710" y="-50" />
               <mxPoint x="-710" y="310" />
               <mxPoint x="-575" y="310" />
@@ -364,7 +364,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="UXRqbKGA226XY0kclbWd-80" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="-120" y="630" width="210" height="320" as="geometry" />
+          <mxGeometry x="-10" y="630" width="210" height="320" as="geometry" />
         </mxCell>
         <mxCell id="sVfAgQeSOBTBw0H8juTk-169" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Architects Daughter;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fillColor=none;strokeWidth=2;" parent="UXRqbKGA226XY0kclbWd-80" vertex="1">
           <mxGeometry width="210" height="320" as="geometry" />
@@ -469,7 +469,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="UXRqbKGA226XY0kclbWd-141" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="-413" y="-30" width="501" height="571" as="geometry" />
+          <mxGeometry x="-325" y="-30" width="501" height="571" as="geometry" />
         </mxCell>
         <mxCell id="UXRqbKGA226XY0kclbWd-31" value="" style="group" parent="UXRqbKGA226XY0kclbWd-141" vertex="1" connectable="0">
           <mxGeometry y="70" width="501" height="501" as="geometry" />
