@@ -9,8 +9,8 @@ pip install tensorflow-gpu -i https://pypi.tuna.tsinghua.edu.cn/simple  # https:
 
 #### install docker composer
 ```bash
-compose_version='1.24.0'
-curl -L https://github.com/docker/compose/releases/download/${compose_version}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+compose_version='v2.33.1'
+curl -L https://github.com/docker/compose/releases/download/${compose_version}/docker-compose-`uname -s|tr A-Z a-z`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 curl -L https://raw.githubusercontent.com/docker/compose/master/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose
 ```
