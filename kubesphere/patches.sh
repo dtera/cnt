@@ -13,9 +13,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   # shellcheck disable=SC2154
   sed -i '' "${k8s_row_num}s/version: v.*/version: v$k8s_ver/" "$f_path"
   # shellcheck disable=SC2154
-  sed -i '' "${ks_row_num}s/version: v.*/version: v$ks_ver/" "$f_path"
+  [[ "$ks_row_num" == "" ]] || sed -i '' "${ks_row_num}s/version: v.*/version: v$ks_ver/" "$f_path"
 else
   sed -i "s/, password: \".*\"/, password: \"$password\"/g" "$f_path"
   sed -i "${k8s_row_num}s/version: v.*/version: v$k8s_ver/" "$f_path"
-  sed -i "${ks_row_num}s/version: v.*/version: v$ks_ver/" "$f_path"
+  [[ "$ks_row_num" == "" ]] || sed -i "${ks_row_num}s/version: v.*/version: v$ks_ver/" "$f_path"
 fi
