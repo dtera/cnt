@@ -21,5 +21,5 @@ fi
 sh "$CD"/patches.sh
 
 # shellcheck disable=SC2154
-kk create cluster --with-kubesphere v"$ks_ver" $arg # --with-kubernetes v"$k8s_ver"
+kk create cluster $arg #--with-kubesphere v"$ks_ver" --with-kubernetes v"$k8s_ver"
 echo '==========================END install kubesphere============================='
