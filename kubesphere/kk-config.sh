@@ -25,5 +25,5 @@ echo '=====================END  download and install KubeKey====================
 
 echo '=====================BEGIN  generate config file============================='
 # shellcheck disable=SC2154
-kk create config --with-kubesphere v"$ks_ver" # --with-kubernetes v"$k8s_ver"
+kk create config --with-kubernetes v"$k8s_ver" #--with-kubesphere v"$ks_ver"
 echo '=====================END  generate config file==============================='
