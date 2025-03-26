@@ -8,6 +8,6 @@ kk_ver=3.1.7
 # shellcheck disable=SC2034
 ks_ver=3.4.0
 # shellcheck disable=SC2034
-k8s_ver=1.32.3
+k8s_ver=1.31.0
 # shellcheck disable=SC2034
 password=123
