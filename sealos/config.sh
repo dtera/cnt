@@ -16,4 +16,4 @@ ingress_nginx_v="1.12.1"
 masters="9.135.90.159"
 nodes="9.135.117.186"
 port="36000" # 22
-passwd="ZHQ@5133zhq"
+passwd="123456"
