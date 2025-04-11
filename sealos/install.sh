@@ -9,5 +9,5 @@ export CLOUD_DOMAIN=www.wx.com  # [ip].nip.io
 curl -sfL "$PROXY_PREFIX"/https://raw.githubusercontent.com/labring/sealos/v"$SEALOS_VERSION"/scripts/cloud/install.sh -o /tmp/install.sh  && \
 bash /tmp/install.sh   --cloud-version=v"$SEALOS_VERSION"   \
 --image-registry=registry.cn-shanghai.aliyuncs.com --zh   \
---proxy-prefix=“$PROXY_PREFIX” \
+--proxy-prefix="$PROXY_PREFIX" \
 --cloud-domain="$CLOUD_DOMAIN"
