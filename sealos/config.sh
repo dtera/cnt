@@ -17,3 +17,10 @@ masters="9.135.90.159"
 nodes="9.135.117.186"
 port="36000" # 22
 passwd="123456"
+
+data_dir="/data"
+rm -rf /var/lib/docker && rm -rf /var/lib/sealos
+[ -d "$data_dir"/docker ] || mkdir -p "$data_dir"/docker
+[ -d "$data_dir"/sealos ] || mkdir -p "$data_dir"/sealos
+ln -s "$data_dir"/docker /var/lib/docker
+ln -s "$data_dir"/sealos /var/lib/sealos
