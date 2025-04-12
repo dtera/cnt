@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC2154
+# shellcheck disable=SC2181
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 . "$CD"/config.sh
 
 which sealos &> /dev/null
-# shellcheck disable=SC2181
 if [[ $? != 0 ]]; then
   export PROXY_PREFIX=https://ghfast.top
   VERSION=$(curl -s https://api.github.com/repos/labring/sealos/releases/latest | grep -oE '"tag_name": "[^"]+"' | head -n1 | cut -d'"' -f4)
@@ -15,16 +15,34 @@ if [[ $? != 0 ]]; then
   PROXY_PREFIX=${PROXY_PREFIX} sh -s ${VERSION} labring/sealos
 fi
 
-opt="--masters $masters --nodes $nodes"
-if [[ "$1" == "single" ]]; then
-  opt="--single"
+show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx ]  \n\
+-h|--help         \t\t show help information  \n\
+-s|--single       \t\t all in one node \n\
+-i|--ingress_nginx  \t whether install ingress_nginx"
+ARGS=$(getopt -o hsi -l help,single,ingress_nginx -n 'k8s-install.sh' -- "$@")
+if [[ $? != 0 ]]; then
+  echo "Terminating..."
+  exit 1
 fi
+eval set -- "${ARGS}"
+
+opt="--masters $masters --nodes $nodes"
+while true
+do
+  case $1 in
+    -h|--help) echo -e ${show_usage}; exit 0;;
+    -s|--single) shift; opt="$opt --single";;
+    -i|--ingress_nginx) shift; opt="registry.cn-shanghai.aliyuncs.com/labring/ingress-nginx:v$ingress_nginx_v $opt";;
+    --) shift; break;;
+    *) echo "unknown args"; exit 1;;
+  esac
+done
+
 sealos run registry.cn-shanghai.aliyuncs.com/labring/kubernetes-docker:v"$k8s_v" \
            registry.cn-shanghai.aliyuncs.com/labring/helm:v"$helm_v" \
            registry.cn-shanghai.aliyuncs.com/labring/cilium:v"$cilium_v" \
            registry.cn-shanghai.aliyuncs.com/labring/openebs:v"$openebs_v" \
            registry.cn-shanghai.aliyuncs.com/labring/minio-operator:v"$minio_v" \
-           registry.cn-shanghai.aliyuncs.com/labring/ingress-nginx:v"$ingress_nginx_v" \
            $opt --port $port -p $passwd
 
 kubectl taint node admin node-role.kubernetes.io/control-plane:NoSchedule-
