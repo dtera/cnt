@@ -5,14 +5,12 @@
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
-. "$CD"/config.sh
+. "$CD"/config.sh gen_dir
 
 which sealos &> /dev/null
 if [[ $? != 0 ]]; then
-  export PROXY_PREFIX=https://ghfast.top
-  VERSION=$(curl -s https://api.github.com/repos/labring/sealos/releases/latest | grep -oE '"tag_name": "[^"]+"' | head -n1 | cut -d'"' -f4)
   curl -sfL ${PROXY_PREFIX}/https://raw.githubusercontent.com/labring/sealos/main/scripts/install.sh | \
-  PROXY_PREFIX=${PROXY_PREFIX} sh -s ${VERSION} labring/sealos
+  PROXY_PREFIX=${PROXY_PREFIX} sh -s ${SEALOS_VERSION} labring/sealos
 fi
 
 show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx ]  \n\

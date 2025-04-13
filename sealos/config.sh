@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # shellcheck disable=SC2034
+# shellcheck disable=SC2155
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
@@ -19,8 +20,14 @@ port="36000" # 22
 passwd="123456"
 
 data_dir="/data"
-rm -rf /var/lib/docker && rm -rf /var/lib/sealos
-[ -d "$data_dir"/docker ] || mkdir -p "$data_dir"/docker
-[ -d "$data_dir"/sealos ] || mkdir -p "$data_dir"/sealos
-ln -s "$data_dir"/docker /var/lib/docker
-ln -s "$data_dir"/sealos /var/lib/sealos
+if [[ "$1" == "gen_dir" ]]; then
+  rm -rf /var/lib/docker && rm -rf /var/lib/sealos
+  [ -d "$data_dir"/docker ] || mkdir -p "$data_dir"/docker
+  [ -d "$data_dir"/sealos ] || mkdir -p "$data_dir"/sealos
+  ln -s "$data_dir"/docker /var/lib/docker
+  ln -s "$data_dir"/sealos /var/lib/sealos
+fi
+
+export PROXY_PREFIX=https://ghfast.top
+export SEALOS_VERSION=$(curl -s https://api.github.com/repos/labring/sealos/releases/latest | grep -oE '"tag_name": "[^"]+"' | head -n1 | cut -d'"' -f4)
+export CLOUD_DOMAIN=www.wx.com  # [ip].nip.io
