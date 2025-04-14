@@ -2,10 +2,13 @@
 
 # shellcheck disable=SC2154
 # shellcheck disable=SC2181
+# shellcheck disable=SC2269
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 . "$CD"/config.sh gen_dir
+
+passwd=$passwd
 
 which sealos &> /dev/null
 if [[ $? != 0 ]]; then
@@ -13,11 +16,12 @@ if [[ $? != 0 ]]; then
   PROXY_PREFIX=${PROXY_PREFIX} sh -s ${SEALOS_VERSION} labring/sealos
 fi
 
-show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx ]  \n\
+show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx -p|--passwd ]  \n\
 -h|--help         \t\t show help information  \n\
 -s|--single       \t\t all in one node \n\
--i|--ingress_nginx  \t whether install ingress_nginx"
-ARGS=$(getopt -o hsi -l help,single,ingress_nginx -n 'k8s-install.sh' -- "$@")
+-i|--ingress_nginx  \t whether install ingress_nginx \n\
+-p|--passwd       \t\t passwd of host"
+ARGS=$(getopt -o hsip -l help,single,ingress_nginx,passwd -n 'k8s-install.sh' -- "$@")
 if [[ $? != 0 ]]; then
   echo "Terminating..."
   exit 1
@@ -31,6 +35,7 @@ do
     -h|--help) echo -e ${show_usage}; exit 0;;
     -s|--single) shift; opt="$opt --single";;
     -i|--ingress_nginx) shift; opt="registry.cn-shanghai.aliyuncs.com/labring/ingress-nginx:v$ingress_nginx_v $opt";;
+    -p|--passwd)  passwd=$2; shift 2;;
     --) shift; break;;
     *) echo "unknown args"; exit 1;;
   esac
