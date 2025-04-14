@@ -22,7 +22,7 @@ show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx -p|--passwd ]  \n\
 -s|--single       \t\t all in one node \n\
 -i|--ingress_nginx  \t whether install ingress_nginx \n\
 -p|--passwd       \t\t passwd of host"
-ARGS=$(getopt -o hsip:: -l help,single,ingress_nginx,passwd:: -n 'k8s-install.sh' -- "$@")
+ARGS=$(getopt -o hsip: -l help,single,ingress_nginx,passwd: -n 'k8s-install.sh' -- "$@")
 if [[ $? != 0 ]]; then
   echo "Terminating..."
   exit 1
