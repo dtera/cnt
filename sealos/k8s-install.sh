@@ -3,8 +3,6 @@
 # shellcheck disable=SC2154
 # shellcheck disable=SC2181
 
-set -x
-
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 . "$CD"/config.sh gen_dir
