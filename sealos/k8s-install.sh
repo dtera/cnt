@@ -7,7 +7,7 @@
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 echo "Current Directory: $CD"
-sh "$CD"/config.sh gen_dir
+source "$CD"/config.sh gen_dir
 
 passwd=$passwd
 
