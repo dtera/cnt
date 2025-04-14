@@ -5,7 +5,7 @@
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
-
+echo "Current Directory: $CD"
 
 k8s_v="1.28.0"
 helm_v="3.15.4"
