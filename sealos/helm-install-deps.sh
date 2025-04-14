@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -x
-set -e
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
