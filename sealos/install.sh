@@ -6,7 +6,7 @@ set -x
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
-sh "$CD"/config.sh
+source "$CD"/config.sh
 
 echo "PROXY_PREFIX: $PROXY_PREFIX"
 echo "SEALOS_VERSION: $SEALOS_VERSION"

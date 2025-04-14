@@ -3,7 +3,7 @@
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 
-read -r -p "Please input password: " passwd
+read -r -p "Please input password of the nodes to install k8s: " passwd
 
 # install k8s
 sh "$CD"/sealos/k8s-install.sh -p "$passwd"
