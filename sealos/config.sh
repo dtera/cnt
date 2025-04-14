@@ -9,7 +9,7 @@ echo "Current Directory: $CD"
 
 k8s_v="1.28.11"
 helm_v="3.15.4"
-cilium_v="1.13.18"
+cilium_v="1.15.8"
 openebs_v="3.10.0"
 minio_v="5.0.6"
 ingress_nginx_v="1.12.1"
