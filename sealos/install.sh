@@ -13,9 +13,8 @@ if [[ $? != 0 ]]; then
   PROXY_PREFIX=${PROXY_PREFIX} sh -s ${VERSION} labring/sealos
 fi
 
-curl -sfL $PROXY_PREFIX/https://raw.githubusercontent.com/labring/sealos/v"$SEALOS_VERSION"/scripts/cloud/install.sh \
-  -o /tmp/install.sh && bash /tmp/install.sh \
-  --cloud-version=v"$SEALOS_VERSION" \
-  --image-registry=registry.cn-shanghai.aliyuncs.com --zh \
-  --proxy-prefix=$PROXY_PREFIX \
+curl -sfL $PROXY_PREFIX/https://raw.githubusercontent.com/labring/sealos/v"$SEALOS_VERSION"/scripts/cloud/install.sh -o /tmp/install.sh && \
+  bash /tmp/install.sh --cloud-version=v"$SEALOS_VERSION"   \
+  --image-registry=registry.cn-shanghai.aliyuncs.com --zh   \
+  --proxy-prefix=$PROXY_PREFIX   \
   --cloud-domain="$CLOUD_DOMAIN"
