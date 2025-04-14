@@ -30,4 +30,7 @@ fi
 
 export PROXY_PREFIX=https://ghfast.top
 export SEALOS_VERSION=$(curl -s https://api.github.com/repos/labring/sealos/releases/latest | grep -oE '"tag_name": "[^"]+"' | head -n1 | cut -d'"' -f4)
+if [[ "$SEALOS_VERSION" == "" ]]; then
+  export SEALOS_VERSION=5.0.1
+fi
 export CLOUD_DOMAIN=www.wx.com  # [ip].nip.io
