@@ -3,6 +3,8 @@
 # shellcheck disable=SC2034
 # shellcheck disable=SC2155
 
+set -e
+
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 

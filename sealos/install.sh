@@ -2,16 +2,12 @@
 
 # shellcheck disable=SC2181
 
+set -x
+set -e
+
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 . "$CD"/config.sh
-
-
-which sealos &> /dev/null
-if [[ $? != 0 ]]; then
-  curl -sfL ${PROXY_PREFIX}/https://raw.githubusercontent.com/labring/sealos/main/scripts/install.sh | \
-  PROXY_PREFIX=${PROXY_PREFIX} sh -s ${VERSION} labring/sealos
-fi
 
 echo "PROXY_PREFIX: $PROXY_PREFIX"
 echo "SEALOS_VERSION: $SEALOS_VERSION"
