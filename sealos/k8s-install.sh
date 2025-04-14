@@ -47,7 +47,7 @@ sealos run registry.cn-shanghai.aliyuncs.com/labring/kubernetes-docker:v"$k8s_v"
            registry.cn-shanghai.aliyuncs.com/labring/cilium:v"$cilium_v" \
            registry.cn-shanghai.aliyuncs.com/labring/openebs:v"$openebs_v" \
            registry.cn-shanghai.aliyuncs.com/labring/minio-operator:v"$minio_v" \
-           $opt --port $port -p $passwd
+           $opt --port $port --passwd $passwd
 
 kubectl taint node admin node-role.kubernetes.io/control-plane:NoSchedule-
 kubectl label nodes admin node-role.kubernetes.io/master= node-role.kubernetes.io/worker=
