@@ -8,15 +8,9 @@
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 echo "Current Directory: $CD"
+
 source "$CD"/config.sh gen_dir
-
 passwd=$passwd
-
-which sealos &> /dev/null
-if [[ $? != 0 ]]; then
-  curl -sfL "${PROXY_PREFIX}"/https://raw.githubusercontent.com/labring/sealos/main/scripts/install.sh | \
-  PROXY_PREFIX=${PROXY_PREFIX} sh -s "${SEALOS_VERSION}" labring/sealos
-fi
 
 show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx -c|--cilium -p|--passwd ]  \n\
 -h|--help         \t\t show help information  \n\
@@ -44,6 +38,22 @@ do
     *) echo "unknown args"; exit 1;;
   esac
 done
+
+
+which sshpass &> /dev/null
+if [[ $? != 0 ]]; then
+  yum install -y sshpass
+fi
+for node in $(echo "$nodes" | tr "," "\n")
+do
+    sshpass -p "$passwd" ssh -p "$port" "root@$node" 'bash -s' < "$CD"/config.sh gen_dir
+done
+
+which sealos &> /dev/null
+if [[ $? != 0 ]]; then
+  curl -sfL "${PROXY_PREFIX}"/https://raw.githubusercontent.com/labring/sealos/main/scripts/install.sh | \
+  PROXY_PREFIX=${PROXY_PREFIX} sh -s "${SEALOS_VERSION}" labring/sealos
+fi
 
 sealos run registry.cn-shanghai.aliyuncs.com/labring/kubernetes-docker:v"$k8s_v" \
            registry.cn-shanghai.aliyuncs.com/labring/helm:v"$helm_v" \
