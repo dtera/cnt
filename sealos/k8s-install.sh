@@ -17,12 +17,13 @@ if [[ $? != 0 ]]; then
   PROXY_PREFIX=${PROXY_PREFIX} sh -s ${SEALOS_VERSION} labring/sealos
 fi
 
-show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx -p|--passwd ]  \n\
+show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx -c|--cilium -p|--passwd ]  \n\
 -h|--help         \t\t show help information  \n\
 -s|--single       \t\t all in one node \n\
 -i|--ingress_nginx  \t whether install ingress_nginx \n\
+-c|--cilium       \t\t whether install cilium \n\
 -p|--passwd       \t\t passwd of host"
-ARGS=$(getopt -o hsip: -l help,single,ingress_nginx,passwd: -n 'k8s-install.sh' -- "$@")
+ARGS=$(getopt -o hsicp: -l help,single,ingress_nginx,cilium,passwd: -n 'k8s-install.sh' -- "$@")
 if [[ $? != 0 ]]; then
   echo "Terminating..."
   exit 1
@@ -36,6 +37,7 @@ do
     -h|--help) echo -e ${show_usage}; exit 0;;
     -s|--single) shift; opt="$opt --single";;
     -i|--ingress_nginx) shift; opt="registry.cn-shanghai.aliyuncs.com/labring/ingress-nginx:v$ingress_nginx_v $opt";;
+    -c|--cilium) shift; opt="registry.cn-shanghai.aliyuncs.com/labring/cilium:v$cilium_v $opt";;
     -p|--passwd)  passwd=$2; shift 2;;
     --) shift; break;;
     *) echo "unknown args"; exit 1;;
@@ -44,7 +46,6 @@ done
 
 sealos run registry.cn-shanghai.aliyuncs.com/labring/kubernetes-docker:v"$k8s_v" \
            registry.cn-shanghai.aliyuncs.com/labring/helm:v"$helm_v" \
-           registry.cn-shanghai.aliyuncs.com/labring/cilium:v"$cilium_v" \
            registry.cn-shanghai.aliyuncs.com/labring/openebs:v"$openebs_v" \
            registry.cn-shanghai.aliyuncs.com/labring/minio-operator:v"$minio_v" \
            $opt --port $port --passwd $passwd
