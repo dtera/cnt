@@ -12,7 +12,7 @@ echo "PROXY_PREFIX: $PROXY_PREFIX"
 echo "SEALOS_VERSION: $SEALOS_VERSION"
 echo "CLOUD_DOMAIN: $CLOUD_DOMAIN"
 
-curl -sfL $PROXY_PREFIX/https://raw.githubusercontent.com/labring/sealos/"$SEALOS_VERSION"/scripts/cloud/install.sh \
+curl -sfL "$PROXY_PREFIX"/https://raw.githubusercontent.com/labring/sealos/"$SEALOS_VERSION"/scripts/cloud/install.sh \
   -o /tmp/install.sh && bash /tmp/install.sh --cloud-version="$SEALOS_VERSION" \
   --image-registry=registry.cn-shanghai.aliyuncs.com --zh \
   --proxy-prefix="$PROXY_PREFIX" \

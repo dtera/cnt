@@ -3,6 +3,7 @@
 # shellcheck disable=SC2154
 # shellcheck disable=SC2181
 # shellcheck disable=SC2269
+# shellcheck disable=SC2086
 
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
@@ -13,8 +14,8 @@ passwd=$passwd
 
 which sealos &> /dev/null
 if [[ $? != 0 ]]; then
-  curl -sfL ${PROXY_PREFIX}/https://raw.githubusercontent.com/labring/sealos/main/scripts/install.sh | \
-  PROXY_PREFIX=${PROXY_PREFIX} sh -s ${SEALOS_VERSION} labring/sealos
+  curl -sfL "${PROXY_PREFIX}"/https://raw.githubusercontent.com/labring/sealos/main/scripts/install.sh | \
+  PROXY_PREFIX=${PROXY_PREFIX} sh -s "${SEALOS_VERSION}" labring/sealos
 fi
 
 show_usage="args: [-h|--help  -s|--single -i|--ingress_nginx -c|--cilium -p|--passwd ]  \n\
@@ -34,7 +35,7 @@ opt="--masters $masters --nodes $nodes"
 while true
 do
   case $1 in
-    -h|--help) echo -e ${show_usage}; exit 0;;
+    -h|--help) echo -e "${show_usage}"; exit 0;;
     -s|--single) shift; opt="$opt --single";;
     -i|--ingress_nginx) shift; opt="registry.cn-shanghai.aliyuncs.com/labring/ingress-nginx:v$ingress_nginx_v $opt";;
     -c|--cilium) shift; opt="registry.cn-shanghai.aliyuncs.com/labring/cilium:v$cilium_v $opt";;
