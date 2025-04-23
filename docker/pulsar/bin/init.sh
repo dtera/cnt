@@ -2,7 +2,7 @@
 
 set -e
 
-dc_exec="docker-compose -f docker-compose.yml exec"
+dc_exec="docker compose -f docker-compose.yml exec"
 
 $dc_exec pulsar ./bin/pulsar-admin tenants create fl-tenant || true
 $dc_exec pulsar ./bin/pulsar-admin namespaces create fl-tenant/fl-namespace || true
