@@ -10,3 +10,5 @@ services:
     volumes:
         - '/data/bind:/data'
     restart: always
+    environment:
+        WEBMIN_INIT_SSL_ENABLED: false
