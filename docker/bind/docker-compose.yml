@@ -12,3 +12,4 @@ services:
     restart: always
     environment:
         WEBMIN_INIT_SSL_ENABLED: false
+        ROOT_PASSWORD: 123456
