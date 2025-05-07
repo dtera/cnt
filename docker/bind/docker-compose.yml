@@ -9,5 +9,5 @@ services:
         - '53:53/udp'
         - '10000:10000/tcp'
     volumes:
-        - '/var/docker/bind/data:/data'
+        - '/data/bind:/data'
     restart: always
