@@ -1,7 +1,7 @@
 
 services:
   dns:
-    image: sameersbn/bind
+    image: sameersbn/bind:9.16.1-20200524
     container_name: bind
     ports:
         - '53:53/tcp'
