@@ -8,7 +8,7 @@ services:
         - '53:53/udp'
         - '10000:10000/tcp'
     volumes:
-        - '/data/bind:/data'
+        - '~/data/bind:/data'
     restart: always
     environment:
         WEBMIN_INIT_SSL_ENABLED: false
