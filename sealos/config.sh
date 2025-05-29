@@ -10,20 +10,10 @@ openebs_v="3.10.0"
 minio_v="5.0.6"
 ingress_nginx_v="1.12.1"
 
-masters="9.135.90.159"
-nodes="9.135.117.186"
+masters="127.0.0.1" # comma seperated
+nodes="127.0.0.1" # comma seperated
 port="36000" # 22
 passwd="123456"
-
-data_dir="/data"
-if [[ "$1" == "gen_dir" ]]; then
-  rm -rf /var/lib/docker && rm -rf /var/lib/sealos
-  [ -d "$data_dir"/docker ] || mkdir -p "$data_dir"/docker
-  [ -d "$data_dir"/sealos ] || mkdir -p "$data_dir"/sealos
-  rm -rf "$data_dir"/docker/* "$data_dir"/sealos/*
-  ln -s "$data_dir"/docker /var/lib/docker
-  ln -s "$data_dir"/sealos /var/lib/sealos
-fi
 
 export PROXY_PREFIX=https://ghfast.top
 export SEALOS_VERSION=$(curl -s https://api.github.com/repos/labring/sealos/releases/latest | grep -oE '"tag_name": "[^"]+"' | head -n1 | cut -d'"' -f4)

@@ -10,7 +10,7 @@ source "$CD"/config.sh
 
 read -r -p "Please input password of the nodes to add[123456]: " passwd
 passwd=${passwd:-123456}
-read -r -p "Please input type of the nodes to add[nodes](nodes|masters): " node_type
+read -r -p "Please input type of the nodes to add(nodes|masters)[nodes]: " node_type
 node_type=${node_type:-nodes}
 read -r -p "Please input ip addresses of the nodes to add[127.0.0.1]: " add_nodes
 add_nodes=${add_nodes:-127.0.0.1}
@@ -18,7 +18,7 @@ add_nodes=${add_nodes:-127.0.0.1}
 for node in $(echo "$add_nodes" | tr "," "\n")
 do
     echo "config for node $node"
-    sshpass -p "$passwd" ssh -p "$port" "root@$node" -o StrictHostKeyChecking=no 'bash -s' < "$CD"/config.sh gen_dir 2>/dev/null
+    sshpass -p "$passwd" ssh -p "$port" "root@$node" -o StrictHostKeyChecking=no 'bash -s' < "$CD"/pre_init.sh 2>/dev/null
 done
 
 # add nodes or masters
