@@ -3,10 +3,6 @@
 # shellcheck disable=SC2034
 # shellcheck disable=SC2155
 
-CD=$(cd "$(dirname "$0")" || exit && pwd)
-cd "$CD" || exit
-echo "Current Directory: $CD"
-
 k8s_v="1.28.11"
 helm_v="3.15.4"
 cilium_v="1.15.8"

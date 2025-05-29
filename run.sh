@@ -3,11 +3,8 @@
 CD=$(cd "$(dirname "$0")" || exit && pwd)
 cd "$CD" || exit
 
-read -r -p "Please input password of the nodes to install k8s: " passwd
-
-if [[ "$passwd" == "" ]]; then
-  passwd="123456"
-fi
+read -r -p "Please input password of the nodes to install k8s[123456]: " passwd
+passwd=${passwd:-123456}
 
 opt="--cilium"
 if [[ "$1" == "seal_cloud" ]]; then
