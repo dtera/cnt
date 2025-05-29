@@ -17,7 +17,8 @@ add_nodes=${add_nodes:-127.0.0.1}
 
 for node in $(echo "$add_nodes" | tr "," "\n")
 do
-    sshpass -p "$passwd" ssh -p "$port" "root@$node" 'bash -s' < "$CD"/config.sh gen_dir
+    echo "config for node $node"
+    sshpass -p "$passwd" ssh -p "$port" "root@$node" -o StrictHostKeyChecking=no 'bash -s' < "$CD"/config.sh gen_dir 2>/dev/null
 done
 
 # add nodes or masters
@@ -26,5 +27,6 @@ sealos add --"$node_type" "$add_nodes" --port "$port" --passwd "$passwd"
 # post init after add nodes for k8s
 for node in $(echo "$add_nodes" | tr "," "\n")
 do
-    sshpass -p "$passwd" ssh -p "$port" "root@$node" 'bash -s' < "$CD"/post_init.sh
+    echo "post init for node $node"
+    sshpass -p "$passwd" ssh -p "$port" "root@$node" -o StrictHostKeyChecking=no 'bash -s' < "$CD"/post_init.sh 2>/dev/null
 done

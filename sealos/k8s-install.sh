@@ -46,7 +46,8 @@ if [[ $? != 0 ]]; then
 fi
 for node in $(echo "$nodes" | tr "," "\n")
 do
-    sshpass -p "$passwd" ssh -p "$port" "root@$node" 'bash -s' < "$CD"/config.sh gen_dir
+    echo "config for node $node"
+    sshpass -p "$passwd" ssh -p "$port" "root@$node" -o StrictHostKeyChecking=no 'bash -s' < "$CD"/config.sh gen_dir 2>/dev/null
 done
 
 which sealos &> /dev/null
@@ -64,7 +65,8 @@ sealos run registry.cn-shanghai.aliyuncs.com/labring/kubernetes-docker:v"$k8s_v"
 # post init after installing k8s
 for node in $(echo "$nodes" | tr "," "\n")
 do
-    sshpass -p "$passwd" ssh -p "$port" "root@$node" 'bash -s' < "$CD"/post_init.sh
+    echo "post init for node $node"
+    sshpass -p "$passwd" ssh -p "$port" "root@$node" -o StrictHostKeyChecking=no 'bash -s' < "$CD"/post_init.sh 2>/dev/null
 done
 
 kubectl taint node admin node-role.kubernetes.io/control-plane:NoSchedule-
