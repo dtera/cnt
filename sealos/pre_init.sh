@@ -9,5 +9,3 @@ rm -rf /var/lib/docker && rm -rf /var/lib/sealos
 rm -rf "$data_dir"/docker/* "$data_dir"/sealos/*
 ln -s "$data_dir"/docker /var/lib/docker
 ln -s "$data_dir"/sealos /var/lib/sealos
-
-

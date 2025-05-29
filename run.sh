@@ -34,5 +34,3 @@ else
   # install dependencies by helm
   sh "$CD"/sealos/helm-install-deps.sh
 fi
-
-
