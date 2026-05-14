@@ -5,7 +5,7 @@ cd "$CD" || exit
 
 export KKZONE=cn
 
-helm repo add kubesphere https://charts.kubesphere.com.cn/main
+# helm repo add kubesphere https://charts.kubesphere.com.cn/main
 helm repo update
 helm upgrade --install -n kubesphere-system --create-namespace ks-core \
   oci://hub.kubesphere.com.cn/kse/ks-core
