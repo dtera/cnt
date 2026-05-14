@@ -5,7 +5,11 @@ cd "$CD" || exit
 
 export KKZONE=cn
 
-ks_ver=1.1.4
+helm repo add kubesphere https://charts.kubesphere.io/main
+helm repo update
+helm upgrade --install -n kubesphere-system --create-namespace ks-core kubesphere/ks-core
+
+# ks_ver=1.1.4
 # 如果无法访问 charts.kubesphere.io, 可将 charts.kubesphere.io 替换为 charts.kubesphere.com.cn
-helm upgrade --install -n kubesphere-system --create-namespace ks-core \
-     https://charts.kubesphere.com.cn/main/ks-core-"$ks_ver".tgz --debug --wait
+# helm upgrade --install -n kubesphere-system --create-namespace ks-core \
+#      https://charts.kubesphere.com.cn/main/ks-core-"$ks_ver".tgz --debug --wait
