@@ -3,7 +3,7 @@
 # shellcheck disable=SC2034
 # shellcheck disable=SC2155
 
-k8s_v="1.29.9"
+k8s_v="1.30.5"
 helm_v="3.15.4"
 cilium_v="1.15.8"
 openebs_v="3.10.0"
