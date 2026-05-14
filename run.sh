@@ -22,7 +22,7 @@ else
 fi
 
 # install k8s
-sh "$CD"/sealos/k8s-install.sh "$opt -p $passwd"
+sh "$CD"/sealos/k8s-install.sh $opt -p $passwd
 
 if [[ "$1" == "seal_cloud" ]]; then
   # install sealos cloud
