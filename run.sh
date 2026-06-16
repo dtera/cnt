@@ -37,3 +37,10 @@ else
   # install dependencies by helm
   sh "$CD"/sealos/helm-install-deps.sh
 fi
+
+#printf '%s\n' \
+#  '$masters' \
+#  '$nodes' \
+#  '$passwd' \
+#  '1.1.4' \
+#| bash "$CD/run.sh"
