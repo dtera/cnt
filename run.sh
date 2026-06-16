@@ -42,5 +42,5 @@ fi
 #  '$masters' \
 #  '$nodes' \
 #  '$passwd' \
-#  '1.1.4' \
+#  '1.0.8' \
 #| bash "$CD/run.sh"
